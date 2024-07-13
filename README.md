@@ -16,9 +16,9 @@ Learnify is an e-learning platform that allows users to browse, enroll in, and u
 - Publish Course: Users can create and publish their own courses.
 
 ### **Course Management**
-- Create Course: Admins can create new courses with titles, descriptions, categories, and prices.
-- Edit Course: Admins can update course details.
-- Delete Course: Admins can remove courses from the platform.
+- Create Course: Instructors(Users) can create new courses with titles, descriptions, categories, and prices.
+- Edit Course: Instructors(Users) can update course details.
+- Delete Course: Instructors(Users) can remove courses from the platform.
 
 ### **Subscription and Enrollement**
 - Enroll in Courses: Users can enroll in courses to access their content.
