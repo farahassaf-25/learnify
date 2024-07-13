@@ -47,4 +47,4 @@ Learnify is an e-learning platform that allows users to browse, enroll in, and u
 - bcrypt.js: For password hashing.
 
 ### **Payment Integration**
-- Stripe: For handling transactions and payouts (if monetizing courses).
+- Stripe OR Razorpay: For handling transactions and payouts (if monetizing courses).
