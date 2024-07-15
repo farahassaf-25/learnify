@@ -52,7 +52,7 @@ Learnify/
 │   ├── .env
 │   ├── package.json
 │
-├── client/
+├── frontend/
 │   ├── public/
 │   ├── src/
 │   │   ├── assets/
