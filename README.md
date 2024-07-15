@@ -1,50 +1,70 @@
-# **Learnify - E-learning Platform**
+# Learnify E-Learning Platform
 
-## **Project Overview:**
+## Project Overview
+Learnify is an e-learning platform where users can browse diverse courses, enroll, and even share their own courses. Built with Node.js, Express.js, MongoDB, React.js, and TailwindCSS.
 
-Learnify is an e-learning platform that allows users to browse, enroll in, and upload courses across various categories. The platform supports user management, course and lecture management, and provides a comprehensive learning dashboard.
+## Features
+- **User Management:**
+  - Sign up, login, logout, change password
+  - Edit profile details, view profile information
+  - Publish own courses
 
-## **Features:**
+- **Course Management:**
+  - Create, edit, and delete courses
 
-### **User Management**
+- **Lecture Management:**
+  - Add, edit, and delete lectures within courses
 
-- Signup: Users can create an account by providing necessary details.
-- Login/Logout: Users can log in and log out of their accounts securely.
-- Change Password: Users can update their passwords.
-- Edit Profile: Users can update their profile details.
-- View Profile Information: Users can view their profile information.
-- Publish Course: Users can create and publish their own courses.
+- **Subscription:**
+  - Enroll in courses
 
-### **Course Management**
-- Create Course: Instructors(Users) can create new courses with titles, descriptions, categories, and prices.
-- Edit Course: Instructors(Users) can update course details.
-- Delete Course: Instructors(Users) can remove courses from the platform.
+- **Lecture Dashboard:**
+  - Display course lectures
+  - Play videos and view lecture descriptions
 
-### **Subscription and Enrollement**
-- Enroll in Courses: Users can enroll in courses to access their content.
-- Subscription Management: Users can manage their course subscriptions.
+## Tech Stack
+- **Backend:**
+  - Node.js
+  - Express.js
+  - MongoDB
 
-### **Learning Dashboard**
-- Course Dashboard: Users can view and access their enrolled courses.
-- Lecture Dashboard: Users can play lecture videos, view lecture descriptions, and track progress.
-- Course Progress: Users can see their progress within a course.
+- **Frontend:**
+  - React.js
+  - TailwindCSS
 
-## **Technical Requirements**
-### **Frontend**
-- React.js: For building the user interface.
-- React Router: For client-side routing.
-- Context API/Redux: For state management.
-- Axios: For making API requests.
 
-### **Backend**
-- Node.js: For the server environment.
-- Express.js: For building the backend API.
-- MongoDB: For the database.
-- Mongoose: For MongoDB object modeling.
+# Learnify Project
 
-### **Authentication**
-- JWT (JSON Web Tokens): For secure user authentication.
-- bcrypt.js: For password hashing.
+## File Structure
 
-### **Payment Integration**
-- Stripe OR Razorpay: For handling transactions and payouts (if monetizing courses).
+```plaintext
+Learnify/
+├── backend/
+│   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── utils/
+│   ├── uploads/
+│   ├── app.js
+│   ├── server.js
+│   ├── .env
+│   ├── package.json
+│
+├── client/
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── helpers/
+│   │   ├── layout/
+│   │   ├── pages/
+│   │   ├── Redux/
+│   │   ├── App.jsx
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   ├── .env
+│   ├── package.json
+│   ├── README.md
+
