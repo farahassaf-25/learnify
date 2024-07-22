@@ -87,8 +87,6 @@ Learnify/
 │   ├── models/
 │   ├── routes/
 │   ├── utils/
-│   ├── uploads/
-│   ├── app.js
 │   ├── server.js
 │   ├── .env
 │   ├── package.json
