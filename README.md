@@ -12,9 +12,6 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 - Manage Students:
   - Edit Student
   - Delete Student
-- Manage Instructors:
-  - Edit Instructor
-  - Delete Instructor
 - Manage Courses:
   - Add Course
   - Edit Course
