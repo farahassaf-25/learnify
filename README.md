@@ -84,11 +84,27 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 - [nodemailer](https://www.npmjs.com/package/nodemailer)
 - [slugify](https://www.npmjs.com/package/slugify)
 
-### --watch flag: restarts the process when an imported file is changed(available for Node.js version 18 and up) used instead of nodemon, will work by only add it to the command in package.json 
+### --watch flag: restarts the process when an imported file is changed(available for Node.js version 18 and up) used instead of nodemon, only add command it to package.json 
 - reference: [Good bye, Nodemon](https://vazgen6.medium.com/goodbye-nodemon-693a2c9b370c)
   
-### --env-file=env: to load environment variables, used instead of dotenv(available for Node.js version 20.6.0+), will work by only add it to the command in package.json 
+### --env-file=env: to load environment variables, used instead of dotenv(available for Node.js version 20.6.0+), only add command to package.json 
 - reference: [Stop using dotenv in Node.js](https://medium.com/@tony.infisical/stop-using-dotenv-in-node-js-v20-6-0-8febf98f6314)
+
+```
+"scripts": {
+    "start": "node --env-file=.env server.js",
+    "dev": "node --watch --env-file=.env server.js"
+  },
+```  
+
+## To run backend:
+```
+# Run in dev mode
+npm run dev
+
+# Run in prod mode
+npm start
+```
 
 # Learnify Project
 
