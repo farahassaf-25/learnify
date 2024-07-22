@@ -42,18 +42,6 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
   - PayPal or
   - Razorpay
 
-### Instructor:
-- Login
-- Register
-- Change Password
-- Logout
-- Manage Courses:
-  - Add Course
-  - Edit Course
-  - Delete Course
-- Manage Quizzes:
-  - Add Quiz for a Course
-  - Update Quiz
 
 ### Additional Features:
 - Allow Students to Give Feedback on Courses
