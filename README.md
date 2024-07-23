@@ -124,3 +124,119 @@ Learnify/
 │   ├── package.json
 │   ├── README.md
 
+```
+
+## Class Diagram
+
+```mermaid
+classDiagram
+    class User {
+        +String name
+        +String email
+        +String password
+        +String role
+        +String avatar
+        +String resetPasswordToken
+        +Date resetPasswordExpire
+        +getSignedJwtToken()
+        +matchPassword()
+        +getResetPasswordToken()
+    }
+
+    class Course {
+        +String title
+        +String slug
+        +String description
+        +String[] category
+        +String image
+        +Number price
+        +Number weeks
+        +Number views
+        +Number numOfLectures
+        +String creatorName
+        +Timestamp createdAt
+        +Timestamp updatedAt
+        +slugify()
+    }
+
+    class Lecture {
+        +String title
+        +String description
+        +String video
+        +String minimumLevel
+        +Timestamp createdAt
+        +Timestamp updatedAt
+    }
+
+    class Quiz {
+        +String title
+        +String[] questions
+        +Timestamp createdAt
+        +Timestamp updatedAt
+    }
+
+    User "1" --> "many" Course : creates
+    Course "1" --> "many" Lecture : contains
+    Course "1" --> "many" Quiz : contains
+    Lecture "many" --> "1" Course : belongs to
+    Quiz "many" --> "1" Course : belongs to
+
+    class Admin {
+        +login()
+        +changePassword()
+        +logout()
+        +editStudent()
+        +deleteStudent()
+        +addCourse()
+        +editCourse()
+        +deleteCourse()
+        +addQuiz()
+        +updateQuiz()
+        +deleteQuiz()
+    }
+
+    class Student {
+        +login()
+        +register()
+        +changePassword()
+        +logout()
+        +addCourse()
+        +editCourse()
+        +deleteCourse()
+        +updateProfile()
+        +deleteAccount()
+        +subscribeToCourse()
+        +unsubscribeFromCourse()
+        +giveFeedback()
+    }
+
+    class Subscription {
+        +String method
+        +Stripe or Razorpay
+    }
+
+    class Feedback {
+        +String comment
+        +Number rating
+        +Timestamp createdAt
+        +Timestamp updatedAt
+    }
+
+    class Notification {
+        +String message
+        +Timestamp createdAt
+        +Timestamp updatedAt
+    }
+
+    class ContactForm {
+        +String name
+        +String email
+        +String message
+    }
+
+    User "1" --> "many" Subscription : has
+    Course "1" --> "many" Feedback : receives
+    User "1" --> "many" Feedback : gives
+    User "1" --> "many" Notification : receives
+    User "many" --> "1" ContactForm : sends
+```
