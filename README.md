@@ -12,9 +12,6 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 - Manage Students:
   - Edit Student
   - Delete Student
-- Manage Instructors:
-  - Edit Instructor
-  - Delete Instructor
 - Manage Courses:
   - Add Course
   - Edit Course
@@ -38,22 +35,10 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 - Subscribe to Courses
 - Unsubscribe from Courses
 - Payment Method for Subscription:
-  - Stripe
-  - PayPal
+  - Stripe or
+  - PayPal or
   - Razorpay
 
-### Instructor:
-- Login
-- Register
-- Change Password
-- Logout
-- Manage Courses:
-  - Add Course
-  - Edit Course
-  - Delete Course
-- Manage Quizzes:
-  - Add Quiz for a Course
-  - Update Quiz
 
 ### Additional Features:
 - Allow Students to Give Feedback on Courses
@@ -72,7 +57,39 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 - React.js
 - TailwindCSS
 
+## Dependecies used:
 
+### Backend:
+- [bcryptjs](https://www.npmjs.com/package/bcryptjs)
+- [colors](https://www.npmjs.com/package/colors)
+- [cookie-parser](https://www.npmjs.com/package/cookie-parser)
+- [express](https://www.npmjs.com/package/express)
+- [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
+- [mongoose](https://www.npmjs.com/package/mongoose)
+- [nodemailer](https://www.npmjs.com/package/nodemailer)
+- [slugify](https://www.npmjs.com/package/slugify)
+
+### --watch flag: restarts the process when an imported file is changed(available for Node.js version 18 and up) used instead of nodemon, only add command it to package.json 
+- reference: [Good bye, Nodemon](https://vazgen6.medium.com/goodbye-nodemon-693a2c9b370c)
+  
+### --env-file=env: to load environment variables, used instead of dotenv(available for Node.js version 20.6.0+), only add command to package.json 
+- reference: [Stop using dotenv in Node.js](https://medium.com/@tony.infisical/stop-using-dotenv-in-node-js-v20-6-0-8febf98f6314)
+
+```
+"scripts": {
+    "start": "node --env-file=.env server.js",
+    "dev": "node --watch --env-file=.env server.js"
+  },
+```  
+
+## To run backend:
+```
+# Run in dev mode
+npm run dev
+
+# Run in prod mode
+npm start
+```
 
 # Learnify Project
 
@@ -87,8 +104,6 @@ Learnify/
 │   ├── models/
 │   ├── routes/
 │   ├── utils/
-│   ├── uploads/
-│   ├── app.js
 │   ├── server.js
 │   ├── .env
 │   ├── package.json
