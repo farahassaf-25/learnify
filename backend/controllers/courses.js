@@ -1,7 +1,7 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const CoursesSchema = require('../models/Courses');
-const upload = require('../config/upload.js');
+const upload = require('../config/uploadImage.js');
 
 // @desc Get all courses
 // @route GET /learnify/courses
@@ -51,30 +51,30 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
     //image upload
     upload.single('image')(req, res, async(err) => {
         if(err) {
-            return nect(ErrorResponse(err.message, 400));
+            return next(new ErrorResponse(err.message, 400));
         }
 
         //add user to req.body
-    req.body.creator = req.user.id;
+        req.body.creator = req.user.id;
 
-    //check for published course
-    const publishedCourse = await CoursesSchema.findOne({ user: req.user.id });
-    //if user is not an admin, they can only add one course
-    if (publishedCourse && req.user.role !== 'admin') {
-        return next(new ErrorResponse(`The user with ID ${req.user.id} has already published a course`, 400));
-    }
+        //check for published course
+        const publishedCourse = await CoursesSchema.findOne({ user: req.user.id });
+        //if user is not an admin, they can only add one course
+        if (publishedCourse && req.user.role !== 'admin') {
+            return next(new ErrorResponse(`The user with ID ${req.user.id} has already published a course`, 400));
+        }
 
-    //set img url if uploaded
-    if(req.file) {
-        req.body.image = req.file.location; //get image url from s3
-    }
+        //set img url if uploaded
+        if(req.file) {
+            req.body.image = req.file.location; //get image url from s3
+        }
 
-    const course = await CoursesSchema.create(req.body);
-    res.status(201).json({
-        success: true,
-        data: course,
-        msg: "Course created, you can add lectures now"
-    });
+        const course = await CoursesSchema.create(req.body);
+        res.status(200).json({
+            success: true,
+            data: course,
+            msg: "Course created, you can add lectures now"
+        });
     })
 });
 
