@@ -60,6 +60,8 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 ## Dependecies used:
 
 ### Backend:
+- [aws-sdk/client-s3](https://www.npmjs.com/package/@aws-sdk/client-s3)
+- [aws-sdk/lib-storage](https://www.npmjs.com/package/@aws-sdk/lib-storage)
 - [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 - [colors](https://www.npmjs.com/package/colors)
 - [cookie-parser](https://www.npmjs.com/package/cookie-parser)
@@ -72,6 +74,8 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 - [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 - [mongoose](https://www.npmjs.com/package/mongoose)
 - [morgan](https://www.npmjs.com/package/morgan)
+- [multer](https://www.npmjs.com/package/multer)
+- [multer-s3](https://www.npmjs.com/package/multer-s3)
 - [nodemailer](https://www.npmjs.com/package/nodemailer)
 - [slugify](https://www.npmjs.com/package/slugify)
 - [xss-clean](https://www.npmjs.com/package/xss-clean)
