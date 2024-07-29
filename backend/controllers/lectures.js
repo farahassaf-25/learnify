@@ -2,6 +2,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const CoursesSchema = require('../models/Courses');
 const LectureSchema = require('../models/Lectures');
+const uploadVideo = require('../config/uploadVideo');
 
 // @desc Get lectures for course
 // @route GET /learnify/courses/:courseId/lectures
@@ -28,23 +29,36 @@ exports.getCourseLectures = asyncHandler(async (req, res, next) => {
 // @route POST /learnify/courses/:courseId/lectures
 // @access Public
 exports.addLecture = asyncHandler(async (req, res, next) => {
-    req.body.course = req.params.courseId;
-    req.body.user = req.user.id;
+    const upload = uploadVideo.single('video');
 
-    const course = await CoursesSchema.findById(req.params.courseId);
-    if (!course) {
-        return next(new ErrorResponse(`No course found with id of ${req.params.courseId}`, 404));
-    }
+    upload(req, res, async (err) => {
+        if (err) {
+            return next(new ErrorResponse(err.message, 400));
+        }
 
-    if (course.user && course.user.toString() !== req.user.id && req.user.role !== 'admin') {
-        return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a lecture to the course ${course._id}`, 401));
-    }
+        req.body.course = req.params.courseId;
+        req.body.user = req.user.id;
 
-    const lecture = await LectureSchema.create(req.body);
-    res.status(200).json({
-        success: true,
-        data: lecture,
-        msg: `Lecture created for course ${req.params.courseId}`
+        const course = await CoursesSchema.findById(req.params.courseId);
+        if (!course) {
+            return next(new ErrorResponse(`No course found with id of ${req.params.courseId}`, 404));
+        }
+
+        if (course.user && course.user.toString() !== req.user.id && req.user.role !== 'admin') {
+            return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a lecture to the course ${course._id}`, 401));
+        }
+
+        // Set video URL if uploaded
+        if (req.file) {
+            req.body.video = req.file.location; // get video URL from S3
+        }
+
+        const lecture = await LectureSchema.create(req.body);
+        res.status(200).json({
+            success: true,
+            data: lecture,
+            msg: `Lecture created for course ${req.params.courseId}`
+        });
     });
 });
 

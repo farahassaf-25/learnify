@@ -13,4 +13,7 @@ router
     .put(protect, authorize('student', 'admin'), updateLecture)
     .delete(protect, authorize('student', 'admin'), deleteLecture);
 
+// router.route('/upload-video')
+//   .post(protect, authorize('publisher', 'admin'), uploadLectureVideo);
+
 module.exports = router;
