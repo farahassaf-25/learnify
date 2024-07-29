@@ -1,6 +1,7 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const CoursesSchema = require('../models/Courses');
+const upload = require('../config/upload.js');
 
 // @desc Get all courses
 // @route GET /learnify/courses
@@ -47,7 +48,13 @@ exports.getCourse = asyncHandler(async (req, res, next) => {
 // @route POST /learnify/courses
 // @access Public
 exports.createCourse = asyncHandler(async (req, res, next) => {
-    //add user to req.body
+    //image upload
+    upload.single('image')(req, res, async(err) => {
+        if(err) {
+            return nect(ErrorResponse(err.message, 400));
+        }
+
+        //add user to req.body
     req.body.creator = req.user.id;
 
     //check for published course
@@ -57,12 +64,18 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`The user with ID ${req.user.id} has already published a course`, 400));
     }
 
+    //set img url if uploaded
+    if(req.file) {
+        req.body.image = req.file.location; //get image url from s3
+    }
+
     const course = await CoursesSchema.create(req.body);
     res.status(201).json({
         success: true,
         data: course,
         msg: "Course created, you can add lectures now"
     });
+    })
 });
 
 // @desc Update course
@@ -113,4 +126,3 @@ exports.deleteCourse = asyncHandler(async (req, res, next) => {
         msg: `Delete course ${req.params.id}`
     });
 });
-

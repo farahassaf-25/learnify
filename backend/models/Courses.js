@@ -7,15 +7,15 @@ const CoursesSchema = new mongoose.Schema({
         required: [true, 'Please add a course title'],
         unique: true,
         trim: true,
-        minLength: [4, 'Course title must be at leart 4 characters'],
-        maxlength: [100, 'Course title can not be more than 100 characters']
+        minLength: [4, 'Course title must be at least 4 characters'],
+        maxLength: [100, 'Course title can not be more than 100 characters']
     },
     slug: String,
     description: {
         type: String,
         required: [true, 'Please add a description'],
         minLength: [10, 'Description must be at least 10 characters'],
-        maxlength: [500, 'Description can not be more than 500 characters']
+        maxLength: [500, 'Description can not be more than 500 characters']
     },
     category: {
         type: [String], //array of strings

@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllCourses, getCourse, createCourse, updateCourse, deleteCourse } = require('../controllers/courses');
+const { getAllCourses, getCourse, createCourse, updateCourse, deleteCourse, uploadImage } = require('../controllers/courses');
 const { protect, authorize } = require('../middleware/auth');
 const lectureRouter = require('./lectures');
 
@@ -17,5 +17,7 @@ router
     .get(getCourse)
     .put(protect, authorize('student', 'admin'), updateCourse)
     .delete(protect, authorize('student', 'admin'), deleteCourse);
+
+// router.route('/:id/upload-image').put(protect, authorize('student', 'admin'), uploadImage);
 
 module.exports = router;
