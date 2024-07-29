@@ -51,7 +51,7 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
     //image upload
     upload.single('image')(req, res, async(err) => {
         if(err) {
-            return nect(ErrorResponse(err.message, 400));
+            return next(new ErrorResponse(err.message, 400));
         }
 
         //add user to req.body
