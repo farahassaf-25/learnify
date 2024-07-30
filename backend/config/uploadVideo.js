@@ -1,21 +1,21 @@
 const multer = require('multer');
 const multerS3 = require('multer-s3');
-const AWS = require('aws-sdk');
+const { S3Client } = require('@aws-sdk/client-s3');
 
-AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION
+const s3 = new S3Client({
+    region: process.env.AWS_REGION,
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    },
 });
-
-const s3 = new AWS.S3();
 
 // File type validation
 const fileFilter = (req, file, cb) => {
     if (file.mimetype === 'video/mp4' || file.mimetype === 'video/mkv') {
         cb(null, true);
     } else {
-        cb(new Error('Invalid file type, only MP4 and MKV are allowed!'), false);
+        cb(new Error('Invalid file type, only MP4 and MKV is allowed!'), false);
     }
 };
 
@@ -32,7 +32,7 @@ const upload = multer({
         },
     }),
     limits: {
-        fileSize: 1024 * 1024 * 50 // 50 MB file size limit
+        fileSize: 1024 * 1024 * 100 // 100 MB file size limit
     },
     fileFilter: fileFilter
 });

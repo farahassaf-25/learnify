@@ -29,28 +29,27 @@ exports.getCourseLectures = asyncHandler(async (req, res, next) => {
 // @route POST /learnify/courses/:courseId/lectures
 // @access Public
 exports.addLecture = asyncHandler(async (req, res, next) => {
-    const upload = uploadVideo.single('video');
+    req.body.course = req.params.courseId;
+    req.body.user = req.user.id;
 
-    upload(req, res, async (err) => {
+    const course = await CoursesSchema.findById(req.params.courseId);
+    if (!course) {
+        return next(new ErrorResponse(`No course found with id of ${req.params.courseId}`, 404));
+    }
+
+    if (course.user && course.user.toString() !== req.user.id && req.user.role !== 'admin') {
+        return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a lecture to the course ${course._id}`, 401));
+    }
+
+    // video upload
+    uploadVideo.single('video')(req, res, async (err) => {
         if (err) {
             return next(new ErrorResponse(err.message, 400));
         }
 
-        req.body.course = req.params.courseId;
-        req.body.user = req.user.id;
-
-        const course = await CoursesSchema.findById(req.params.courseId);
-        if (!course) {
-            return next(new ErrorResponse(`No course found with id of ${req.params.courseId}`, 404));
-        }
-
-        if (course.user && course.user.toString() !== req.user.id && req.user.role !== 'admin') {
-            return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a lecture to the course ${course._id}`, 401));
-        }
-
-        // Set video URL if uploaded
+        // set video url if uploaded
         if (req.file) {
-            req.body.video = req.file.location; // get video URL from S3
+            req.body.video = req.file.location; // get video url from s3
         }
 
         const lecture = await LectureSchema.create(req.body);

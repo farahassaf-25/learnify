@@ -1,7 +1,7 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const CoursesSchema = require('../models/Courses');
-const upload = require('../config/uploadImage.js');
+const uploadImage = require('../config/uploadImage.js');
 
 // @desc Get all courses
 // @route GET /learnify/courses
@@ -49,7 +49,7 @@ exports.getCourse = asyncHandler(async (req, res, next) => {
 // @access Public
 exports.createCourse = asyncHandler(async (req, res, next) => {
     //image upload
-    upload.single('image')(req, res, async(err) => {
+    uploadImage.single('image')(req, res, async(err) => {
         if(err) {
             return next(new ErrorResponse(err.message, 400));
         }
