@@ -73,12 +73,10 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 - [hpp](https://www.npmjs.com/package/hpp)
 - [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 - [mongoose](https://www.npmjs.com/package/mongoose)
-- [morgan](https://www.npmjs.com/package/morgan)
 - [multer](https://www.npmjs.com/package/multer)
 - [multer-s3](https://www.npmjs.com/package/multer-s3)
 - [nodemailer](https://www.npmjs.com/package/nodemailer)
 - [slugify](https://www.npmjs.com/package/slugify)
-- [xss-clean](https://www.npmjs.com/package/xss-clean)
 
 ### --watch flag: restarts the process when an imported file is changed(available for Node.js version 18 and up) used instead of nodemon, only add command it to package.json 
 - reference: [Good bye, Nodemon](https://vazgen6.medium.com/goodbye-nodemon-693a2c9b370c)
