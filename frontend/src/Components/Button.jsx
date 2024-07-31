@@ -8,7 +8,6 @@ const Button = ({ children, color, to, onClick }) => {
     secondary: "bg-secondary hover:bg-secondary-light text-white focus:ring-secondary",
   };
 
-  // Use fallback color if none provided
   const classes = `${baseClasses} ${colorClasses[color] || ''}`;
 
   if (to) {

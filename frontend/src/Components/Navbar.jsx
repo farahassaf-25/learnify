@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Button from './Button';
+import logo from '../assets/logo-only.png';
 
 const Navbar = () => {
   return (
@@ -13,33 +15,37 @@ const Navbar = () => {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              style={{ marginRight: '-30px' }}
+              style={{ marginRight: '-20px' }}
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16" />
+                d="M4 6h16M4 12h8m-8 6h16"
+              />
             </svg>
           </div>
           <ul
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
-            <li><a className="text-textColor text-lg hover:border-y-2 hover:border-secondary transition-all">Home</a></li>
-            <li><a className="text-textColor text-lg hover:border-y-2 hover:border-secondary transition-all">Courses</a></li>
-            <li><a className="text-textColor text-lg hover:border-y-2 hover:border-secondary transition-all">About Us</a></li>
-            <li><a className="text-textColor text-lg hover:border-y-2 hover:border-secondary transition-all">Contact Us</a></li>
+            <li><NavLink to="/">Home</NavLink></li>
+            <li><NavLink to="/courses">Courses</NavLink></li>
+            <li><NavLink to="/about-us">About Us</NavLink></li>
+            <li><NavLink to="/contact-us">Contact Us</NavLink></li>
           </ul>
         </div>
-        <a className="btn btn-ghost text-primary text-2xl lg:text-3xl font-lora">Learnify</a>
+        <div className="flex items-center space-x-0">
+          <img src={logo} alt="logo" className="h-7" />
+          <a className="btn btn-ghost text-textColor text-2xl lg:text-3xl">Learnify</a>
+        </div>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 space-x-4">
-          <li><a className="text-textColor text-xl hover:border-y-2 hover:border-secondary transition-all">Home</a></li>
-          <li><a className="text-textColor text-xl hover:border-y-2 hover:border-secondary transition-all">Courses</a></li>
-          <li><a className="text-textColor text-xl hover:border-y-2 hover:border-secondary transition-all">About Us</a></li>
-          <li><a className="text-textColor text-xl hover:border-y-2 hover:border-secondary transition-all">Contact Us</a></li>
+          <li><NavLink to="/">Home</NavLink></li>
+          <li><NavLink to="/courses">Courses</NavLink></li>
+          <li><NavLink to="/about-us">About Us</NavLink></li>
+          <li><NavLink to="/contact-us">Contact Us</NavLink></li>
         </ul>
       </div>
       <div className="navbar-end flex gap-2 lg:gap-4">
@@ -49,5 +55,17 @@ const Navbar = () => {
     </div>
   );
 }
+
+const NavLink = ({ to, children }) => {
+  console.log('Rendering NavLink to:', to);
+  return (
+    <Link 
+      to={to} 
+      className="text-textColor font-bold hover:text-primary text-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
+    >
+      {children}
+    </Link>
+  );
+};
 
 export default Navbar;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Layout = ({ children }) => {
+const MainLayout = ({ children }) => {
   return (
     <div className="min-h-screen">
       {children}
@@ -8,4 +8,4 @@ const Layout = ({ children }) => {
   );
 }
 
-export default Layout;
+export default MainLayout;
