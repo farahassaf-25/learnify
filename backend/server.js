@@ -1,11 +1,9 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const colors = require('colors');
-// const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const sanitizeData = require('express-mongo-sanitize');
 const helmet = require('helmet');
-const xssClean = require('xss-clean');
 const limitRequest = require('express-rate-limit');
 const cors = require('cors');
 const hpp = require('hpp');
@@ -37,9 +35,6 @@ app.use(sanitizeData());
 //set security headers
 app.use(helmet());
 
-//prevent xss attacks
-app.use(xssClean());
-
 //enable cors
 app.use(cors()); 
 
@@ -52,11 +47,6 @@ app.use(limit);
 
 //prevent http param pollution
 app.use(hpp());
-
-// Dev logging middleware
-// if (process.env.NODE_ENV === 'development') {
-//     app.use(morgan('dev'));
-// }
 
 // Mount routes
 app.use('/learnify/courses', courses);

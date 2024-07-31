@@ -22,6 +22,11 @@ const CoursesSchema = new mongoose.Schema({
         required: [true, 'Category is required'],
         enum: ['Web Development', 'Data Structures', 'Algorithms', 'Operating System', 'Computer Networks', 'Databases', 'Other']
     },
+    minimumLevel: {
+        type: String,
+        required: [true, 'Please add a minimum level'],
+        enum: ['Beginner', 'Intermediate', 'Advanced']
+    },
     image: {
         type: String,
         default: 'no-photo.jpg'

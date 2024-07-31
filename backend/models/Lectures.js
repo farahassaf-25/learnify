@@ -6,10 +6,6 @@ const LectureSchema = new mongoose.Schema({
         required: [true, 'Please add a name'],
         maxlength: [50, 'Name can not be more than 50 characters'],
     },
-    description: {
-        type: String,
-        required: [true, 'Please add a description'],
-    },
     video: {
         type: String,
         required: [true, 'Please add a video lecture'],
@@ -18,11 +14,6 @@ const LectureSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Courses',
         required: true
-    },
-    minimumLevel: {
-        type: String,
-        required: [true, 'Please add a minimum level'],
-        enum: ['Beginner', 'Intermediate', 'Advanced']
     },
     user: {
         type: mongoose.Schema.ObjectId,
