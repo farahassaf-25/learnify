@@ -5,7 +5,7 @@ import logo from '../assets/logo-only.png';
 
 const Navbar = () => {
   return (
-    <div className="navbar bg-bgColor">
+    <div className="navbar bg-bgColor flex-shrink-0">
       <div className="navbar-start flex items-center space-x-4">
         <div className="dropdown lg:hidden">
           <div tabIndex={0} role="button" className="btn btn-ghost">
@@ -31,8 +31,16 @@ const Navbar = () => {
           >
             <li><NavLink to="/">Home</NavLink></li>
             <li><NavLink to="/courses">Courses</NavLink></li>
-            <li><NavLink to="/about-us">About Us</NavLink></li>
-            <li><NavLink to="/contact-us">Contact Us</NavLink></li>
+            <li><NavLink to="/about">About Us</NavLink></li>
+            <li><NavLink to="/contact">Contact Us</NavLink></li>
+            <div className="flex justify-between mt-4 space-x-2">
+              <li>
+                <Button color="primary" to="/login" onClick={() => alert('Login Clicked')}>Login</Button>
+              </li>
+              <li>
+                <Button color="secondary" to="/register" onClick={() => alert('Register Clicked')}>Register</Button>
+              </li>
+            </div>
           </ul>
         </div>
         <div className="flex items-center space-x-0">
@@ -44,20 +52,19 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1 space-x-4">
           <li><NavLink to="/">Home</NavLink></li>
           <li><NavLink to="/courses">Courses</NavLink></li>
-          <li><NavLink to="/about-us">About Us</NavLink></li>
-          <li><NavLink to="/contact-us">Contact Us</NavLink></li>
+          <li><NavLink to="/about">About Us</NavLink></li>
+          <li><NavLink to="/contact">Contact Us</NavLink></li>
         </ul>
       </div>
-      <div className="navbar-end flex gap-2 lg:gap-4">
-        <Button color="primary" to="/login" onClick={() => alert('Login Clicked')}>Login</Button>
-        <Button color="secondary" to="/register" onClick={() => alert('Register Clicked')}>Register</Button>
+      <div className="navbar-end hidden lg:flex gap-2 lg:gap-4">
+        <Button color="primary" to="/login">Login</Button>
+        <Button color="secondary" to="/register">Register</Button>
       </div>
     </div>
   );
 }
 
 const NavLink = ({ to, children }) => {
-  console.log('Rendering NavLink to:', to);
   return (
     <Link 
       to={to} 

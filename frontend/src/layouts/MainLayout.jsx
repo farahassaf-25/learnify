@@ -2,7 +2,7 @@ import React from 'react';
 
 const MainLayout = ({ children }) => {
   return (
-    <div className="min-h-screen">
+    <div className="container mx-auto min-h-screen flex flex-col">
       {children}
     </div>
   );

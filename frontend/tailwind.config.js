@@ -17,6 +17,15 @@ export default {
       fontFamily: {
         lora: ['Lora', 'sans-serif'],
       },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(10px)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+      },
+      animation: {
+        float: 'float 2s ease-in-out infinite',
+      },
     },
   },
   plugins: [
