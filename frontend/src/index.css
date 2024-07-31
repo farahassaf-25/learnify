@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply bg-bgColor;
+    min-height: 100%;
+    margin: 0;
+  }
+}
+
+body {
+  font-family: 'Lora', sans-serif;
+}
