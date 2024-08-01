@@ -156,18 +156,14 @@ classDiagram
         +String password
         +String role
         +String avatar
-        +String resetPasswordToken
-        +Date resetPasswordExpire
-        +getSignedJwtToken()
-        +matchPassword()
-        +getResetPasswordToken()
     }
 
     class Course {
         +String title
         +String slug
         +String description
-        +String[] category
+        +String category
+        +String minimumLevel
         +String image
         +Number price
         +Number weeks
@@ -181,9 +177,7 @@ classDiagram
 
     class Lecture {
         +String title
-        +String description
         +String video
-        +String minimumLevel
         +Timestamp createdAt
         +Timestamp updatedAt
     }
@@ -207,9 +201,16 @@ classDiagram
         +logout()
         +editStudent()
         +deleteStudent()
+        + getAllUsers()
+        + getAllCourses()
         +addCourse()
         +editCourse()
         +deleteCourse()
+        +addLecture()
+        +editLecture()
+        +deleteCourse()
+        +getAllLectures()
+        +getLecturesForCourse()
         +addQuiz()
         +updateQuiz()
         +deleteQuiz()
@@ -232,7 +233,7 @@ classDiagram
 
     class Subscription {
         +String method
-        +Stripe or Razorpay
+        +Stripe or Razorpay or Paypal
     }
 
     class Feedback {
