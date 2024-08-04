@@ -1,5 +1,5 @@
 {
-  "name": "learnify-backend",
+  "name": "learnify",
   "version": "1.0.0",
   "description": "Learnify is an e-learning platform where users can browse diverse courses, enroll, and even share their own courses. Built with Node.js, Express.js, MongoDB, React.js, and TailwindCSS.",
   "main": "server.js",
