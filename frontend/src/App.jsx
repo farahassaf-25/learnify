@@ -1,22 +1,21 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
+import Home from './pages/HomePage';
 import Navbar from './Components/Navbar';
-import MainLayout from './layouts/MainLayout';
-import Home from './pages/Home';
+import AllCoursesPage from './pages/AllCoursesPage';
+import CourseDetailsPage from './pages/CourseDetailsPage';
 
-function App() {
+const App = () => {
   return (
-    <Router>
+    <>
+      <Navbar />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Home />
-          }
-        />
+        <Route path="/" element={<Home />} />
+        <Route path="/courses" element={<AllCoursesPage />} />
+        <Route path="/courses/:courseId" element={<CourseDetailsPage />} />
       </Routes>
-    </Router>
+    </>
   );
-}
+};
 
 export default App;

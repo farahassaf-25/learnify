@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Button from './Button';
+import { Link } from 'react-router-dom';
 
-const CourseCard = ({ image, title, description, price, level }) => {
+const CourseCard = ({ id, image, title, description, price, level }) => {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   const handleDescriptionToggle = () => {
@@ -31,7 +32,9 @@ const CourseCard = ({ image, title, description, price, level }) => {
           <span className="text-sm text-gray-600">{level}</span>
         </div>
         <div className="card-actions justify-end">
-          <Button color="secondary" to="/courses">Show More</Button>
+          <Link to={`/courses/${id}`}>
+            <Button color="secondary">Show More</Button>
+          </Link>
         </div>
       </div>
     </div>
