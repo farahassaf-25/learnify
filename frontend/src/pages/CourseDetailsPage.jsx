@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import Button from '../Components/Button';
 import { useGetCourseDetailsQuery } from '../slices/coursesApiSlice';
 import Loader from '../Components/Loader';
+import Message from '../Components/Message';
 
 const CourseDetailsPage = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const CourseDetailsPage = () => {
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <div>{error?.data?.message || error.error}</div>
+        <Message variant='error'>{error?.data?.message || error.error}</Message>
       ) : course && course.data ? (
         <div className="py-10 max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold mb-4 text-primary">{course.data.title}</h1>

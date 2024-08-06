@@ -5,6 +5,7 @@ import MainLayout from '../layouts/MainLayout';
 import CourseCard from '../Components/CourseCard';
 import Button from '../Components/Button';
 import Loader from '../Components/Loader';
+import Message from '../Components/Message';
 
 const AllCoursesPage = () => {
   const { data: response, isLoading, error } = useGetCoursesQuery();
@@ -100,12 +101,11 @@ const AllCoursesPage = () => {
           </select>
         </div>
       </div>
-
       <div className="flex flex-wrap justify-center gap-8 py-10">
         {isLoading ? (
           <Loader />
         ) : error ? (
-          <div>{error?.data?.message || error.error}</div>
+          <Message variant='error'>{error?.data?.message || error.error}</Message>
         ) : Array.isArray(currentCourses) && currentCourses.length > 0 ? (
           currentCourses.map((course) => (
             <CourseCard

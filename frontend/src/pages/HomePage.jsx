@@ -7,6 +7,7 @@ import CourseCard from '../Components/CourseCard';
 import Button from '../Components/Button';
 import Loader from '../Components/Loader';
 import { Link } from 'react-router-dom';
+import Message from '../Components/Message';
 
 const HomePage = () => {
   const { data: response, isLoading, error } = useGetCoursesQuery();
@@ -28,7 +29,7 @@ const HomePage = () => {
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <div>{error?.data?.message || error.error}</div>
+        <Message variant='error'>{error?.data?.message || error.error}</Message>
       ) : (
         <>
           <Hero scrollToCourses={scrollToCourses} />
