@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Button from '../Components/Button';
 import { useGetCourseDetailsQuery } from '../slices/coursesApiSlice';
+import Loader from '../Components/Loader';
 
 const CourseDetailsPage = () => {
   const { id } = useParams();
+  // console.log("Course ID:", id);
   const { data: course, isLoading, error } = useGetCourseDetailsQuery(id);
   
   const [isLoggedIn, setIsLoggedIn] = useState(false); 
@@ -15,7 +17,7 @@ const CourseDetailsPage = () => {
         Go Back
       </Button>
       {isLoading ? (
-        <h2>Loading...</h2>
+        <Loader />
       ) : error ? (
         <div>{error?.data?.message || error.error}</div>
       ) : course && course.data ? (

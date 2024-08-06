@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useGetCoursesQuery } from '../slices/coursesApiSlice';
 import MainLayout from '../layouts/MainLayout';
 import CourseCard from '../Components/CourseCard';
 import Button from '../Components/Button';
+import Loader from '../Components/Loader';
 
 const AllCoursesPage = () => {
   const { data: response, isLoading, error } = useGetCoursesQuery();
   const courses = response?.data || [];
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredCourses, setFilteredCourses] = useState(courses);
   const [levelFilter, setLevelFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [coursesPerPage] = useState(9);
 
-  useEffect(() => {
+  const filteredCourses = useMemo(() => {
     let filtered = courses;
 
     if (searchTerm) {
@@ -40,7 +40,7 @@ const AllCoursesPage = () => {
       filtered = filtered.filter(course => course.price >= minPrice && course.price <= maxPrice);
     }
 
-    setFilteredCourses(filtered);
+    return filtered;
   }, [searchTerm, levelFilter, categoryFilter, priceFilter, courses]);
 
   // Get current courses
@@ -103,13 +103,14 @@ const AllCoursesPage = () => {
 
       <div className="flex flex-wrap justify-center gap-8 py-10">
         {isLoading ? (
-          <h2>Loading...</h2>
+          <Loader />
         ) : error ? (
           <div>{error?.data?.message || error.error}</div>
         ) : Array.isArray(currentCourses) && currentCourses.length > 0 ? (
           currentCourses.map((course) => (
             <CourseCard
               key={course._id}
+              id={course._id}
               image={course.image}
               title={course.title}
               description={course.description}

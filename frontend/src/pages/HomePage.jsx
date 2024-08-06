@@ -5,6 +5,7 @@ import Hero from '../Components/Hero';
 import MiddleText from '../Components/MiddleText';
 import CourseCard from '../Components/CourseCard';
 import Button from '../Components/Button';
+import Loader from '../Components/Loader';
 import { Link } from 'react-router-dom';
 
 const HomePage = () => {
@@ -15,7 +16,7 @@ const HomePage = () => {
 
   const courses = response?.data || [];
 
-  // Slice the courses array to get only the latest 3 courses
+  // slice the courses array to get only the latest 3 courses
   const latestCourses = courses.slice(0, 3);
 
   const scrollToCourses = () => {
@@ -25,7 +26,7 @@ const HomePage = () => {
   return (
     <MainLayout>
       {isLoading ? (
-        <h2>Loading...</h2>
+        <Loader />
       ) : error ? (
         <div>{error?.data?.message || error.error}</div>
       ) : (
