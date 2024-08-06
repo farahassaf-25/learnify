@@ -18,6 +18,4 @@ router
     .put(protect, authorize('student', 'admin'), updateCourse)
     .delete(protect, authorize('student', 'admin'), deleteCourse);
 
-// router.route('/:id/upload-image').put(protect, authorize('student', 'admin'), uploadImage);
-
 module.exports = router;

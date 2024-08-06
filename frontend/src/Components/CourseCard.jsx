@@ -32,9 +32,9 @@ const CourseCard = ({ id, image, title, description, price, level }) => {
           <span className="text-sm text-gray-600">{level}</span>
         </div>
         <div className="card-actions justify-end">
-          <Link to={`/courses/${id}`}>
-            <Button color="secondary">Show More</Button>
-          </Link>
+        <Link to={`/courses/${id}`}>
+          <Button color="secondary">Show More</Button>
+        </Link>
         </div>
       </div>
     </div>
