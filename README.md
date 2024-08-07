@@ -9,9 +9,6 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 - Login
 - Change Password
 - Logout
-- Manage Students:
-  - Edit Student
-  - Delete Student
 - Manage Courses:
   - Add Course
   - Edit Course
@@ -79,17 +76,13 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 - [nodemailer](https://www.npmjs.com/package/nodemailer)
 - [slugify](https://www.npmjs.com/package/slugify)
 
-### --watch flag: restarts the process when an imported file is changed(available for Node.js version 18 and up) used instead of nodemon, only add command it to package.json 
-- reference: [Good bye, Nodemon](https://vazgen6.medium.com/goodbye-nodemon-693a2c9b370c)
-  
-### --env-file=env: to load environment variables, used instead of dotenv(available for Node.js version 20.6.0+), only add command to package.json 
-- reference: [Stop using dotenv in Node.js](https://medium.com/@tony.infisical/stop-using-dotenv-in-node-js-v20-6-0-8febf98f6314)
-
 ### Frontend:
 - [tailwindCSS](https://tailwindcss.com/docs/guides/vite)
 - [DaisyUI](https://daisyui.com/docs/install/)
-- [axios](https://www.npmjs.com/package/axios)
-- [react-router-dom](https://www.npmjs.com/package/react-router-dom) 
+- [react-router-dom](https://www.npmjs.com/package/react-router-dom)
+- [react-icons](https://www.npmjs.com/package/react-icons)
+- [react-redux](https://www.npmjs.com/package/react-redux)
+- [react-toastify](https://www.npmjs.com/package/react-toastify)
 
 ## To run backend:
 ```
@@ -110,6 +103,20 @@ npm start
 ```
 # Run in dev mode
 npm run dev
+```
+## To run both frontend and backend:
+install [concurrently
+](https://www.npmjs.com/package/concurrently)
+```
+# update scripts in package.json:
+"scripts": {
+    "start": "node --env-file=.env server.js",
+    "dev": "node --watch --env-file=.env server.js"
+  },
+```
+```
+# run
+npm run concurrently
 ```
 
 # Learnify Project
@@ -199,8 +206,6 @@ classDiagram
         +login()
         +changePassword()
         +logout()
-        +editStudent()
-        +deleteStudent()
         + getAllUsers()
         + getAllCourses()
         +addCourse()
