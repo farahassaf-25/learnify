@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../slices/cartSlice';
@@ -6,28 +6,41 @@ import Button from '../Components/Button';
 import { useGetCourseDetailsQuery } from '../slices/coursesApiSlice';
 import Loader from '../Components/Loader';
 import Message from '../Components/Message';
+import { toast } from 'react-toastify';
 
 const CourseDetailsPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { data: course, isLoading, error } = useGetCourseDetailsQuery(id);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const addToCartHandler = () => {
     dispatch(addToCart(course.data));
+    toast.success('Course added to cart!');
   };
 
+  // Toast notifications
+  useEffect(() => {
+    if (isLoading) {
+      toast.info('Loading course details...');
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Error fetching course details: ' + (error?.data?.message || error.error));
+    }
+  }, [error]);
+
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 mt-5">
       <Button color="primary" to="/courses">
         Go Back
       </Button>
-      {isLoading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant='error'>{error?.data?.message || error.error}</Message>
-      ) : course && course.data ? (
+      {isLoading && <Loader />}
+      {error && <Message variant='error'>{error?.data?.message || error.error}</Message>}
+      {!isLoading && !error && course && course.data ? (
         <div className="py-10 max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold mb-4 text-primary">{course.data.title}</h1>
           <img

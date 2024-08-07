@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useGetCoursesQuery } from '../slices/coursesApiSlice';
 import MainLayout from '../layouts/MainLayout';
@@ -6,6 +6,7 @@ import CourseCard from '../Components/CourseCard';
 import Button from '../Components/Button';
 import Loader from '../Components/Loader';
 import Message from '../Components/Message';
+import { toast } from 'react-toastify';
 
 const AllCoursesPage = () => {
   const { data: response, isLoading, error } = useGetCoursesQuery();
@@ -52,13 +53,26 @@ const AllCoursesPage = () => {
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  // Toast notifications
+  useEffect(() => {
+    if (isLoading) {
+      toast.info('Loading courses...');
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Error fetching courses: ' + (error?.data?.message || error.error));
+    }
+  }, [error]);
+
   return (
-    <MainLayout>
+    <div className="container mx-auto p-4 mt-2">
       <Button color="primary" to="/">
         Go Back To Home
       </Button>
 
-      <div className="my-4 flex flex-col md:flex-row justify-between items-center">
+      <div className="my-4 flex flex-col md:flex-row justify-between items-center mt-10">
         <input
           type="text"
           placeholder="Search by course name or category..."
@@ -102,11 +116,9 @@ const AllCoursesPage = () => {
         </div>
       </div>
       <div className="flex flex-wrap justify-center gap-8 py-10">
-        {isLoading ? (
-          <Loader />
-        ) : error ? (
-          <Message variant='error'>{error?.data?.message || error.error}</Message>
-        ) : Array.isArray(currentCourses) && currentCourses.length > 0 ? (
+        {isLoading && <Loader />}
+        {error && <Message variant='error'>{error?.data?.message || error.error}</Message>}
+        {!isLoading && !error && Array.isArray(currentCourses) && currentCourses.length > 0 ? (
           currentCourses.map((course) => (
             <CourseCard
               key={course._id}
@@ -135,7 +147,7 @@ const AllCoursesPage = () => {
           </Button>
         ))}
       </div>
-    </MainLayout>
+    </div>
   );
 };
 

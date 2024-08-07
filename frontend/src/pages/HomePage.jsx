@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useGetCoursesQuery } from '../slices/coursesApiSlice';
 import MainLayout from '../layouts/MainLayout';
 import Hero from '../Components/Hero';
@@ -8,16 +8,26 @@ import Button from '../Components/Button';
 import Loader from '../Components/Loader';
 import { Link } from 'react-router-dom';
 import Message from '../Components/Message';
+import { toast } from 'react-toastify';
 
 const HomePage = () => {
   const { data: response, isLoading, error } = useGetCoursesQuery();
   const latestCoursesRef = useRef(null);
 
-  // console.log('Fetched data:', response);
+  // Use useEffect to handle toast notifications
+  useEffect(() => {
+    if (isLoading) {
+      toast.info('Loading courses...');
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Error fetching courses: ' + (error?.data?.message || error.error));
+    }
+  }, [error]);
 
   const courses = response?.data || [];
-
-  // slice the courses array to get only the latest 3 courses
   const latestCourses = courses.slice(0, 3);
 
   const scrollToCourses = () => {
@@ -25,7 +35,7 @@ const HomePage = () => {
   };
 
   return (
-    <MainLayout>
+    <div className="container mx-auto p-4">
       {isLoading ? (
         <Loader />
       ) : error ? (
@@ -60,7 +70,7 @@ const HomePage = () => {
           </div>
         </>
       )}
-    </MainLayout>
+    </div>
   );
 };
 

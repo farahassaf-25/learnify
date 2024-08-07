@@ -2,10 +2,9 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../Components/Button';
-import MainLayout from '../layouts/MainLayout';
-import InlineMessage from '../Components/InlineMessage';
-import { addToCart, removeFromCart } from '../slices/cartSlice';
 import MiddleText from '../Components/MiddleText';
+import { toast } from 'react-toastify';
+import { removeFromCart } from '../slices/cartSlice';
 import { FaTrash } from 'react-icons/fa';
 
 const CartPage = () => {
@@ -14,26 +13,23 @@ const CartPage = () => {
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
 
-  const addToCartHandler = () => {
-    dispatch(addToCart(course.data));
-  };
-
   const handleRemoveFromCart = (id) => {
     dispatch(removeFromCart(id));
+    toast.info('Course removed from cart');
   };
 
   const checkoutHandler = () => {
     navigate('/login?redirect=/shipping');
-  }
+  };
 
   return (
-    <MainLayout>
-      <MiddleText text='Your Cart' />
+    <div className="container mx-auto p-4">
+      <MiddleText text="Your Cart" />
       {cartItems.length === 0 ? (
-        <div>
-          <InlineMessage variant="info">
+        <div className="flex flex-col items-center">
+          <Button color="primary" className="mb-4">
             Your cart is empty. <Link to="/courses" className="text-blue-500 underline">Go to Courses</Link>
-          </InlineMessage>
+          </Button>
         </div>
       ) : (
         <div>
@@ -51,11 +47,13 @@ const CartPage = () => {
             ))}
           </div>
           <div className="flex justify-center mt-6">
-            <Button color="primary">Proceed to Checkout</Button>
+            <Button color="primary" onClick={checkoutHandler}>
+              Proceed to Checkout
+            </Button>
           </div>
         </div>
       )}
-    </MainLayout>
+    </div>
   );
 };
 
