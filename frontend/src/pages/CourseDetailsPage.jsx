@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../slices/cartSlice';
 import Button from '../Components/Button';
 import { useGetCourseDetailsQuery } from '../slices/coursesApiSlice';
 import Loader from '../Components/Loader';
@@ -7,10 +9,14 @@ import Message from '../Components/Message';
 
 const CourseDetailsPage = () => {
   const { id } = useParams();
-  // console.log("Course ID:", id);
+  const dispatch = useDispatch();
   const { data: course, isLoading, error } = useGetCourseDetailsQuery(id);
-  
+
   const [isLoggedIn, setIsLoggedIn] = useState(false); 
+
+  const addToCartHandler = () => {
+    dispatch(addToCart(course.data));
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -60,7 +66,9 @@ const CourseDetailsPage = () => {
             </div>
           </div>
           <div className="flex justify-center mt-6">
-            <Button color="primary">Show All Lectures</Button>
+            <Button color="primary" onClick={addToCartHandler}>
+              Add to Cart
+            </Button>
           </div>
           {isLoggedIn && (
             <div className="mt-6">

@@ -2,8 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from './Button';
 import logo from '../assets/logo-only.png';
+import { useSelector } from 'react-redux';
+import { FaShoppingCart } from 'react-icons/fa';
 
 const Navbar = () => {
+  const cart = useSelector((state) => state.cart);
+  const cartItemsCount = cart.cartItems.length;
+
   return (
     <div className="navbar bg-bgColor flex-shrink-0">
       <div className="navbar-start flex items-center space-x-4">
@@ -57,6 +62,14 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end hidden lg:flex gap-2 lg:gap-4">
+        <Link to="/cart" className="relative">
+          <FaShoppingCart className="text-textColor text-4xl mr-4" />
+          {cartItemsCount > 0 && (
+            <span className="absolute top-0 left-7 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+              {cartItemsCount}
+            </span>
+          )}
+        </Link>
         <Button color="primary" to="/login">Login</Button>
         <Button color="secondary" to="/register">Register</Button>
       </div>
