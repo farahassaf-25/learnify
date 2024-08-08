@@ -4,7 +4,7 @@ import App from './App';
 import './index.css';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import store from './store';
+import store from './Redux/store';
 
 // Set the theme attribute
 document.documentElement.setAttribute('data-theme', 'mytheme');

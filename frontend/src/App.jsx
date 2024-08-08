@@ -8,6 +8,7 @@ import CourseDetailsPage from './pages/CourseDetailsPage';
 import CartPage from './pages/CartPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LoginPage from './pages/LoginPage';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/courses" element={<AllCoursesPage />} />
         <Route path="/courses/:id" element={<CourseDetailsPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
       <ToastContainer />
     </MainLayout>

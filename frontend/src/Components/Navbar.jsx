@@ -11,7 +11,7 @@ const Navbar = () => {
 
   return (
     <div className="navbar bg-bgColor flex-shrink-0">
-      <div className="navbar-start flex items-center space-x-4">
+      <div className="navbar-start flex items-center space-x-5">
         <div className="dropdown lg:hidden">
           <div tabIndex={0} role="button" className="btn btn-ghost">
             <svg

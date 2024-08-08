@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { useGetCoursesQuery } from '../slices/coursesApiSlice';
-import MainLayout from '../layouts/MainLayout';
+import { useGetCoursesQuery } from '../Redux/slices/coursesApiSlice';
 import Hero from '../Components/Hero';
 import MiddleText from '../Components/MiddleText';
 import CourseCard from '../Components/CourseCard';

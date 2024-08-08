@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Button from '../Components/Button';
 import MiddleText from '../Components/MiddleText';
 import { toast } from 'react-toastify';
-import { removeFromCart } from '../slices/cartSlice';
+import { removeFromCart } from '../Redux/slices/cartSlice';
 import { FaTrash } from 'react-icons/fa';
 
 const CartPage = () => {

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { addToCart } from '../slices/cartSlice';
+import { addToCart } from '../Redux/slices/cartSlice';
 import Button from '../Components/Button';
-import { useGetCourseDetailsQuery } from '../slices/coursesApiSlice';
+import { useGetCourseDetailsQuery } from '../Redux/slices/coursesApiSlice';
 import Loader from '../Components/Loader';
 import Message from '../Components/Message';
 import { toast } from 'react-toastify';

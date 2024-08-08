@@ -2,14 +2,11 @@ const express = require('express');
 const connectDB = require('./config/db');
 const colors = require('colors');
 const cookieParser = require('cookie-parser');
-const sanitizeData = require('express-mongo-sanitize');
-const helmet = require('helmet');
 const limitRequest = require('express-rate-limit');
-const cors = require('cors');
-const hpp = require('hpp');
 
 const logger = require('./middleware/logger');
 const errorHandler = require('./middleware/error');
+
 // Route files
 const courses = require('./routes/courses');
 const lectures = require('./routes/lectures');
@@ -22,32 +19,20 @@ const app = express();
 
 // Body parser
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 
-//cookie parser
+// Cookie parser
 app.use(cookieParser());
 
-//logger middleware
+// Logger middleware
 app.use(logger);
 
-//sanitize data
-app.use(sanitizeData());
-
-//set security headers
-app.use(helmet());
-
-//enable cors
-app.use(cors()); 
-
-//limit requests from same API
+// Limit requests from the same API
 const limit = limitRequest({
-    windowMs: 10 * 60 * 1000, //10 mins
-    max: 20, //20 times limit
+    windowMs: 10 * 60 * 1000, // 10 mins
+    max: 20, // 20 times limit
 });
 app.use(limit);
-
-//prevent http param pollution
-app.use(hpp());
 
 // Mount routes
 app.use('/learnify/courses', courses);

@@ -1,7 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useGetCoursesQuery } from '../slices/coursesApiSlice';
-import MainLayout from '../layouts/MainLayout';
+import { useGetCoursesQuery } from '../Redux/slices/coursesApiSlice';
 import CourseCard from '../Components/CourseCard';
 import Button from '../Components/Button';
 import Loader from '../Components/Loader';
