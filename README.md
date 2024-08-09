@@ -63,12 +63,8 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 - [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 - [colors](https://www.npmjs.com/package/colors)
 - [cookie-parser](https://www.npmjs.com/package/cookie-parser)
-- [cors](https://www.npmjs.com/package/cors)
 - [express](https://www.npmjs.com/package/express)
-- [express-mongo-sanitize](https://www.npmjs.com/package/express-mongo-sanitize)
 - [express-rate-limit](https://www.npmjs.com/package/express-rate-limit)
-- [helmet](https://www.npmjs.com/package/helmet)
-- [hpp](https://www.npmjs.com/package/hpp)
 - [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 - [mongoose](https://www.npmjs.com/package/mongoose)
 - [multer](https://www.npmjs.com/package/multer)
@@ -144,10 +140,10 @@ Learnify/
 │   │   ├── helpers/
 │   │   ├── layout/
 │   │   ├── pages/
+│   │   ├── Redux/
 │   │   ├── App.jsx
 │   │   ├── index.css
 │   │   ├── main.jsx
-│   ├── .env
 │   ├── package.json
 │   ├── README.md
 
