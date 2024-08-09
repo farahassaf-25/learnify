@@ -13,7 +13,7 @@ const { protect, authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.post('/register', register);
+router.post('/', register);
 router.post('/login', login);
 router.get('/me', protect, authorize('student ', 'admin'), getMe);
 router.post('/forgotPassword', forgotPassword);

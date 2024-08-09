@@ -10,6 +10,12 @@ const crypto = require('crypto');
 exports.register = asyncHandler(async(req, res, next) => {
     const { name, email, password, role } = req.body;
 
+    //check if email already registered
+    const existingUser = await User.findOne({ email });
+    if(existingUser) {
+        return next(new ErrorResponse('Email is already registered', 400));
+    }
+
     //create user
     const user = await User.create({
         name,
