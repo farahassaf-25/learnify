@@ -1,13 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import Button from './Button';
 import logo from '../assets/logo-only.png';
-import { useSelector } from 'react-redux';
 import { FaShoppingCart } from 'react-icons/fa';
 
 const Navbar = () => {
   const cart = useSelector((state) => state.cart);
+
+  //get user info from redux
+  const { userInfo } = useSelector((state) => state.auth);
+
   const cartItemsCount = cart.cartItems.length;
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
     <div className="navbar bg-bgColor flex-shrink-0">
@@ -39,12 +46,26 @@ const Navbar = () => {
             <li><NavLink to="/about">About Us</NavLink></li>
             <li><NavLink to="/contact">Contact Us</NavLink></li>
             <div className="flex justify-between mt-4 space-x-2">
-              <li>
-                <Button color="primary" to="/login" onClick={() => alert('Login Clicked')}>Login</Button>
-              </li>
-              <li>
-                <Button color="secondary" to="/register" onClick={() => alert('Register Clicked')}>Register</Button>
-              </li>
+              { userInfo ? (
+                <>
+                  <li>
+                    <Button color="primary" to="/profile">Profile</Button>
+                  </li>
+                  <li>
+                    <Button color="secondary">Logout</Button>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Button color="primary" to="/login">Login</Button>
+                  </li>
+                  <li>
+                    <Button color="secondary" to="/register">Register</Button>
+                  </li>
+                </>
+              )
+              }
             </div>
           </ul>
         </div>
@@ -70,8 +91,17 @@ const Navbar = () => {
             </span>
           )}
         </Link>
-        <Button color="primary" to="/login">Login</Button>
-        <Button color="secondary" to="/register">Register</Button>
+        {userInfo ? (
+          <>
+            <Button color="primary" to="/profile">Profile</Button>
+            <Button color="secondary">Logout</Button>
+          </>
+        ) : (
+          <>
+            <Button color="primary" to="/login">Login</Button>
+            <Button color="secondary" to="/register">Register</Button>
+          </>
+        )}
       </div>
     </div>
   );
