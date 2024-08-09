@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useLogoutMutation } from '../Redux/slices/userApiSlice';
+import { logout } from '../Redux/slices/authSlice';
 import Button from './Button';
 import logo from '../assets/logo-only.png';
 import { FaShoppingCart } from 'react-icons/fa';
@@ -10,11 +12,22 @@ const Navbar = () => {
 
   //get user info from redux
   const { userInfo } = useSelector((state) => state.auth);
+  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const cartItemsCount = cart.cartItems.length;
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [logoutApiCall]  = useLogoutMutation();
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap();
+      dispatch(logout());
+      navigate('/')
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="navbar bg-bgColor flex-shrink-0">
@@ -52,7 +65,7 @@ const Navbar = () => {
                     <Button color="primary" to="/profile">Profile</Button>
                   </li>
                   <li>
-                    <Button color="secondary">Logout</Button>
+                    <Button color="secondary" onClick={logoutHandler}>Logout</Button>
                   </li>
                 </>
               ) : (
@@ -94,7 +107,7 @@ const Navbar = () => {
         {userInfo ? (
           <>
             <Button color="primary" to="/profile">Profile</Button>
-            <Button color="secondary">Logout</Button>
+            <Button color="secondary" onClick={logoutHandler}>Logout</Button>
           </>
         ) : (
           <>
