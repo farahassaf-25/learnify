@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLoginMutation } from '../Redux/slices/userApiSlice';
 import { setCredentials } from '../Redux/slices/authSlice';
 import Form from '../Components/Form';
-import Loader from '../Components/Loader';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -19,23 +18,30 @@ const LoginPage = () => {
 
   const { userInfo } = useSelector((state) => state.auth);
   const search = new URLSearchParams(location.search);
-  const redirect = search.get('redirect') || '/';
+  const redirect = search.get('redirect') || '/courses';
 
   useEffect(() => {
     if (userInfo) {
       navigate(redirect);
     }
-  }, [navigate, redirect, userInfo]); 
+  }, [navigate, redirect, userInfo]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    
+    //validation for empty fields
+    if (!email || !password) {
+      toast.error('Please fill in all fields');
+      return;
+    }
+
     try {
-      //call login, get response and set credentials
+      //call login, get response, and set credentials
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
       navigate(redirect || '/');
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      toast.error(err?.data?.message || 'Invalid email or password');
     }
   };
 
@@ -47,7 +53,7 @@ const LoginPage = () => {
       type: 'email',
       placeholder: 'Enter your email',
       value: email,
-      onChange: (e) => setEmail(e.target.value), 
+      onChange: (e) => setEmail(e.target.value),
     },
     {
       id: 'password',
@@ -74,11 +80,11 @@ const LoginPage = () => {
         fields={loginFields}
         onSubmit={submitHandler}
         submitLabel="Login"
+        isLoading={isLoading}
       />
-      {isLoading && <Loader />}
       <p className="mt-4">
         Don't have an account?{' '}
-        <Link to={ redirect ? `/register?redirect=${redirect}` : '/register'} className="text-primary font-bold underline">
+        <Link to={redirect ? `/register?redirect=${redirect}` : '/register'} className="text-primary font-bold underline">
           Register
         </Link>
       </p>
