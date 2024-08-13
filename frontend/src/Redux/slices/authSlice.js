@@ -5,19 +5,22 @@ const initialState = {
 };
 
 const authSlice = createSlice({
-    name: "auth",
-    initialState,
+    name: 'auth',
+    initialState: {
+        userInfo: JSON.parse(localStorage.getItem('userInfo')) || null,
+    },
     reducers: {
         setCredentials: (state, action) => {
-            state.userInfo = action.payload;
-            localStorage.setItem("userInfo", JSON.stringify(action.payload));
+            state.userInfo = action.payload.user; // Adjust based on the actual response
+            localStorage.setItem('userInfo', JSON.stringify(action.payload.user)); // Store user info in localStorage
         },
-        logout: (state, action) => {
-            state.userInfo = null,
+        logout: (state) => {
+            state.userInfo = null;
             localStorage.removeItem('userInfo');
         }
     },
 });
+
 
 export const { setCredentials, logout } = authSlice.actions;
 export default authSlice.reducer;

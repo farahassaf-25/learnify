@@ -23,7 +23,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 method: 'POST',
             }),
         }),
+        addCoursesToPlaylist: builder.mutation({
+            query: (data) => ({
+                url: `${USERS_URL}/playlist`, // Adjust the URL as needed
+                method: "POST",
+                body: data,
+            }),
+        }),
     }),
 })
 
-export const { useLoginMutation, useRegisterMutation, useLogoutMutation } = userApiSlice;
+export const { useLoginMutation, useRegisterMutation, useLogoutMutation, useAddCoursesToPlaylistMutation } = userApiSlice;

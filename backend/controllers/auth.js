@@ -10,6 +10,8 @@ const crypto = require('crypto');
 exports.register = asyncHandler(async(req, res, next) => {
     const { name, email, password, role } = req.body;
 
+    const avatar = req.file ? req.file.location : '';
+
     //check if email already registered
     const existingUser = await User.findOne({ email });
     if(existingUser) {
@@ -21,7 +23,8 @@ exports.register = asyncHandler(async(req, res, next) => {
         name,
         email,
         password,
-        role
+        role,
+        avatar
     });
 
     sendTokenResponse(user, 200, res);
@@ -133,6 +136,10 @@ exports.updateDetails = asyncHandler(async(req, res, next) => {
         email: req.body.email
     };
 
+    if(req.file) {
+        fieldsToUpdate.avatar = req.file.location; //save image url from S3
+    }
+
     const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
         new: true,
         runValidators: true
@@ -189,7 +196,14 @@ const sendTokenResponse = (user, statusCode, res) => {
         .cookie('token', token, options)
         .json({
             success: true,
-            token
+            token,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                avatar: user.avatar,
+                role: user.role
+            }
         });
 }
 

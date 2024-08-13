@@ -38,7 +38,8 @@ const LoginPage = () => {
     try {
       //call login, get response, and set credentials
       const res = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ ...res }));
+      console.log(res);
+      dispatch(setCredentials(res));
       navigate(redirect || '/');
     } catch (err) {
       toast.error(err?.data?.message || 'Invalid email or password');
