@@ -31,30 +31,6 @@ exports.register = asyncHandler(async(req, res, next) => {
     });
 });
 
-// @desc Get current logged in user
-// @route GET /learnify/auth/me
-// @access Private
-exports.getMe = asyncHandler(async(req, res, next) => {
-    const user = await User.findById(req.user.id);
-
-    res.status(200).json({
-        success: true,
-        data: user
-    });
-});
-
-// @desc Get user profile
-// @route GET /learnify/auth/profile
-// @access Private
-exports.getUserProfile = asyncHandler(async(req, res, next) => {
-    const user = await User.findById(req.user.id);
-
-    res.status(200).json({
-        success: true,
-        data: user
-    });
-});
-
 // @desc Login user
 // @route POST /learnify/auth/login
 // @access Public

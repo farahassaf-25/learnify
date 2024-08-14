@@ -18,7 +18,7 @@ const LoginPage = () => {
 
   const { userInfo } = useSelector((state) => state.auth);
   const search = new URLSearchParams(location.search);
-  const redirect = search.get('redirect') || '/courses';
+  const redirect = search.get('redirect') || '/';
 
   useEffect(() => {
     if (userInfo) {

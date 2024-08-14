@@ -11,7 +11,7 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [avatar, setAvatar] = useState('');
+  const [image, setImage] = useState(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const RegisterPage = () => {
 
   const { userInfo } = useSelector((state) => state.auth);
   const search = new URLSearchParams(location.search);
-  const redirect = search.get('redirect') || '/courses';
+  const redirect = search.get('redirect') || '/';
 
   useEffect(() => {
     if (userInfo) {
@@ -31,35 +31,38 @@ const RegisterPage = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    
+  
     if (!name || !email || !password || !confirmPassword) {
-        toast.error('Please fill in all fields');
-        return;
+      toast.error('Please fill in all fields');
+      return;
     }
-
+  
     if (password !== confirmPassword) {
-        toast.error('Passwords do not match');
-        return;
+      toast.error('Passwords do not match');
+      return;
     }
-
+  
     try {
-        const userData = { name, email, password };
-
-        if (avatar) {
-            userData.avatar = avatar;
-        }
-
-        const res = await register(userData).unwrap();
-        dispatch(setCredentials({ ...res }));
-        navigate(redirect || '/');
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('email', email);
+      formData.append('password', password);
+      
+      if (image) {
+        formData.append('image', image); 
+      }
+  
+      const res = await register(formData).unwrap();
+      dispatch(setCredentials({ ...res }));
+      navigate(redirect || '/');
     } catch (err) {
-        if (err?.data?.error) {
-            toast.error(err.data.error); 
-        } else {
-            toast.error('An unexpected error occurred');
-        }
+      if (err?.data?.error) {
+        toast.error(err.data.error); 
+      } else {
+        toast.error('An unexpected error occurred');
+      }
     }
-};
+  };  
 
   const registerFields = [
     {
@@ -99,13 +102,12 @@ const RegisterPage = () => {
         onChange: (e) => setConfirmPassword(e.target.value),
     },
     {
-        id: 'avatar',
-        name: 'avatar',
-        label: 'Avatar',
+        id: 'image',
+        name: 'image',
+        label: 'Image',
         type: 'file',
         placeholder: 'Upload your image',
-        value: avatar,
-        onChange: (e) => setAvatar(e.target.value),
+        onChange: (e) => setImage(e.target.files[0]),
     },
   ];
 
