@@ -28,13 +28,9 @@ const UsersSchema = new mongoose.Schema({
         minlength: [6, 'Password must be at least 6 characters'],
         select: false,
     },
-    avatar: {
-        public_id: {
-            type: String,
-        },
-        url: {
-            type: String,
-        },
+    image: {
+        type: String,
+        default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'
     },
     role: {
         type: String,

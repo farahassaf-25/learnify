@@ -2,38 +2,51 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const sendEmail = require('../utils/sendEmail');
 const User = require('../models/Users');
+const uploadImage = require('../config/uploadImage.js');
 const crypto = require('crypto');
 
 //@desc register user
 //@route POST /learnify/auth/register
 //@access public
 exports.register = asyncHandler(async(req, res, next) => {
-    const { name, email, password, role } = req.body;
+    uploadImage.single('image')(req, res, async(err) => {
+        if(err) {
+            console.error('Upload error:', err);
+            return next(new ErrorResponse(err.message, 400));
+        }
 
-    const avatar = req.file ? req.file.location : '';
+        console.log('Uploaded file:', req.file);
 
-    //check if email already registered
-    const existingUser = await User.findOne({ email });
-    if(existingUser) {
-        return next(new ErrorResponse('Email is already registered', 400));
-    }
+        const { name, email, password, role } = req.body;
 
-    //create user
-    const user = await User.create({
-        name,
-        email,
-        password,
-        role,
-        avatar
+        const user = await User.create({
+            name,
+            email,
+            password,
+            role,
+            image: req.file ? req.file.location : undefined,
+        });
+
+        sendTokenResponse(user, 200, res);  
     });
-
-    sendTokenResponse(user, 200, res);
 });
 
 // @desc Get current logged in user
 // @route GET /learnify/auth/me
 // @access Private
 exports.getMe = asyncHandler(async(req, res, next) => {
+    const user = await User.findById(req.user.id);
+
+    res.status(200).json({
+        success: true,
+        data: user
+    });
+});
+
+// @desc Get user profile
+// @route GET /learnify/auth/profile
+// @access Private
+exports.getUserProfile = asyncHandler(async(req, res, next) => {
     const user = await User.findById(req.user.id);
 
     res.status(200).json({
@@ -201,7 +214,7 @@ const sendTokenResponse = (user, statusCode, res) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                avatar: user.avatar,
+                image: user.image,
                 role: user.role
             }
         });

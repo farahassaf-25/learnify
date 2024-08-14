@@ -4,6 +4,7 @@ const {
     register, 
     login, 
     getMe, 
+    getUserProfile,
     forgotPassword, 
     resetPassword, 
     updateDetails,
@@ -14,13 +15,18 @@ const { protect, authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.post('/', uploadImage.single('avatar'), register);
+router.post('/', register);
 router.post('/login', login);
-router.get('/me', protect, authorize('student ', 'admin'), getMe);
+router.get('/me', protect, authorize('student', 'admin'), getMe);
 router.post('/forgotPassword', forgotPassword);
 router.put('/resetPassword/:resetToken', resetPassword);
 router.put('/updateDetails', protect, uploadImage.single('avatar'), updateDetails);
 router.put('/updatePassword', protect, updatePassword);
 router.post('/logout', logout);
+
+
+router
+  .route('/profile')
+  .get(protect, getUserProfile);
 
 module.exports = router;
