@@ -32,9 +32,7 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 - Subscribe to Courses
 - Unsubscribe from Courses
 - Payment Method for Subscription:
-  - Stripe or
-  - PayPal or
-  - Razorpay
+  - PayPal 
 
 
 ### Additional Features:
@@ -62,6 +60,7 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 - [aws-sdk/lib-storage](https://www.npmjs.com/package/@aws-sdk/lib-storage)
 - [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 - [colors](https://www.npmjs.com/package/colors)
+- [cors](https://www.npmjs.com/package/cors)
 - [cookie-parser](https://www.npmjs.com/package/cookie-parser)
 - [express](https://www.npmjs.com/package/express)
 - [express-rate-limit](https://www.npmjs.com/package/express-rate-limit)
