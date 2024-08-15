@@ -7,19 +7,25 @@ const initialState = {
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
-        userInfo: JSON.parse(localStorage.getItem('userInfo')) || null,
+      userInfo: JSON.parse(localStorage.getItem("userInfo")) || null,
+      token: localStorage.getItem("token") || null, // Add token to state
     },
     reducers: {
-        setCredentials: (state, action) => {
-            state.userInfo = action.payload.user; // Adjust based on the actual response
-            localStorage.setItem('userInfo', JSON.stringify(action.payload.user)); // Store user info in localStorage
-        },
-        logout: (state) => {
-            state.userInfo = null;
-            localStorage.removeItem('userInfo');
-        }
+      setCredentials: (state, action) => {
+        state.userInfo = action.payload.user; 
+        state.token = action.payload.token; // Store token
+        localStorage.setItem('userInfo', JSON.stringify(action.payload.user));
+        localStorage.setItem('token', action.payload.token); // Save token
+      },
+      logout: (state) => {
+        state.userInfo = null;
+        state.token = null; // Clear token
+        localStorage.removeItem('userInfo');
+        localStorage.removeItem('token');
+      }
     },
-});
+  });
+  
 
 
 export const { setCredentials, logout } = authSlice.actions;

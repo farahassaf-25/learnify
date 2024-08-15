@@ -1,4 +1,3 @@
-// src/App.jsx
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Navbar from './Components/Navbar';
@@ -12,6 +11,7 @@ import RegisterPage from './pages/RegisterPage';
 import PrivateRoute from './pages/PrivateRoute';
 import PaymentPage from './pages/PaymentPage';
 import ConfirmationPage from './pages/ConfirmationPage';
+import UserProfilePage from './pages/UserProfilePage';
 
 const App = () => {
   return (
@@ -24,12 +24,14 @@ const App = () => {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        
-        <Route path="/payment/checkout" element={<PrivateRoute />}>
-          <Route index element={<PaymentPage />} />
-        </Route>
 
+      <Route path='' element={<PrivateRoute />}>
+        <Route path='/payment/checkout' element={<PaymentPage />} />
+        <Route path='/me' element={<UserProfilePage />} />
         <Route path="/confirmation" element={<ConfirmationPage />} />
+      </Route>
+
+        
       </Routes>
     </MainLayout>
   );
