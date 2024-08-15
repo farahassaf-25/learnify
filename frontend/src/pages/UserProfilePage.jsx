@@ -19,7 +19,6 @@ const UserProfilePage = () => {
     const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [courses, setCourses] = useState([]);
-    const [imageVersion, setImageVersion] = useState(0);
 
     const { userInfo } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
@@ -30,8 +29,8 @@ const UserProfilePage = () => {
     const [updateDetails] = useUpdateDetailsMutation();
 
     useEffect(() => {
-        if (userProfile?.data) {  
-            dispatch(setCredentials(userProfile.data)); 
+        if (userProfile?.data) {
+            dispatch(setCredentials(userProfile.data));
             setName(userProfile.data.name);
             setEmail(userProfile.data.email);
             setImagePreview(userProfile.data.image);
@@ -39,14 +38,14 @@ const UserProfilePage = () => {
         if (profileError) {
             toast.error('Failed to fetch user profile');
         }
-    
+
         if (userCourses) {
             setCourses(userCourses);
         }
         if (coursesError) {
             toast.error('Failed to load courses');
         }
-    }, [userProfile, profileError, userCourses, coursesError, dispatch]);    
+    }, [userProfile, profileError, userCourses, coursesError, dispatch]);
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -54,7 +53,7 @@ const UserProfilePage = () => {
             toast.error('Passwords do not match');
             return;
         }
-    
+
         try {
             const formData = new FormData();
             formData.append('name', name);
@@ -63,29 +62,28 @@ const UserProfilePage = () => {
             if (image) {
                 formData.append('image', image, image.name);
             }
-            setImageVersion(prev => prev + 1);
-    
+
             const res = await updateDetails(formData).unwrap();
-            dispatch(setCredentials({ ...res.data })); 
+            dispatch(setCredentials({ ...res.data }));
             setImagePreview(`${res.data.image}?${new Date().getTime()}`);
             toast.success('Profile updated successfully');
-            setIsModalOpen(false);  
+            setIsModalOpen(false);
         } catch (err) {
             toast.error(err?.data?.message || err.error);
         }
     };
-    
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         setImage(file);
-
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImagePreview(reader.result);
             };
             reader.readAsDataURL(file);
+        } else {
+            setImagePreview('');
         }
     };
 
@@ -138,7 +136,7 @@ const UserProfilePage = () => {
                 {/* Left Column */}
                 <div className="flex flex-col items-center">
                     <img
-                        src={imagePreview}
+                        src={`${imagePreview}?v=${new Date().getTime()}`}
                         alt="Profile"
                         className="w-48 h-48 rounded-full border-2 border-primary mb-12"
                     />
@@ -155,7 +153,7 @@ const UserProfilePage = () => {
                             <ul>
                                 {courses.map(course => (
                                     <li key={course.id} className="border p-4 mb-2 rounded">
-                                        <h3 className="text-lg font-bold">{course.title}</h3>
+                                        <h3 className="text-lg                                         font-bold">{course.title}</h3>
                                         <p>{course.description}</p>
                                     </li>
                                 ))}
@@ -181,14 +179,16 @@ const UserProfilePage = () => {
                                 Close
                             </button>
                             <Form
-                                title=""
+                                title="Update Profile"
                                 fields={fields}
                                 onSubmit={submitHandler}
                                 submitLabel="Save Changes"
                                 isLoading={false}
                                 imagePreview={imagePreview}
                                 handleImageChange={handleImageChange}
+                                showFileInput={true}
                             />
+
                         </div>
                     </div>
                 </>
@@ -209,3 +209,4 @@ const UserProfilePage = () => {
 };
 
 export default UserProfilePage;
+

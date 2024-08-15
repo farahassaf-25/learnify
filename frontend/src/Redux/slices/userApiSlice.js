@@ -23,7 +23,6 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
       }),
     }),
-    // Change profile to a query
     profile: builder.query({
       query: () => ({
         url: `${USERS_URL}/me`,
@@ -31,10 +30,11 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     updateDetails: builder.mutation({
-      query: (formData) => ({
+      query: (data) => ({
         url: `${USERS_URL}/me`,
-        method: "PUT",
-        body: formData,
+        method: 'PUT',
+        body: data,
+        formData: true,
       }),
     }),
     getUserCourses: builder.query({

@@ -18,14 +18,14 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-      setCredentials: (state, action) => {
-        state.userInfo = {
-            ...state.userInfo,
-            ...action.payload,
-            image: action.payload.image + `?${new Date().getTime()}` 
-        };
-        localStorage.setItem('userInfo', JSON.stringify(state.userInfo));
-    },
+        setCredentials: (state, action) => {
+            state.userInfo = {
+              ...state.userInfo,
+              ...action.payload,
+            };
+            console.log('Redux state updated:', state.userInfo);
+            localStorage.setItem('userInfo', JSON.stringify(state.userInfo));
+          },
         logout: (state) => {
             state.userInfo = null;
             localStorage.clear();
