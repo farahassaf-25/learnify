@@ -1,25 +1,23 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../constants";
 
-const baseQuery = async (args, api, extraOptions) => {
-    const token = api.getState().auth.userInfo?.token; // Get the token from the Redux state
-  
-    const result = await fetchBaseQuery({
-      baseUrl: BASE_URL,
-      prepareHeaders: (headers) => {
-        if (token) {
-          headers.set('Authorization', `Bearer ${token}`);
-        }
-        return headers;
-      },
-    })(args, api, extraOptions);
-  
-    return result;
-  };
-  
+import { logout } from "./authSlice";
+
+const baseQuery = fetchBaseQuery({
+  baseUrl: BASE_URL,
+});
+
+async function baseQueryWithAuth(args, api, extra) {
+  const result = await baseQuery(args, api, extra);
+  // Dispatch the logout action on 401.
+  if (result.error && result.error.status === 401) {
+    api.dispatch(logout());
+  }
+  return result;
+}
 
 export const apiSlice = createApi({
-    baseQuery,
-    tagTypes: ["Courses", "Users"],
-    endpoints: (builder) => ({}),
+  baseQuery: baseQueryWithAuth, 
+  tagTypes: ['Courses', 'Users',],
+  endpoints: (builder) => ({}),
 });

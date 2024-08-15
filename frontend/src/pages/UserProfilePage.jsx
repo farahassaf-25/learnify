@@ -5,7 +5,7 @@ import Form from '../Components/Form';
 import Button from '../Components/Button';
 import ConfirmationModal from '../Components/ConfirmationModal';
 import { setCredentials } from '../Redux/slices/authSlice';
-import { useGetUserCoursesQuery } from '../Redux/slices/userApiSlice';
+import { useProfileQuery, useGetUserCoursesQuery, useUpdateDetailsMutation } from '../Redux/slices/userApiSlice';
 import { useNavigate } from 'react-router-dom';
 import MiddleText from '../Components/MiddleText';
 
@@ -19,24 +19,34 @@ const UserProfilePage = () => {
     const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [courses, setCourses] = useState([]);
+    const [imageVersion, setImageVersion] = useState(0);
 
     const { userInfo } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const { data: userProfile, error: profileError } = useProfileQuery();
     const { data: userCourses, error: coursesError } = useGetUserCoursesQuery(userInfo.id);
+    const [updateDetails] = useUpdateDetailsMutation();
 
     useEffect(() => {
-        setName(userInfo.name);
-        setEmail(userInfo.email);
-        setImagePreview(userInfo.image);
-
+        if (userProfile?.data) {  
+            dispatch(setCredentials(userProfile.data)); 
+            setName(userProfile.data.name);
+            setEmail(userProfile.data.email);
+            setImagePreview(userProfile.data.image);
+        }
+        if (profileError) {
+            toast.error('Failed to fetch user profile');
+        }
+    
         if (userCourses) {
             setCourses(userCourses);
         }
         if (coursesError) {
             toast.error('Failed to load courses');
         }
-    }, [userInfo, userCourses, coursesError]);
+    }, [userProfile, profileError, userCourses, coursesError, dispatch]);    
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -44,24 +54,27 @@ const UserProfilePage = () => {
             toast.error('Passwords do not match');
             return;
         }
-
+    
         try {
             const formData = new FormData();
             formData.append('name', name);
             formData.append('email', email);
             formData.append('password', password);
             if (image) {
-                formData.append('image', image);
+                formData.append('image', image, image.name);
             }
-
-            const res = await updateProfile(formData).unwrap();
-            dispatch(setCredentials({ ...res }));
+            setImageVersion(prev => prev + 1);
+    
+            const res = await updateDetails(formData).unwrap();
+            dispatch(setCredentials({ ...res.data })); 
+            setImagePreview(`${res.data.image}?${new Date().getTime()}`);
             toast.success('Profile updated successfully');
             setIsModalOpen(false);  
         } catch (err) {
             toast.error(err?.data?.message || err.error);
         }
     };
+    
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -79,6 +92,12 @@ const UserProfilePage = () => {
     const handleDelete = () => {
         setIsConfirmationOpen(false);
     };
+
+    useEffect(() => {
+        if (userInfo?.image) {
+            setImagePreview(userInfo.image);
+        }
+    }, [userInfo]);
 
     const fields = [
         {
@@ -113,25 +132,25 @@ const UserProfilePage = () => {
 
     return (
         <div className="container mx-auto p-6 mt-5 max-w-4xl">
-            <h1 className="text-3xl font-bold mb-4 text-center">{userInfo.name}'s Profile</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h1 className="text-3xl font-bold mb-10 text-center"><span className='text-secondary'>{userInfo.name}</span>'s Profile</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-40">
                 
                 {/* Left Column */}
                 <div className="flex flex-col items-center">
                     <img
                         src={imagePreview}
                         alt="Profile"
-                        className="w-48 h-48 rounded-full border-2 border-primary mb-4"
+                        className="w-48 h-48 rounded-full border-2 border-primary mb-12"
                     />
-                    <Button onClick={() => setIsModalOpen(true)} color='secondary' className="w-full">Update Profile</Button>
+                    <Button onClick={() => navigate('/add-course')} color='secondary' className="w-full mb-8">Add Course to Learnify</Button>
+                    <Button onClick={() => setIsModalOpen(true)} color='primary' className="w-full mb-4">Update Profile</Button>
                     <Button onClick={() => setIsConfirmationOpen(true)} className="bg-red-600 text-white w-full mt-4">Delete Account</Button>
                 </div>
 
                 {/* Right Column */}
                 <div className="flex flex-col">
-                    <Button onClick={() => navigate('/add-course')} color='primary' className="mb-4">Add Course to Learnify</Button>
+                    <MiddleText text='My Courses' />
                     <div className="w-full bg-white rounded p-3">
-                        <MiddleText text='My Courses' />
                         {courses.length > 0 ? (
                             <ul>
                                 {courses.map(course => (
