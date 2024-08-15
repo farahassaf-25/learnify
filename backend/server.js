@@ -37,7 +37,7 @@ app.use(cors({
 // Limit requests from the same API
 const limit = limitRequest({
     windowMs: 10 * 60 * 1000, // 10 mins
-    max: 20, // 20 times limit
+    max: 50, // 20 times limit
 });
 app.use(limit);
 
