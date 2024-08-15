@@ -119,6 +119,7 @@ const RegisterPage = () => {
         onSubmit={submitHandler}
         submitLabel="Sign Up"
         isLoading={isLoading}
+        showFileInput={false}
       />
       <p className="mt-4">
         Already have an account?{' '}

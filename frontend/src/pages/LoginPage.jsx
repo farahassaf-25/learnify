@@ -77,12 +77,14 @@ const LoginPage = () => {
   return (
     <div className="flex flex-col justify-center items-center min-h-[80vh]">
       <Form
-        title="Login"
-        fields={loginFields}
-        onSubmit={submitHandler}
-        submitLabel="Login"
-        isLoading={isLoading}
-      />
+  title="Login"
+  fields={loginFields}
+  onSubmit={submitHandler}
+  submitLabel="Login"
+  isLoading={isLoading}
+  showFileInput={false}
+/>
+
       <p className="mt-4">
         Don't have an account?{' '}
         <Link to={redirect ? `/register?redirect=${redirect}` : '/register'} className="text-primary font-bold underline">
