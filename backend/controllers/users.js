@@ -3,6 +3,22 @@ const asyncHandler = require('../middleware/async');
 const User = require('../models/Users');
 const uploadImage = require('../config/uploadImage.js');
 
+// @desc      Get single user
+// @route     GET /learnify/auth/me
+// @access    Private/Admin
+exports.getProfile = asyncHandler(async (req, res, next) => {
+    const user = await User.findById(req.user.id).select('-password');
+  
+    if(!user){
+      return next(new ErrorResponse(`User not found`, 404));
+    }
+  
+    res.status(200).json({
+      success: true,
+      data: user
+    });
+});
+
 //@desc update user details
 //@route PUT /learnify/auth/me
 //@access private
