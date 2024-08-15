@@ -58,11 +58,12 @@ const Navbar = () => {
             <li><NavLink to="/courses">Courses</NavLink></li>
             <li><NavLink to="/about">About Us</NavLink></li>
             <li><NavLink to="/contact">Contact Us</NavLink></li>
+            <li><NavLink to='/cart'>My Cart</NavLink></li>
             <div className="flex justify-between mt-4 space-x-2">
               { userInfo ? (
                 <>
                   <li>
-                    <Button color="primary" to="/profile">Profile</Button>
+                    <Button color="primary" to="/me">Profile</Button>
                   </li>
                   <li>
                     <Button color="secondary" onClick={logoutHandler}>Logout</Button>
@@ -106,7 +107,7 @@ const Navbar = () => {
         </Link>
         {userInfo ? (
           <>
-            <Button color="primary" to="/profile">Profile</Button>
+            <Button color="primary" to="/me">Profile</Button>
             <Button color="secondary" onClick={logoutHandler}>Logout</Button>
           </>
         ) : (
