@@ -1,5 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Navbar from './Components/Navbar';
 import MainLayout from './layouts/MainLayout';
 import HomePage from './pages/HomePage';
@@ -30,9 +32,8 @@ const App = () => {
         <Route path='/me' element={<UserProfilePage />} />
         <Route path="/confirmation" element={<ConfirmationPage />} />
       </Route>
-
-        
       </Routes>
+      <ToastContainer />
     </MainLayout>
   );
 };
