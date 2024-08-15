@@ -116,30 +116,6 @@ exports.resetPassword = asyncHandler(async(req, res, next) => {
     sendTokenResponse(user, 200, res);
 });
 
-//@desc update user details
-//@route PUT /learnify/auth/updateDetails
-//@access private
-exports.updateDetails = asyncHandler(async(req, res, next) => {
-    const fieldsToUpdate = {
-        name: req.body.name,
-        email: req.body.email
-    };
-
-    if(req.file) {
-        fieldsToUpdate.avatar = req.file.location; //save image url from S3
-    }
-
-    const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
-        new: true,
-        runValidators: true
-    });
-
-    res.status(200).json({
-        success: true,
-        data: user
-    });
-});
-
 //@desc update password
 //@route PUT /learnify/auth/updatePassword
 //@access private
