@@ -160,7 +160,7 @@ classDiagram
         +String email
         +String password
         +String role
-        +String avatar
+        +String image
     }
 
     class Course {
