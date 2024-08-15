@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const colors = require('colors');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const limitRequest = require('express-rate-limit');
 
@@ -27,6 +28,11 @@ app.use(cookieParser());
 
 // Logger middleware
 app.use(logger);
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}))
 
 // Limit requests from the same API
 const limit = limitRequest({
