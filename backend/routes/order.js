@@ -4,7 +4,7 @@ const Order = require('../models/Order');
 
 const router = express.Router();
 
-router.post('/payment', protect, async (req, res) => {
+router.post('/checkout', protect, async (req, res) => {
     console.log('Request body:', req.body);
     const { orderItems, paymentMethod, itemsPrice, taxPrice, totalPrice } = req.body;
 
