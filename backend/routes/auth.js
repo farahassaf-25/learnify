@@ -9,7 +9,7 @@ const {
     logout 
 } = require('../controllers/auth');
 
-const { getProfile, updateDetails } = require('../controllers/users');
+const { getProfile, updateDetails, deleteAccount } = require('../controllers/users');
 
 const { protect } = require('../middleware/auth');
 
@@ -24,6 +24,7 @@ router.post('/logout', logout);
 
 router.route('/me')
   .get(protect, getProfile)
-  .put(protect, updateDetails);
+  .put(protect, updateDetails)
+  .delete(protect, deleteAccount);
 
 module.exports = router;

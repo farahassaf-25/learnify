@@ -5,7 +5,7 @@ import Form from '../Components/Form';
 import Button from '../Components/Button';
 import ConfirmationModal from '../Components/ConfirmationModal';
 import { setCredentials } from '../Redux/slices/authSlice';
-import { useProfileQuery, useGetUserCoursesQuery, useUpdateDetailsMutation } from '../Redux/slices/userApiSlice';
+import { useProfileQuery, useGetUserCoursesQuery, useUpdateDetailsMutation, useDeleteUserAccountMutation } from '../Redux/slices/userApiSlice';
 import { useNavigate } from 'react-router-dom';
 import MiddleText from '../Components/MiddleText';
 
@@ -27,6 +27,8 @@ const UserProfilePage = () => {
     const { data: userProfile, error: profileError } = useProfileQuery();
     const { data: userCourses, error: coursesError } = useGetUserCoursesQuery(userInfo.id);
     const [updateDetails] = useUpdateDetailsMutation();
+
+    const [deleteUserAccount, { isLoading: isDeleting }] = useDeleteUserAccountMutation();
 
     useEffect(() => {
         if (userProfile?.data) {
@@ -87,15 +89,26 @@ const UserProfilePage = () => {
         }
     };
 
-    const handleDelete = () => {
-        setIsConfirmationOpen(false);
-    };
-
     useEffect(() => {
         if (userInfo?.image) {
             setImagePreview(userInfo.image);
         }
     }, [userInfo]);
+
+    const handleDelete = async () => {
+        try {
+            await deleteUserAccount().unwrap();
+            toast.success('Account deleted successfully');
+            dispatch(setCredentials(null));
+            localStorage.removeItem('userInfo');
+            navigate('/');
+            window.location.reload(); 
+        } catch (err) {
+            toast.error(err?.data?.message || 'Failed to delete account');
+        } finally {
+            setIsConfirmationOpen(false);
+        }
+    };    
 
     const fields = [
         {
@@ -199,7 +212,7 @@ const UserProfilePage = () => {
                 <ConfirmationModal
                     title="Delete Account"
                     description="Are you sure you want to delete your account? This action cannot be undone."
-                    btnText="Confirm"
+                    btnText={isDeleting ? "Deleting..." : "Confirm"}
                     onClose={() => setIsConfirmationOpen(false)}
                     onConfirm={handleDelete}
                 />

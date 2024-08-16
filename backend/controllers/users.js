@@ -56,3 +56,21 @@ exports.updateDetails = asyncHandler(async(req, res, next) => {
     })
 });
 
+// @desc Delete user account
+// @route DELETE /learnify/auth/me
+// @access Private
+exports.deleteAccount= asyncHandler(async (req, res, next) => {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+        return next(new ErrorResponse('User not found', 404));
+    }
+
+    await User.findByIdAndDelete(req.user.id);
+
+    res.status(200).json({
+        success: true,
+        data: {},
+        msg: `Account deleted`
+    });
+});
