@@ -3,7 +3,7 @@ import Button from '../Components/Button';
 import MiddleText from '../Components/MiddleText';
 import TextInput from '../Components/TextInput';
 import FileInput from '../Components/FileInput';
-import SelectInput from '../Components/SelectInput';
+import SelectInput from '../Components/SelectInput'; // Import the new SelectInput component
 import Form from '../Components/Form';
 
 const AddCoursePage = () => {
@@ -11,6 +11,7 @@ const AddCoursePage = () => {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [level, setLevel] = useState('');
+  const [creatorName, setCreatorName] = useState('');
   const [price, setPrice] = useState('');
   const [weeks, setWeeks] = useState('');
   const [numOfLectures, setNumOfLectures] = useState(1); // default 1 lecture
@@ -26,15 +27,9 @@ const AddCoursePage = () => {
     setLectures([...lectures, { title: '', video: null }]);
   };
 
-  const handleRemoveLecture = (index) => {
-    const newLectures = [...lectures];
-    newLectures.splice(index, 1);
-    setLectures(newLectures);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
+    // Handle form submission logic here
   };
 
   return (
@@ -53,6 +48,21 @@ const AddCoursePage = () => {
         fields={[
           { id: 'courseTitle', type: 'text', placeholder: 'Course Title', value: courseTitle, onChange: (e) => setCourseTitle(e.target.value), label: 'Course Title' },
           { id: 'description', type: 'text', placeholder: 'Course Description', value: description, onChange: (e) => setDescription(e.target.value), label: 'Course Description' },
+          { id: 'category', type: 'select', label: 'Category', value: category, onChange: (e) => setCategory(e.target.value), options: [
+            { value: 'Web Development', label: 'Web Development' },
+            { value: 'Data Structures', label: 'Data Structures' },
+            { value: 'Algorithms', label: 'Algorithms' },
+            { value: 'Operating System', label: 'Operating System' },
+            { value: 'Computer Networks', label: 'Computer Networks' },
+            { value: 'Databases', label: 'Databases' },
+            { value: 'Other', label: 'Other' }
+          ]},
+          { id: 'level', type: 'select', label: 'Level', value: level, onChange: (e) => setLevel(e.target.value), options: [
+            { value: 'Beginner', label: 'Beginner' },
+            { value: 'Intermediate', label: 'Intermediate' },
+            { value: 'Advanced', label: 'Advanced' }
+          ]},
+          { id: 'creatorName', type: 'text', placeholder: 'Creator Name', value: creatorName, onChange: (e) => setCreatorName(e.target.value), label: 'Creator Name' },
           { id: 'price', type: 'number', placeholder: 'Price', value: price, onChange: (e) => setPrice(e.target.value), label: 'Price' },
           { id: 'weeks', type: 'number', placeholder: 'Weeks', value: weeks, onChange: (e) => setWeeks(e.target.value), label: 'Weeks' },
           { id: 'numOfLectures', type: 'number', placeholder: 'Number Of Lectures', value: numOfLectures, onChange: (e) => {
