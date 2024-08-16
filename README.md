@@ -1,7 +1,7 @@
 # Learnify E-Learning Platform
 
 ## Project Overview
-Learnify is an e-learning platform where users can browse diverse courses, enroll, and even share their own courses. Built with Node.js, Express.js, MongoDB, React.js + Vite, and TailwindCSS.
+Learnify is an e-learning platform where users can browse diverse courses, enroll, and even share their own courses. Built with Node.js, Express.js, MongoDB, React.js + Vite, TailwindCSS and DaisyUI.
 
 ## Features
 
@@ -130,23 +130,25 @@ Learnify/
 │   ├── routes/
 │   ├── utils/
 │   ├── server.js
-│   ├── .env
-│   ├── package.json
 │
 ├── frontend/
 │   ├── public/
 │   ├── src/
 │   │   ├── assets/
 │   │   ├── components/
-│   │   ├── helpers/
+│   │   ├── utils/
 │   │   ├── layout/
 │   │   ├── pages/
 │   │   ├── Redux/
 │   │   ├── App.jsx
 │   │   ├── index.css
 │   │   ├── main.jsx
+│   ├── tailwind.config.js
+│   ├── vite.config.js
 │   ├── package.json
 │   ├── README.md
+├──.env
+├── package.json
 
 ```
 
@@ -203,8 +205,8 @@ classDiagram
         +login()
         +changePassword()
         +logout()
-        + getAllUsers()
-        + getAllCourses()
+        +getAllUsers()
+        +getAllCourses()
         +addCourse()
         +editCourse()
         +deleteCourse()
