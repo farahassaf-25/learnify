@@ -14,6 +14,7 @@ import PrivateRoute from './pages/PrivateRoute';
 import PaymentPage from './pages/PaymentPage';
 import ConfirmationPage from './pages/ConfirmationPage';
 import UserProfilePage from './pages/UserProfilePage';
+import AddCoursePage from './pages/AddCoursePage';
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
         <Route path='/payment/checkout' element={<PaymentPage />} />
         <Route path='/me' element={<UserProfilePage />} />
         <Route path="/confirmation" element={<ConfirmationPage />} />
+        <Route path='/create-course' element={<AddCoursePage />} />
       </Route>
       </Routes>
       <ToastContainer />

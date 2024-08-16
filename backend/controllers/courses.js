@@ -46,7 +46,7 @@ exports.getCourse = asyncHandler(async (req, res, next) => {
 
 // @desc Create new course
 // @route POST /learnify/courses
-// @access Public
+// @access Private
 exports.createCourse = asyncHandler(async (req, res, next) => {
     //image upload
     uploadImage.single('image')(req, res, async(err) => {

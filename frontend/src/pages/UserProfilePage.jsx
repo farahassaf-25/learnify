@@ -153,7 +153,7 @@ const UserProfilePage = () => {
                         alt="Profile"
                         className="w-48 h-48 rounded-full border-2 border-primary mb-12"
                     />
-                    <Button onClick={() => navigate('/add-course')} color='secondary' className="w-full mb-8">Add Course to Learnify</Button>
+                    <Button onClick={() => navigate('/create-course')} color='secondary' className="w-full mb-8">Add Course to Learnify</Button>
                     <Button onClick={() => setIsModalOpen(true)} color='primary' className="w-full mb-4">Update Profile</Button>
                     <Button onClick={() => setIsConfirmationOpen(true)} className="bg-red-600 text-white w-full mt-4">Delete Account</Button>
                 </div>

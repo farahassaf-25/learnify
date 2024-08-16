@@ -23,7 +23,6 @@ const authSlice = createSlice({
               ...state.userInfo,
               ...action.payload,
             };
-            console.log('Redux state updated:', state.userInfo);
             localStorage.setItem('userInfo', JSON.stringify(state.userInfo));
           },
         logout: (state) => {
