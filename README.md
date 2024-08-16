@@ -237,7 +237,7 @@ classDiagram
 
     class Subscription {
         +String method
-        +Stripe or Razorpay or Paypal
+        +Paypal
     }
 
     class Feedback {
