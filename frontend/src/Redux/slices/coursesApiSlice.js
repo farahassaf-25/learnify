@@ -8,20 +8,16 @@ export const coursesApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
     }),
     getCourseDetails: builder.query({
-      query: (courseId) => {
-        if (!courseId) {
-          throw new Error('Course ID is undefined');
-        }
-        return `${COURSES_URL}/${courseId}`;
-      },
+      query: (courseId) => `${COURSES_URL}/${courseId}`,
       keepUnusedDataFor: 5,
     }),
     createCourse: builder.mutation({
-      query: () => ({
+      query: (formData) => ({
         url: `${COURSES_URL}`,
-        method: POST,
+        method: 'POST',
+        body: formData,
       }),
-      invalidatesTags: ["Courses"]
+      invalidatesTags: ["Courses"],
     }),
   }),
 });
@@ -29,5 +25,5 @@ export const coursesApiSlice = apiSlice.injectEndpoints({
 export const { 
   useGetCoursesQuery, 
   useGetCourseDetailsQuery, 
-  useCreateCourseMutation } 
-= coursesApiSlice;
+  useCreateCourseMutation 
+} = coursesApiSlice;

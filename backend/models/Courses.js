@@ -29,7 +29,7 @@ const CoursesSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        default: 'no-photo.jpg'
+        required: [true, 'Please add an image'],
     },
     price: {
         type: Number,
@@ -40,6 +40,10 @@ const CoursesSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Please add number of weeks'],
     },
+    numOfLectures: {
+        type: Number,
+        default: 0,
+    },
     lectures: [
         {
             type: mongoose.Schema.Types.ObjectId, 
@@ -47,10 +51,6 @@ const CoursesSchema = new mongoose.Schema({
         },
     ],
     views: {
-        type: Number,
-        default: 0,
-    },
-    numOfLectures: {
         type: Number,
         default: 0,
     },

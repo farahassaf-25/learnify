@@ -1,35 +1,42 @@
 import React, { useState } from 'react';
 import Button from '../Components/Button';
 import MiddleText from '../Components/MiddleText';
-import TextInput from '../Components/TextInput';
-import FileInput from '../Components/FileInput';
-import SelectInput from '../Components/SelectInput'; // Import the new SelectInput component
 import Form from '../Components/Form';
+import { useCreateCourseMutation } from '../Redux/slices/coursesApiSlice';
+import { useNavigate } from 'react-router-dom';
 
 const AddCoursePage = () => {
-  const [courseTitle, setCourseTitle] = useState('');
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
-  const [level, setLevel] = useState('');
-  const [creatorName, setCreatorName] = useState('');
+  const [minimumLevel, setMinimumLevel] = useState('');
+  const [image, setImage] = useState(null);
   const [price, setPrice] = useState('');
   const [weeks, setWeeks] = useState('');
-  const [numOfLectures, setNumOfLectures] = useState(1); // default 1 lecture
-  const [lectures, setLectures] = useState([{ title: '', video: null }]);
+  const [numOfLectures, setNumOfLectures] = useState('');
 
-  const handleLectureChange = (index, field, value) => {
-    const newLectures = [...lectures];
-    newLectures[index][field] = value;
-    setLectures(newLectures);
-  };
+  const [createCourse, { isLoading }] = useCreateCourseMutation();
+  const navigate = useNavigate();
 
-  const handleAddLecture = () => {
-    setLectures([...lectures, { title: '', video: null }]);
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
+  
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('category', category);
+    formData.append('minimumLevel', minimumLevel);
+    formData.append('image', image);
+    formData.append('price', price);
+    formData.append('weeks', weeks);
+    formData.append('numOfLectures', numOfLectures);
+
+    try {
+      const { data } = await createCourse(formData).unwrap();
+      navigate(`/courses/${data._id}/add-lectures`, { state: { numOfLectures: parseInt(numOfLectures) } });
+    } catch (err) {
+      console.error('Failed to create course:', err);
+    }
   };
 
   return (
@@ -42,12 +49,13 @@ const AddCoursePage = () => {
       <Form
         title="Add Course"
         onSubmit={handleSubmit}
-        submitLabel="Add Course"
-        showFileInput={true}
-        fileInputLabel="Course Image"
+        submitLabel={isLoading ? "Submitting..." : "Add Course"}
+        // showFileInput={true}
+        // fileInputLabel="Course Image"
         fields={[
-          { id: 'courseTitle', type: 'text', placeholder: 'Course Title', value: courseTitle, onChange: (e) => setCourseTitle(e.target.value), label: 'Course Title' },
+          { id: 'title', type: 'text', placeholder: 'Course Title', value: title, onChange: (e) => setTitle(e.target.value), label: 'Course Title' },
           { id: 'description', type: 'text', placeholder: 'Course Description', value: description, onChange: (e) => setDescription(e.target.value), label: 'Course Description' },
+          { id: 'image', type: 'file', label: 'Course Image', onChange: (e) => setImage(e.target.files[0])},
           { id: 'category', type: 'select', label: 'Category', value: category, onChange: (e) => setCategory(e.target.value), options: [
             { value: 'Web Development', label: 'Web Development' },
             { value: 'Data Structures', label: 'Data Structures' },
@@ -57,44 +65,18 @@ const AddCoursePage = () => {
             { value: 'Databases', label: 'Databases' },
             { value: 'Other', label: 'Other' }
           ]},
-          { id: 'level', type: 'select', label: 'Level', value: level, onChange: (e) => setLevel(e.target.value), options: [
+          { id: 'minimumLevel', type: 'select', label: 'Minimum Level', value: minimumLevel, onChange: (e) => setMinimumLevel(e.target.value), options: [
             { value: 'Beginner', label: 'Beginner' },
             { value: 'Intermediate', label: 'Intermediate' },
             { value: 'Advanced', label: 'Advanced' }
           ]},
-          { id: 'creatorName', type: 'text', placeholder: 'Creator Name', value: creatorName, onChange: (e) => setCreatorName(e.target.value), label: 'Creator Name' },
           { id: 'price', type: 'number', placeholder: 'Price', value: price, onChange: (e) => setPrice(e.target.value), label: 'Price' },
           { id: 'weeks', type: 'number', placeholder: 'Weeks', value: weeks, onChange: (e) => setWeeks(e.target.value), label: 'Weeks' },
-          { id: 'numOfLectures', type: 'number', placeholder: 'Number Of Lectures', value: numOfLectures, onChange: (e) => {
-            setNumOfLectures(e.target.value);
-            setLectures([...Array(Number(e.target.value)).keys()].map(() => ({ title: '', video: null })));
-          }, label: 'Number Of Lectures' }
+          { id: 'numOfLectures', type: 'number', placeholder: 'Num Of Lectures', value: numOfLectures, onChange: (e) => setNumOfLectures(e.target.value), label: 'Num Of Lectures' }
         ]}
       />
-
-      <MiddleText text='Lectures' />
-
-      {lectures.map((lecture, index) => (
-        <div key={index} className="mb-4">
-          <TextInput 
-            placeholder={`Lecture ${index + 1} Title`} 
-            value={lecture.title} 
-            onChange={(e) => handleLectureChange(index, 'title', e.target.value)} 
-            label={`Lecture ${index + 1} Title`} 
-          />
-          <FileInput 
-            handleImageChange={(e) => handleLectureChange(index, 'video', e.target.files[0])} 
-          />
-        </div>
-      ))}
-
-      <div className="text-center mt-8">
-        <Button type="button" color="secondary" onClick={handleAddLecture}>
-          Add Lecture
-        </Button>
-      </div>
     </div>
   );
-}
+};
 
 export default AddCoursePage;
