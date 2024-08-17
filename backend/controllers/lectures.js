@@ -27,37 +27,47 @@ exports.getCourseLectures = asyncHandler(async (req, res, next) => {
 
 // @desc Add lecture
 // @route POST /learnify/courses/:courseId/lectures
-// @access Public
+// @access Private
 exports.addLecture = asyncHandler(async (req, res, next) => {
-    req.body.course = req.params.courseId;
-    req.body.user = req.user.id;
-
-    const course = await CoursesSchema.findById(req.params.courseId);
-    if (!course) {
-        return next(new ErrorResponse(`No course found with id of ${req.params.courseId}`, 404));
-    }
-
-    if (course.user && course.user.toString() !== req.user.id && req.user.role !== 'admin') {
-        return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a lecture to the course ${course._id}`, 401));
-    }
-
-    // video upload
+    // Handle video upload
     uploadVideo.single('video')(req, res, async (err) => {
         if (err) {
             return next(new ErrorResponse(err.message, 400));
         }
 
-        // set video url if uploaded
-        if (req.file) {
-            req.body.video = req.file.location; // get video url from s3
+        // Ensure title and video are provided
+        const { title } = req.body;
+        const video = req.file ? req.file.location : null;
+
+        if (!title || !video) {
+            return next(new ErrorResponse('Please provide title and video for the lecture', 400));
         }
 
-        const lecture = await LectureSchema.create(req.body);
-        res.status(200).json({
-            success: true,
-            data: lecture,
-            msg: `Lecture created for course ${req.params.courseId}`
-        });
+        req.body.video = video; // Set video URL from S3
+
+        // Set required fields
+        req.body.course = req.params.courseId;
+        req.body.user = req.user.id;
+
+        const course = await CoursesSchema.findById(req.params.courseId);
+        if (!course) {
+            return next(new ErrorResponse(`No course found with id of ${req.params.courseId}`, 404));
+        }
+
+        if (course.user && course.user.toString() !== req.user.id && req.user.role !== 'admin') {
+            return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a lecture to the course ${course._id}`, 401));
+        }
+
+        try {
+            const lecture = await LectureSchema.create(req.body);
+            res.status(200).json({
+                success: true,
+                data: lecture,
+                msg: `Lecture created for course ${req.params.courseId}`
+            });
+        } catch (error) {
+            return next(new ErrorResponse('Error creating lecture', 500));
+        }
     });
 });
 
