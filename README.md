@@ -107,8 +107,9 @@ install [concurrently
 ```
 # update scripts in package.json:
 "scripts": {
-    "start": "node --env-file=.env server.js",
-    "dev": "node --watch --env-file=.env server.js"
+    "start": "node --env-file=.env backend/server.js",
+    "dev": "node --watch --env-file=.env backend/server.js",
+    "concurrently": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\""
   },
 ```
 ```
