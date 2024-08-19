@@ -15,6 +15,7 @@ import PaymentPage from './pages/PaymentPage';
 import ConfirmationPage from './pages/ConfirmationPage';
 import UserProfilePage from './pages/UserProfilePage';
 import AddCoursePage from './pages/AddCoursePage';
+import AddLecturePage from './pages/AddLecturesPage';
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
         <Route path='/me' element={<UserProfilePage />} />
         <Route path="/confirmation" element={<ConfirmationPage />} />
         <Route path='/create-course' element={<AddCoursePage />} />
+        <Route path="/courses/:courseId/add-lectures" element={<AddLecturePage />} />
       </Route>
       </Routes>
       <ToastContainer />
