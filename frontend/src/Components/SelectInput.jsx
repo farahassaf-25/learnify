@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SelectInput = ({ label, value, onChange, options }) => {
+const SelectInput = ({ label, valueLabel, value, onChange, options }) => {
   return (
     <div className="mb-4">
       <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -11,7 +11,7 @@ const SelectInput = ({ label, value, onChange, options }) => {
         value={value} 
         onChange={onChange}
       >
-        <option value="">Select an option</option>
+        <option value="">{valueLabel}</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}

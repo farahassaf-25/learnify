@@ -5,6 +5,9 @@ import Button from '../Components/Button';
 import Loader from '../Components/Loader';
 import Message from '../Components/Message';
 import { toast } from 'react-toastify';
+import TextInput from '../Components/TextInput';
+import CheckboxSelectInput from '../Components/CheckboxSelectInput'; 
+import SelectInput from '../Components/SelectInput'; 
 
 const AllCoursesPage = () => {
   const { data: response, isLoading, error } = useGetCoursesQuery();
@@ -12,7 +15,7 @@ const AllCoursesPage = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [levelFilter, setLevelFilter] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState([]);
   const [priceFilter, setPriceFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [coursesPerPage] = useState(9);
@@ -22,8 +25,7 @@ const AllCoursesPage = () => {
 
     if (searchTerm) {
       filtered = filtered.filter(course =>
-        course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.category.some(cat => cat.toLowerCase().includes(searchTerm.toLowerCase()))
+        course.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -31,8 +33,10 @@ const AllCoursesPage = () => {
       filtered = filtered.filter(course => course.minimumLevel === levelFilter);
     }
 
-    if (categoryFilter) {
-      filtered = filtered.filter(course => course.category.includes(categoryFilter));
+    if (categoryFilter.length > 0) {
+      filtered = filtered.filter(course =>
+        course.category.some(cat => categoryFilter.includes(cat))
+      );
     }
 
     if (priceFilter) {
@@ -43,15 +47,12 @@ const AllCoursesPage = () => {
     return filtered;
   }, [searchTerm, levelFilter, categoryFilter, priceFilter, courses]);
 
-  // Get current courses
   const indexOfLastCourse = currentPage * coursesPerPage;
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
   const currentCourses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse);
 
-  // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Toast notifications
   useEffect(() => {
     if (isLoading) {
       toast.info('Loading courses...');
@@ -64,55 +65,70 @@ const AllCoursesPage = () => {
     }
   }, [error]);
 
+  const uniqueCategories = Array.from(new Set(courses.flatMap(course => course.category)));
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setLevelFilter('');
+    setCategoryFilter([]);
+    setPriceFilter('');
+    setCurrentPage(1);
+  };
+
+  const levelOptions = [
+    { value: '', label: 'All Levels' },
+    { value: 'Beginner', label: 'Beginner' },
+    { value: 'Intermediate', label: 'Intermediate' },
+    { value: 'Advanced', label: 'Advanced' },
+  ];
+
+  const priceOptions = [
+    { value: '', label: 'All Prices' },
+    { value: '0-50', label: '0 - 50 $' },
+    { value: '51-100', label: '51 - 100 $' },
+    { value: '101-200', label: '101 - 200 $' },
+    { value: '201-500', label: '201 - 500 $' },
+    { value: '501-1000', label: '501 - 1000 $' },
+  ];
+
   return (
     <div className="container mx-auto p-4 mt-2">
       <Button color="primary" to="/">
         Go Back To Home
       </Button>
 
-      <div className="my-4 flex flex-col md:flex-row justify-between items-center mt-10">
-        <input
-          type="text"
-          placeholder="Search by course name or category..."
+      <div className="my-4 flex flex-col md:flex-row justify-between items-center mt-12">
+        <TextInput
+          placeholder="Search ..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="input input-bordered w-full md:w-1/3 mb-4 md:mb-0"
+          className="mb-4 md:mb-0 md:w-1/3"
         />
-        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-          <select
+        <div className="flex flex-col md:flex-row md:space-x-4 w-full md:w-auto">
+          <SelectInput
+            valueLabel='Level'
             value={levelFilter}
             onChange={(e) => setLevelFilter(e.target.value)}
-            className="select select-bordered w-full md:w-auto"
-          >
-            <option value="">All Levels</option>
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
-          </select>
-          <select
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="select select-bordered w-full md:w-auto"
-          >
-            <option value="">All Categories</option>
-            {Array.from(new Set(courses.flatMap(course => course.category))).map((category, index) => (
-              <option key={index} value={category}>{category}</option>
-            ))}
-          </select>
-          <select
+            options={levelOptions}
+          />
+          <CheckboxSelectInput 
+            options={uniqueCategories.map(cat => ({ value: cat, label: cat }))} 
+            selectedOptions={categoryFilter}
+            setSelectedOptions={setCategoryFilter}
+            className="mb-4 md:mb-0 md:w-auto"
+          />
+          <SelectInput
+            valueLabel='Price'
             value={priceFilter}
             onChange={(e) => setPriceFilter(e.target.value)}
-            className="select select-bordered w-full md:w-auto"
-          >
-            <option value="">All Prices</option>
-            <option value="0-50">0 - 50 $</option>
-            <option value="51-100">51 - 100 $</option>
-            <option value="101-200">101 - 200 $</option>
-            <option value="201-500">201 - 500 $</option>
-            <option value="501-1000">501 - 1000 $</option>
-          </select>
+            options={priceOptions}
+          />
         </div>
+        <Button color="secondary" onClick={clearFilters} className="w-full md:w-auto mt-4 md:mt-0">
+          Clear Filters
+        </Button>
       </div>
+
       <div className="flex flex-wrap justify-center gap-8 py-10">
         {isLoading && <Loader />}
         {error && <Message variant='error'>{error?.data?.message || error.error}</Message>}
@@ -126,6 +142,7 @@ const AllCoursesPage = () => {
               description={course.description}
               price={course.price}
               level={course.minimumLevel}
+              creatorName={course.creatorName}
             />
           ))
         ) : (
