@@ -29,13 +29,11 @@ exports.getCourseLectures = asyncHandler(async (req, res, next) => {
 // @route POST /learnify/courses/:courseId/lectures
 // @access Private
 exports.addLecture = asyncHandler(async (req, res, next) => {
-    // Handle video upload
     uploadVideo.single('video')(req, res, async (err) => {
         if (err) {
             return next(new ErrorResponse(err.message, 400));
         }
 
-        // Ensure title and video are provided
         const { title } = req.body;
         const video = req.file ? req.file.location : null;
 
@@ -43,9 +41,7 @@ exports.addLecture = asyncHandler(async (req, res, next) => {
             return next(new ErrorResponse('Please provide title and video for the lecture', 400));
         }
 
-        req.body.video = video; // Set video URL from S3
-
-        // Set required fields
+        req.body.video = video;
         req.body.course = req.params.courseId;
         req.body.user = req.user.id;
 
@@ -54,12 +50,17 @@ exports.addLecture = asyncHandler(async (req, res, next) => {
             return next(new ErrorResponse(`No course found with id of ${req.params.courseId}`, 404));
         }
 
-        if (course.user && course.user.toString() !== req.user.id && req.user.role !== 'admin') {
-            return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a lecture to the course ${course._id}`, 401));
+        if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
+            return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a lecture to this course`, 401));
         }
 
         try {
             const lecture = await LectureSchema.create(req.body);
+
+            //update course with the new lecture ID
+            course.lectures.push(lecture._id);
+            await course.save();
+
             res.status(200).json({
                 success: true,
                 data: lecture,
