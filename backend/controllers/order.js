@@ -10,12 +10,21 @@ const User = require('../models/Users');
 exports.checkout = asyncHandler(async (req, res, next) => {
     const { orderItems, paymentMethod, itemsPrice, taxPrice, totalPrice } = req.body;
 
-    //check if the user has already purchased any of the courses
+    //check if the user is trying to purchase their own course
     for (let item of orderItems) {
+        const course = await Course.findById(item.course);
+        if (!course) {
+            return next(new ErrorResponse('Course not found', 404));
+        }
+        if (course.user.toString() === req.user.id.toString()) {
+            return next(new ErrorResponse('You cannot purchase your own course', 400));
+        }
+        
+        //check if the user has already purchased the course
         if (req.user.purchasedCourses.includes(item.course)) {
             return next(new ErrorResponse('You have already purchased one of the courses', 400));
         }
-    }    
+    }
 
     const order = await Order.create({
         user: req.user.id,

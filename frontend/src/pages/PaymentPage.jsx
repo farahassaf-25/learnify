@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { clearCart } from '../Redux/slices/cartSlice';
 import { createOrder } from '../Redux/slices/orderApiSlice';
 import Button from '../Components/Button';
 import MiddleText from '../Components/MiddleText';
@@ -8,31 +10,32 @@ import MiddleText from '../Components/MiddleText';
 const PaymentPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const { cartItems, totalPrice } = useSelector((state) => state.cart);
     const [paymentMethod, setPaymentMethod] = useState('Credit Card');
 
     const handleCheckout = () => {
-        if (!paymentMethod) return;
+        if (cartItems.length === 0) return;
 
         const orderItems = cartItems.map(item => ({
-            course: item.id,
+            course: item._id,
             title: item.title,
             price: item.price,
         }));
-
+    
         const itemsPrice = cartItems.reduce((acc, item) => acc + item.price, 0);
-        const taxPrice = (itemsPrice * 0.05).toFixed(2); // Example tax calculation
-        const totalPrice = (itemsPrice + Number(taxPrice)).toFixed(2);
-
+        const taxPrice = (itemsPrice * 0.05).toFixed(2);
+        const calculatedTotalPrice = (itemsPrice + Number(taxPrice)).toFixed(2);
+    
         dispatch(createOrder({
             orderItems,
             paymentMethod,
             itemsPrice,
             taxPrice,
-            totalPrice,
+            totalPrice: calculatedTotalPrice,
         }));
 
+        dispatch(clearCart());
+        toast.success('Payment successful! Redirecting to your courses...');
         navigate('/confirmation');
     };
 
