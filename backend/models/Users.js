@@ -36,6 +36,9 @@ const UsersSchema = new mongoose.Schema({
         enum: ['student', 'admin'],
         default: 'student',
     },
+    purchasedCourses: [
+        { type: mongoose.Schema.ObjectId, ref: 'Courses' }
+    ],
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     },

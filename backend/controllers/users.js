@@ -1,6 +1,8 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const User = require('../models/Users');
+const Course = require('../models/Courses');
+const Lecture = require('../models/Lectures');
 const uploadImage = require('../config/uploadImage.js');
 
 // @desc      Get single user
@@ -72,5 +74,44 @@ exports.deleteAccount= asyncHandler(async (req, res, next) => {
         success: true,
         data: {},
         msg: `Account deleted`
+    });
+});
+
+// @desc      Get all purchased courses
+// @route     GET /learnify/me/mycourses
+// @access    Private
+exports.getAllPurchasedCoursesAndOwnCourses = asyncHandler(async (req, res, next) => {
+    const ownCourses = await Course.find({ user: req.user.id }).populate('lectures');
+    const purchasedCourses = await Course.find({ _id: { $in: req.user.purchasedCourses } }).populate('lectures');
+
+    const allCourses = {
+        ownCourses,
+        purchasedCourses
+    };
+
+    res.status(200).json({
+        success: true,
+        data: allCourses
+    });
+});
+
+// @desc      Check if user has purchased a course
+// @route     GET /learnify/me/mycourses/:courseId
+// @access    Private
+exports.getPurchasedCourseById = asyncHandler(async (req, res, next) => {
+    const { courseId } = req.params;
+
+    const course = await Course.findOne({
+        _id: courseId,
+        _id: { $in: req.user.purchasedCourses }
+    }).populate('lectures');
+
+    if (!course) {
+        return next(new ErrorResponse('Course not found or not purchased', 404));
+    }
+
+    res.status(200).json({
+        success: true,
+        data: course
     });
 });
