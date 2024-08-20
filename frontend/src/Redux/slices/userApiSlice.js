@@ -1,4 +1,4 @@
-import { USERS_URL } from "../constants";
+import { USERS_URL, COURSES_URL } from "../constants";
 import { apiSlice } from "./apiSlice";
 
 export const userApiSlice = apiSlice.injectEndpoints({
@@ -44,8 +44,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     getUserCourses: builder.query({
-      query: (userId) => ({
-        url: `/users/${userId}/courses`,
+      query: () => ({
+        url: `${USERS_URL}/me/mycourses`,
+        method: 'GET',
+      }),
+    }),
+    getCourseAndLectures: builder.query({
+      query: (courseId) => ({
+        url: `${USERS_URL}/me/mycourses/${courseId}`,
         method: 'GET',
       }),
     }),
@@ -60,4 +66,5 @@ export const {
   useUpdateDetailsMutation,
   useDeleteUserAccountMutation,
   useGetUserCoursesQuery,
+  useGetCourseAndLecturesQuery
 } = userApiSlice;
