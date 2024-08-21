@@ -3,6 +3,7 @@ const asyncHandler = require('../middleware/async');
 const CoursesSchema = require('../models/Courses');
 const LectureSchema = require('../models/Lectures');
 const uploadVideo = require('../config/uploadVideo');
+const deleteFileFromS3 = require('../config/deleteFileFromS3');
 
 // @desc Get lectures for course
 // @route GET /learnify/courses/:courseId/lectures
@@ -123,6 +124,9 @@ exports.deleteLecture = asyncHandler(async (req, res, next) => {
     if (course.user && course.user.toString() !== req.user.id && req.user.role !== 'admin') {
         return next(new ErrorResponse(`User ${req.user.id} is not authorized to delete lecture ${lecture._id}`, 401));
     }
+
+    //delete the video file from S3
+    await deleteFileFromS3(lecture.video.split('/').pop()); //pass the file name
 
     await LectureSchema.findByIdAndDelete(req.params.lectureId);
 
