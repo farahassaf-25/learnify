@@ -27,10 +27,12 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
   - Add Course
   - Edit Course
   - Delete Course
+- Manage Own Lectures for course:
+  - Add Lectures
+  - Edit Lectures
+  - Delete Lectures
 - Update Profile
 - Delete Account
-- Subscribe to Courses
-- Unsubscribe from Courses
 - Payment Method for Subscription:
   - PayPal 
 
@@ -229,10 +231,12 @@ classDiagram
         +addCourse()
         +editCourse()
         +deleteCourse()
+        +addLecture()
+        +editLecture()
+        +deleteLecture()
         +updateProfile()
         +deleteAccount()
-        +subscribeToCourse()
-        +unsubscribeFromCourse()
+        +purchaseCourse()
         +giveFeedback()
     }
 
