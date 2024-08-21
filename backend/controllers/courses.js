@@ -56,21 +56,13 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
 
         //add user to req.body
         req.body.user = req.user.id;
+        req.body.creatorId = req.user.id;
         req.body.creatorName = req.user.name;
-
-        //check for published course
-        // const publishedCourse = await CoursesSchema.findOne({ user: req.user.id });
-        //if user is not an admin, they can only add one course
-        // if (publishedCourse && req.user.role !== 'admin') {
-        //     return next(new ErrorResponse(`The user with ID ${req.user.id} has already published a course`, 400));
-        // }
 
         //set img url if uploaded
         if(req.file) {
             req.body.image = req.file.location; //get image url from s3
         }
-
-        console.log(req.body);
 
         const course = await CoursesSchema.create(req.body);
         res.status(200).json({

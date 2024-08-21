@@ -96,18 +96,26 @@ exports.getAllPurchasedCoursesAndOwnCourses = asyncHandler(async (req, res, next
 });
 
 // @desc      Check if user has purchased a course
-// @route     GET /learnify/me/mycourses/:courseId
+// @route     GET /learnify/me/mycourses/:id
 // @access    Private
 exports.getPurchasedCourseById = asyncHandler(async (req, res, next) => {
-    const { courseId } = req.params;
+    const courseId = req.params.id; 
+    console.log("Received course ID:", courseId);  
 
-    const course = await Course.findOne({
-        _id: courseId,
-        _id: { $in: req.user.purchasedCourses }
-    }).populate('lectures');
+    const course = await Course.findById(courseId).populate('lectures');
 
     if (!course) {
-        return next(new ErrorResponse('Course not found or not purchased', 404));
+        return res.status(404).json({ success: false, message: 'Course not found' });
+    }
+
+    const isOwner = course.user.toString() === req.user.id;
+    const isPurchased = req.user.purchasedCourses.includes(courseId);
+
+    // console.log("Is Owner:", isOwner);
+    // console.log("Is Purchased:", isPurchased);
+
+    if (!isOwner && !isPurchased) {
+        return res.status(403).json({ success: false, message: 'You do not have access to this course' });
     }
 
     res.status(200).json({

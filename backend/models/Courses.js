@@ -58,6 +58,11 @@ const CoursesSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add a creator name'],
     },
+    creatorId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users',
+        required: true
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users',

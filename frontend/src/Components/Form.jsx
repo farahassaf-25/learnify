@@ -3,19 +3,23 @@ import Button from './Button';
 import MiddleText from './MiddleText';
 import Loader from './Loader';
 import TextInput from './TextInput';
-import FileInput from './FileInput';
-import SelectInput from './SelectInput'; // Import the new SelectInput component
+import SelectInput from './SelectInput'; 
 
-const Form = ({ title, fields, onSubmit, submitLabel, isLoading, showFileInput, fileInputLabel }) => {
+const Form = ({ title, fields, onSubmit, submitLabel, isLoading, showFileInput, handleImageChange, imagePreview }) => {
   return (
     <form onSubmit={onSubmit} className="bg-white p-8 rounded-xl shadow-sm w-full max-w-lg mx-auto">
       <MiddleText text={title} />
-      
+
       {/* Input Fields */}
-      {fields.map((field) => {
-        if (field.type === 'select') {
+      {fields.map((field, index) => {
+        const { id, type, ...otherProps } = field;
+
+        // Ensure that each field has a valid key and type
+        const key = id || index; // Use id or fallback to index
+
+        if (type === 'select') {
           return (
-            <div key={field.id} className="mb-4">
+            <div key={key} className="mb-4">
               <SelectInput 
                 label={field.label} 
                 value={field.value} 
@@ -26,22 +30,34 @@ const Form = ({ title, fields, onSubmit, submitLabel, isLoading, showFileInput, 
           );
         }
         return (
-          <div key={field.id} className="mb-4">
-            <label htmlFor={field.id} className="block text-gray-700 text-sm font-bold mb-2">
+          <div key={key} className="mb-4">
+            <label htmlFor={id} className="block text-gray-700 text-sm font-bold mb-2">
               {field.label}
             </label>
-            <TextInput {...field} />
+            <TextInput key={key} id={id} type={type} {...otherProps} />
           </div>
         );
       })}
-      
-      {/* Conditionally Render File Input */}
+
+      {/* File Input for Image Upload */}
       {showFileInput && (
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            {fileInputLabel}
+            Profile Image
           </label>
-          <FileInput />
+          <input 
+            type="file" 
+            accept="image/*" 
+            onChange={handleImageChange} 
+            className="border rounded p-2 w-full" 
+          />
+          {imagePreview && (
+            <img 
+              src={imagePreview} 
+              alt="Preview" 
+              className="mt-2 w-20 h-20 object-cover rounded" 
+            />
+          )}
         </div>
       )}
 

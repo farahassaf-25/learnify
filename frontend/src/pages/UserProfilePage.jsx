@@ -1,13 +1,14 @@
+// UserProfilePage.js
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Form from '../Components/Form';
 import Button from '../Components/Button';
 import ConfirmationModal from '../Components/ConfirmationModal';
+import Loader from '../Components/Loader'
 import { setCredentials } from '../Redux/slices/authSlice';
 import { useProfileQuery, useGetUserCoursesQuery, useUpdateDetailsMutation, useDeleteUserAccountMutation } from '../Redux/slices/userApiSlice';
 import { useNavigate } from 'react-router-dom';
-import MiddleText from '../Components/MiddleText';
 
 const UserProfilePage = () => {
     const [name, setName] = useState('');
@@ -18,16 +19,17 @@ const UserProfilePage = () => {
     const [imagePreview, setImagePreview] = useState('');
     const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [courses, setCourses] = useState([]);
-
     const { userInfo } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const { data: userProfile, error: profileError } = useProfileQuery();
-    const { data: userCourses, error: coursesError } = useGetUserCoursesQuery(userInfo.id);
-    const [updateDetails] = useUpdateDetailsMutation();
+    const { data: userCourses, error: coursesError, isLoading: coursesLoading } = useGetUserCoursesQuery();
 
+    const purchasedCourses = userCourses?.data?.purchasedCourses || [];
+    const ownCourses = userCourses?.data?.ownCourses || [];
+
+    const [updateDetails] = useUpdateDetailsMutation();
     const [deleteUserAccount, { isLoading: isDeleting }] = useDeleteUserAccountMutation();
 
     useEffect(() => {
@@ -40,14 +42,33 @@ const UserProfilePage = () => {
         if (profileError) {
             toast.error('Failed to fetch user profile');
         }
+    }, [userProfile, profileError, dispatch]);
 
-        if (userCourses) {
-            setCourses(userCourses);
+
+    const handlePurchasedCourseClick = (course) => {
+        if (course && course._id) {
+            navigate(`/me/mycourses/${course._id}`);
+        } else {
+            console.error("Course ID is undefined. Course data:", course);
         }
-        if (coursesError) {
-            toast.error('Failed to load courses');
+    };
+    
+    const handleOwnedCourseClick = (course) => {
+        if (course && course._id) {
+            navigate(`/me/mycourses/${course._id}`);
+        } else {
+            console.error("Course ID is undefined. Course data:", course);
         }
-    }, [userProfile, profileError, userCourses, coursesError, dispatch]);
+    };
+    
+
+    if (coursesLoading) {
+        return <Loader />;
+    }
+
+    if (coursesError) {
+        return <div>Error: {coursesError.message}</div>;
+    }
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -89,12 +110,6 @@ const UserProfilePage = () => {
         }
     };
 
-    useEffect(() => {
-        if (userInfo?.image) {
-            setImagePreview(userInfo.image);
-        }
-    }, [userInfo]);
-
     const handleDelete = async () => {
         try {
             await deleteUserAccount().unwrap();
@@ -108,45 +123,12 @@ const UserProfilePage = () => {
         } finally {
             setIsConfirmationOpen(false);
         }
-    };    
-
-    const fields = [
-        {
-            id: 'name',
-            label: 'Name',
-            type: 'text',
-            value: name,
-            onChange: (e) => setName(e.target.value),
-        },
-        {
-            id: 'email',
-            label: 'Email',
-            type: 'email',
-            value: email,
-            onChange: (e) => setEmail(e.target.value),
-        },
-        {
-            id: 'password',
-            label: 'Password',
-            type: 'password',
-            value: password,
-            onChange: (e) => setPassword(e.target.value),
-        },
-        {
-            id: 'confirmPassword',
-            label: 'Confirm Password',
-            type: 'password',
-            value: confirmPassword,
-            onChange: (e) => setConfirmPassword(e.target.value),
-        },
-    ];
+    };
 
     return (
         <div className="container mx-auto p-6 mt-5 max-w-4xl">
             <h1 className="text-3xl font-bold mb-10 text-center"><span className='text-secondary'>{userInfo.name}</span>'s Profile</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-40">
-                
-                {/* Left Column */}
                 <div className="flex flex-col items-center">
                     <img
                         src={`${imagePreview}?v=${new Date().getTime()}`}
@@ -154,37 +136,70 @@ const UserProfilePage = () => {
                         className="w-48 h-48 rounded-full border-2 border-primary mb-12"
                     />
                     <Button onClick={() => navigate('/create-course')} color='secondary' className="w-full mb-8">Add Course to Learnify</Button>
-                    <Button onClick={() => setIsModalOpen(true)} color='primary' className="w-full mb-4">Update Profile</Button>
+                    <Button onClick={() => setIsModalOpen(true)} className="w-full mb-4 bg-green-600 text-white">Update Profile</Button>
                     <Button onClick={() => setIsConfirmationOpen(true)} className="bg-red-600 text-white w-full mt-4">Delete Account</Button>
                 </div>
 
-                {/* Right Column */}
-                <div className="flex flex-col">
-                    <MiddleText text='My Courses' />
-                    <div className="w-full bg-white rounded p-3">
-                        {courses.length > 0 ? (
-                            <ul>
-                                {courses.map(course => (
-                                    <li key={course.id} className="border p-4 mb-2 rounded">
-                                        <h3 className="text-lg                                         font-bold">{course.title}</h3>
-                                        <p>{course.description}</p>
-                                    </li>
+                <div className="flex flex-col items-center">
+                    <h2 className="text-2xl font-semibold mb-4">My Purchased Courses</h2>
+                    {purchasedCourses.length === 0 ? (
+                        <div>No purchased courses found.</div>
+                    ) : (
+                        <div className="w-full overflow-x-auto bg-white rounded-box">
+                            <div className="flex space-x-5 p-4">
+                                {purchasedCourses.map((course) => (
+                                    <div
+                                    key={course._id}
+                                    className="flex-shrink-0 w-70 sm:w-62 md:w-80 lg:w-76 bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transition-transform transform hover:scale-105"
+                                    onClick={() => handlePurchasedCourseClick(course)}
+                                >
+                                    <img
+                                        src={course.image}
+                                        alt={course.title}
+                                        className="w-70 h-40 sm:h-48 md:h-56 lg:h-64 object-cover"
+                                    />
+                                    <div className="p-4 bg-primary w-70">
+                                        <h3 className="text-lg font-semibold truncate text-white">{course.title}</h3>
+                                    </div>
+                                </div>                                
                                 ))}
-                            </ul>
-                        ) : (
-                            <p className="text-gray-600 text-center">You have not purchased any courses yet.</p>
-                        )}
-                    </div>
+                            </div>
+                        </div>
+                    )}
+
+                    <h2 className="text-2xl font-semibold mb-4 mt-10">My Own Courses</h2>
+                    {ownCourses.length === 0 ? (
+                        <div>No own courses found.</div>
+                    ) : (
+                        <div className="w-full overflow-x-auto bg-white rounded-box">
+                            <div className="flex space-x-5 p-4">
+                                {ownCourses.map((course) => (
+                                    <div
+                                    key={course._id}
+                                    className="flex-shrink-0 w-70 sm:w-62 md:w-80 lg:w-76 bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transition-transform transform hover:scale-105"
+                                    onClick={() => handleOwnedCourseClick(course)}
+                                >
+                                    <img
+                                        src={course.image}
+                                        alt={course.title}
+                                        className="w-70 h-40 sm:h-48 md:h-56 lg:h-64 object-cover"
+                                    />
+                                    <div className="p-4 bg-primary w-70">
+                                        <h3 className="text-lg font-semibold truncate text-white">{course.title}</h3>
+                                    </div>
+                                </div>                                
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
-            {/* Modal for Updating Profile */}
             {isModalOpen && (
                 <>
                     <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
                     <div className="fixed inset-0 flex justify-center items-center z-50">
                         <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
-                            {/* Close Button at the Top */}
                             <button
                                 onClick={() => setIsModalOpen(false)}
                                 className="absolute top-2 right-2 bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-3 rounded"
@@ -193,21 +208,22 @@ const UserProfilePage = () => {
                             </button>
                             <Form
                                 title="Update Profile"
-                                fields={fields}
+                                fields={[
+                                    { id: 'name', label: 'Name', type: 'text', value: name, onChange: (e) => setName(e.target.value) },
+                                    { id: 'email', label: 'Email', type: 'email', value: email, onChange: (e) => setEmail(e.target.value) },
+                                    { id: 'password', label: 'Password', type: 'password', value: password, onChange: (e) => setPassword(e.target.value) },
+                                    { id: 'confirmPassword', label: 'Confirm Password', type: 'password', value: confirmPassword, onChange: (e) => setConfirmPassword(e.target.value) },
+                                    { id: 'image', label: 'Profile Image', type: 'file', onChange: handleImageChange }, // Added file input field
+                                ]}
                                 onSubmit={submitHandler}
                                 submitLabel="Save Changes"
                                 isLoading={false}
-                                imagePreview={imagePreview}
-                                handleImageChange={handleImageChange}
-                                showFileInput={true}
                             />
-
                         </div>
                     </div>
                 </>
             )}
 
-            {/* Delete Confirmation Modal */}
             {isConfirmationOpen && (
                 <ConfirmationModal
                     title="Delete Account"
@@ -222,4 +238,3 @@ const UserProfilePage = () => {
 };
 
 export default UserProfilePage;
-

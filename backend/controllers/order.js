@@ -10,7 +10,7 @@ const User = require('../models/Users');
 exports.checkout = asyncHandler(async (req, res, next) => {
     const { orderItems, paymentMethod, itemsPrice, taxPrice, totalPrice } = req.body;
 
-    //check if the user is trying to purchase their own course
+    //check for course validity and ownership
     for (let item of orderItems) {
         const course = await Course.findById(item.course);
         if (!course) {
@@ -19,10 +19,8 @@ exports.checkout = asyncHandler(async (req, res, next) => {
         if (course.user.toString() === req.user.id.toString()) {
             return next(new ErrorResponse('You cannot purchase your own course', 400));
         }
-        
-        //check if the user has already purchased the course
-        if (req.user.purchasedCourses.includes(item.course)) {
-            return next(new ErrorResponse('You have already purchased one of the courses', 400));
+        if (req.user.purchasedCourses.includes(course._id.toString())) {
+            return next(new ErrorResponse('You have already purchased this course', 400));
         }
     }
 
@@ -37,7 +35,12 @@ exports.checkout = asyncHandler(async (req, res, next) => {
         paidAt: Date.now(), 
     });
 
-    req.user.purchasedCourses.push(...orderItems.map(item => item.course));
+    orderItems.forEach(item => {
+        if (!req.user.purchasedCourses.includes(item.course.toString())) {
+            req.user.purchasedCourses.push(item.course);
+        }
+    });
+
     await req.user.save();
 
     res.status(201).json({
