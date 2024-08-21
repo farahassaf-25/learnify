@@ -15,8 +15,6 @@ exports.register = asyncHandler(async(req, res, next) => {
             return next(new ErrorResponse(err.message, 400));
         }
 
-        console.log('Uploaded file:', req.file);
-
         const { name, email, password, role } = req.body;
 
         const user = await User.create({

@@ -25,6 +25,6 @@ router.route('/me')
   .delete(protect, deleteAccount);  
   
 router.get('/me/mycourses', protect, getAllPurchasedCoursesAndOwnCourses);
-router.get('/me/mycourses/:courseId', protect, getPurchasedCourseById);
+router.get('/me/mycourses/:id', protect, getPurchasedCourseById);
 
 module.exports = router;
