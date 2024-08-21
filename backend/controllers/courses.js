@@ -74,7 +74,7 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Update course
-// @route PUT /learnify/courses/:id
+// @route PUT /learnify/me/mycourses/:id
 // @access Public
 exports.updateCourse = asyncHandler(async (req, res, next) => {
     let course = await CoursesSchema.findById(req.params.id);
@@ -83,27 +83,48 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse('Course not found', 404));
     }
 
-    if(course.user && (course.user.toString() !== req.user.id && req.user.role !== 'admin')) {
-        return next(new ErrorResponse(`User ${req.user.id} is not authorized to update this course`, 401));
+    const newNumOfLectures = req.body.numOfLectures;
+
+    //check if the numOfLectures is decreasing
+    if (newNumOfLectures < course.numOfLectures) {
+        return next(new ErrorResponse('Cannot decrease the number of lectures once added.', 400));
     }
 
-    course = await CoursesSchema.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true
-    })
+    uploadImage.single('image')(req, res, async (err) => {
+        if (err) {
+            console.error('Upload error:', err);
+            return next(new ErrorResponse(err.message, 400));
+        }
 
-    res.status(200).json({
-        success: true,
-        data: course,
-        msg: `Update course ${req.params.id}`
+        //update course details
+        course.title = req.body.title || course.title;
+        course.description = req.body.description || course.description;
+        course.category = req.body.category || course.category;
+        course.minimumLevel = req.body.minimumLevel || course.minimumLevel;
+        course.price = req.body.price || course.price;
+        course.weeks = req.body.weeks || course.weeks;
+        course.numOfLectures = req.body.numOfLectures || course.numOfLectures;
+        course.creatorName = req.body.creatorName || course.creatorName;
+
+        if (req.file) {
+            course.image = req.file.location;
+        }
+
+        const updatedCourse = await course.save();
+
+        res.status(200).json({
+            success: true,
+            data: updatedCourse,
+            msg: `Update course ${req.params.id}`
+        });
     });
 });
 
 // @desc Delete course
-// @route DELETE /learnify/courses/:id
+// @route DELETE /learnify/me/mycourses/:id
 // @access Public
 exports.deleteCourse = asyncHandler(async (req, res, next) => {
-    const course = await CoursesSchema.findById(req.params.id);
+    const course = await CoursesSchema.findById(req.params.id).populate('lectures');
 
     if (!course) {
         return next(new ErrorResponse('Course not found', 404));
@@ -113,11 +134,25 @@ exports.deleteCourse = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`User ${req.user.id} is not authorized to delete this course`, 401));
     }
 
+    // Check if the course has lectures
+    if (course.lectures.length > 0) {
+        // Notify the user and ask for confirmation (this part is typically handled on the frontend)
+        return res.status(400).json({
+            success: false,
+            msg: 'This course has lectures associated with it. Do you want to delete the course and all its lectures? Please confirm.'
+        });
+    }
+
+    // If the user confirms deletion of lectures (handle this confirmation on the frontend), proceed
     await CoursesSchema.findByIdAndDelete(req.params.id);
+
+    // If you want to delete the lectures as well, you can add logic here
+    // await LectureSchema.deleteMany({ course: req.params.id });
 
     res.status(200).json({
         success: true,
         data: {},
-        msg: `Delete course ${req.params.id}`
+        msg: `Course ${req.params.id} deleted`
     });
 });
+

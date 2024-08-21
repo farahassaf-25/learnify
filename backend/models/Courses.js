@@ -25,7 +25,7 @@ const CoursesSchema = new mongoose.Schema({
     minimumLevel: {
         type: String,
         required: [true, 'Please add a minimum level'],
-        enum: ['Beginner', 'Intermediate', 'Advanced']
+        enum: ['All Levels', 'Beginner', 'Intermediate', 'Advanced']
     },
     image: {
         type: String,

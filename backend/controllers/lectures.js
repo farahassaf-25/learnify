@@ -73,7 +73,7 @@ exports.addLecture = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Update lecture
-// @route PUT /learnify/courses/:courseId/lectures/:lectureId
+// @route PUT /learnify/me/mycourses/:courseId/lectures/:lectureId
 // @access Public
 exports.updateLecture = asyncHandler(async (req, res, next) => {
     let lecture = await LectureSchema.findById(req.params.lectureId);
@@ -82,28 +82,31 @@ exports.updateLecture = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`Lecture not found with id of ${req.params.lectureId}`, 404));
     }
 
-    const course = await CoursesSchema.findById(req.params.courseId);
-    if (!course) {
-        return next(new ErrorResponse(`Course not found with id of ${req.params.courseId}`, 404));
-    }
+    uploadVideo.single('video')(req, res, async (err) => {
+        if(err) {
+            console.error('Upload error: ', err);
+            return next(new ErrorResponse(err.message, 400));
+        }
 
-    if (course.user && course.user.toString() !== req.user.id && req.user.role !== 'admin') {
-        return next(new ErrorResponse(`User ${req.user.id} is not authorized to update lecture ${lecture._id}`, 401));
-    }
+        //update lecture details
+        lecture.title = req.body.title || lecture.title;
+        lecture.video = req.body.video || lecture.video;
 
-    lecture = await LectureSchema.findByIdAndUpdate(req.params.lectureId, req.body, {
-        new: true,
-        runValidators: true
-    });
+        if (req.file) {
+            lecture.video = req.file.location;
+        }
 
-    res.status(200).json({
-        success: true,
-        data: lecture
+        const updatedLecture = await lecture.save();
+    
+        res.status(200).json({
+            success: true,
+            data: lecture
+        });
     });
 });
 
 // @desc Delete lecture
-// @route DELETE /learnify/courses/:courseId/lectures/:lectureId
+// @route DELETE /learnify/me/mycourses/:courseId/lectures/:lectureId
 // @access Public
 exports.deleteLecture = asyncHandler(async (req, res, next) => {
     const lecture = await LectureSchema.findById(req.params.lectureId);
