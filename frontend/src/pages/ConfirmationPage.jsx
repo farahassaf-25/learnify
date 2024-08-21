@@ -31,8 +31,8 @@ const ConfirmationPage = () => {
                 <p className="text-lg mb-4">Thank you for shopping with us. If you have any questions, feel free to contact our support team.</p>
 
                 <div className="mt-6">
-                    <Button color='primary' onClick={() => window.location.href = '/'}>
-                        Return to Home
+                    <Button color='primary' onClick={() => window.location.href = '/me'}>
+                        Return to Your Courses, Happy Learning!
                     </Button>
                 </div>
             </div>

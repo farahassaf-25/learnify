@@ -13,9 +13,9 @@ const PaymentPage = () => {
     const { cartItems, totalPrice } = useSelector((state) => state.cart);
     const [paymentMethod, setPaymentMethod] = useState('Credit Card');
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
         if (cartItems.length === 0) return;
-
+    
         const orderItems = cartItems.map(item => ({
             course: item._id,
             title: item.title,
@@ -26,18 +26,22 @@ const PaymentPage = () => {
         const taxPrice = (itemsPrice * 0.05).toFixed(2);
         const calculatedTotalPrice = (itemsPrice + Number(taxPrice)).toFixed(2);
     
-        dispatch(createOrder({
-            orderItems,
-            paymentMethod,
-            itemsPrice,
-            taxPrice,
-            totalPrice: calculatedTotalPrice,
-        }));
-
-        dispatch(clearCart());
-        toast.success('Payment successful! Redirecting to your courses...');
-        navigate('/confirmation');
-    };
+        try {
+            await dispatch(createOrder({
+                orderItems,
+                paymentMethod,
+                itemsPrice,
+                taxPrice,
+                totalPrice: calculatedTotalPrice,
+            })).unwrap(); 
+    
+            dispatch(clearCart());
+            toast.success('Payment successful! Redirecting to your courses...');
+            navigate('/confirmation');
+        } catch (error) {
+            toast.error('Payment failed: ' + (error?.data?.message || error.message));
+        }
+    };    
 
     return (
         <div className="payment-page container mx-auto py-8">
