@@ -10,7 +10,7 @@ const CourseCard = ({ id, image, title, description, price, level }) => {
   };
 
   return (
-    <div className="card card-compact bg-base-100 w-96 shadow-xl transition-transform transform hover:scale-105 hover:shadow-2xl">
+    <Link to={`/courses/${id}`} className="card card-compact bg-base-100 w-96 shadow-xl transition-transform transform hover:scale-105 hover:shadow-2xl">
       <figure>
         <img src={image} alt={title} className="w-full h-48 object-cover" />
       </figure>
@@ -32,12 +32,10 @@ const CourseCard = ({ id, image, title, description, price, level }) => {
           <span className="text-sm text-gray-600">{level}</span>
         </div>
         <div className="card-actions justify-end">
-        <Link to={`/courses/${id}`}>
           <Button color="secondary">Show More</Button>
-        </Link>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

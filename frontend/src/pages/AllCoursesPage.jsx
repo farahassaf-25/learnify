@@ -153,7 +153,7 @@ const AllCoursesPage = () => {
       {/* Pagination */}
       <div className="flex justify-center mt-4">
         {Array.from({ length: Math.ceil(filteredCourses.length / coursesPerPage) }, (_, index) => (
-          <Button
+          <Button className='mr-2'
             key={index + 1}
             onClick={() => paginate(index + 1)}
             color={currentPage === index + 1 ? 'primary' : 'secondary'}

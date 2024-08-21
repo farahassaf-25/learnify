@@ -13,7 +13,6 @@ const HomePage = () => {
   const { data: response, isLoading, error } = useGetCoursesQuery();
   const latestCoursesRef = useRef(null);
 
-  // Use useEffect to handle toast notifications
   useEffect(() => {
     if (isLoading) {
       toast.info('Loading courses...');
@@ -43,7 +42,7 @@ const HomePage = () => {
         <>
           <Hero scrollToCourses={scrollToCourses} />
           <div ref={latestCoursesRef}>
-            <MiddleText text="Latest Courses" />
+            <MiddleText text="Learnify Courses" />
             <div className="flex flex-wrap justify-center gap-8 py-10">
               {Array.isArray(latestCourses) && latestCourses.length > 0 ? (
                 latestCourses.map((course) => (
