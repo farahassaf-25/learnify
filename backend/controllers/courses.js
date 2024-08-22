@@ -74,8 +74,8 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Update course
-// @route PUT /learnify/me/mycourses/:id
-// @access Public
+// @route PUT /learnify/courses/:courseId
+// @access Private
 exports.updateCourse = asyncHandler(async (req, res, next) => {
     let course = await CoursesSchema.findById(req.params.id);
 
@@ -121,7 +121,7 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Delete course
-// @route DELETE /learnify/me/mycourses/:id
+// @route DELETE /learnify/courses/:courseId
 // @access Public
 exports.deleteCourse = asyncHandler(async (req, res, next) => {
     const course = await CoursesSchema.findById(req.params.id).populate('lectures');

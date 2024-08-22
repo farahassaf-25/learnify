@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const CheckboxSelectInput = ({ label, options, selectedOptions, setSelectedOptions }) => {
+const CheckboxSelectInput = ({ options, selectedOptions, setSelectedOptions }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [checkedOptions, setCheckedOptions] = useState(selectedOptions);
   const dropdownRef = useRef(null);

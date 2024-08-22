@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../Redux/slices/cartSlice';
 import Button from '../Components/Button';
-import { useGetUserCoursesQuery } from '../Redux/slices/userApiSlice';
+import { useGetMyCoursesQuery} from '../Redux/slices/userApiSlice';
 import { useGetCourseDetailsQuery } from '../Redux/slices/coursesApiSlice';
 import Loader from '../Components/Loader';
 import Message from '../Components/Message';
@@ -13,7 +13,7 @@ const CourseDetailsPage = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const { data: course, isLoading, error } = useGetCourseDetailsQuery(id);
-    const { data: userCourses } = useGetUserCoursesQuery();
+    const { data: userCourses } = useGetMyCoursesQuery();
     const { userInfo } = useSelector((state) => state.auth);
 
     const [isPurchased, setIsPurchased] = useState(false);

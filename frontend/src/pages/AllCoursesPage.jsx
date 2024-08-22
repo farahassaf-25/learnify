@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGetCoursesQuery } from '../Redux/slices/coursesApiSlice';
 import CourseCard from '../Components/CourseCard';
 import Button from '../Components/Button';
@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import TextInput from '../Components/TextInput';
 import CheckboxSelectInput from '../Components/CheckboxSelectInput'; 
 import SelectInput from '../Components/SelectInput'; 
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const AllCoursesPage = () => {
   const { data: response, isLoading, error } = useGetCoursesQuery();
@@ -19,33 +20,32 @@ const AllCoursesPage = () => {
   const [priceFilter, setPriceFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [coursesPerPage] = useState(9);
+  
+  const navigate = useNavigate(); // Initialize useNavigate
 
-  const filteredCourses = useMemo(() => {
-    let filtered = courses;
+  // Calculate filtered courses directly in render flow
+  const filteredCourses = courses.filter(course => {
+    let matches = true;
 
     if (searchTerm) {
-      filtered = filtered.filter(course =>
-        course.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      matches = matches && course.title.toLowerCase().includes(searchTerm.toLowerCase());
     }
 
     if (levelFilter) {
-      filtered = filtered.filter(course => course.minimumLevel === levelFilter);
+      matches = matches && course.minimumLevel === levelFilter;
     }
 
     if (categoryFilter.length > 0) {
-      filtered = filtered.filter(course =>
-        course.category.some(cat => categoryFilter.includes(cat))
-      );
+      matches = matches && course.category.some(cat => categoryFilter.includes(cat));
     }
 
     if (priceFilter) {
       const [minPrice, maxPrice] = priceFilter.split('-').map(Number);
-      filtered = filtered.filter(course => course.price >= minPrice && course.price <= maxPrice);
+      matches = matches && course.price >= minPrice && course.price <= maxPrice;
     }
 
-    return filtered;
-  }, [searchTerm, levelFilter, categoryFilter, priceFilter, courses]);
+    return matches;
+  });
 
   const indexOfLastCourse = currentPage * coursesPerPage;
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
@@ -90,6 +90,11 @@ const AllCoursesPage = () => {
     { value: '201-500', label: '201 - 500 $' },
     { value: '501-1000', label: '501 - 1000 $' },
   ];
+
+  // Function to handle course card click
+  const handleCourseClick = (courseId) => {
+    navigate(`/courses/${courseId}`); // Navigate to the course details page
+  };
 
   return (
     <div className="container mx-auto p-4 mt-2">
@@ -142,7 +147,7 @@ const AllCoursesPage = () => {
               description={course.description}
               price={course.price}
               level={course.minimumLevel}
-              creatorName={course.creatorName}
+              onCardClick={handleCourseClick} 
             />
           ))
         ) : (

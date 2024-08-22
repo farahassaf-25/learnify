@@ -17,6 +17,8 @@ import UserProfilePage from './pages/UserProfilePage';
 import AddCoursePage from './pages/AddCoursePage';
 import AddLecturePage from './pages/AddLecturesPage';
 import CourseLecturesPage from './pages/CourseLecturesPage';
+import EditCoursePage from './pages/EditCoursePage';
+import MyCoursesPage from './pages/MyCoursesPage';
 
 const App = () => {
   return (
@@ -29,15 +31,18 @@ const App = () => {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-
-      <Route path='' element={<PrivateRoute />}>
-        <Route path='/payment/checkout' element={<PaymentPage />} />
-        <Route path='/me' element={<UserProfilePage />} />
-        <Route path="/confirmation" element={<ConfirmationPage />} />
-        <Route path='/create-course' element={<AddCoursePage />} />
-        <Route path="/courses/:courseId/add-lectures" element={<AddLecturePage />} />
-        <Route path="/me/mycourses/:courseId" element={<CourseLecturesPage />} />
-      </Route>
+        
+        <Route path="" element={<PrivateRoute />}>
+            <Route path="/me" element={<UserProfilePage />} />
+            <Route path="/payment/checkout" element={<PaymentPage />} />
+            <Route path="/confirmation" element={<ConfirmationPage />} />
+            <Route path="/me/mycourses" element={<MyCoursesPage />} />
+            <Route path="/me/mycourses/:courseId" element={<CourseLecturesPage />} />
+            <Route path="/create-course" element={<AddCoursePage />} />
+            <Route path="/courses/:courseId/add-lectures" element={<AddLecturePage />} />
+            <Route path="/courses/:courseId/edit" element={<EditCoursePage />} />
+            
+        </Route>
       </Routes>
       <ToastContainer />
     </MainLayout>

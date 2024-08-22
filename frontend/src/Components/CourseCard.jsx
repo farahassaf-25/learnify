@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import Button from './Button';
-import { Link } from 'react-router-dom';
 
-const CourseCard = ({ id, image, title, description, price, level }) => {
+const CourseCard = ({ id, image, title, description, price, level, onCardClick }) => {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   const handleDescriptionToggle = () => {
@@ -10,7 +9,10 @@ const CourseCard = ({ id, image, title, description, price, level }) => {
   };
 
   return (
-    <Link to={`/courses/${id}`} className="card card-compact bg-base-100 w-96 shadow-xl transition-transform transform hover:scale-105 hover:shadow-2xl">
+    <div 
+      className="card card-compact bg-base-100 w-96 shadow-xl transition-transform transform hover:scale-105 hover:shadow-2xl"
+      onClick={() => onCardClick(id)} 
+    >
       <figure>
         <img src={image} alt={title} className="w-full h-48 object-cover" />
       </figure>
@@ -32,10 +34,10 @@ const CourseCard = ({ id, image, title, description, price, level }) => {
           <span className="text-sm text-gray-600">{level}</span>
         </div>
         <div className="card-actions justify-end">
-          <Button color="secondary">Show More</Button>
+          <Button color="secondary" onClick={() => onCardClick(id)}>Show More</Button> {/* Pass click handling */}
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

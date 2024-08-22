@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetCourseAndLecturesQuery } from '../Redux/slices/userApiSlice';
+import { useGetCourseDetailsAndLecturesQuery } from '../Redux/slices/userApiSlice';
 import Accordion from '../Components/Accordion';
 import Button from '../Components/Button';
 import { toast } from 'react-toastify';
+import Loader from '../Components/Loader';
 
 const CourseLecturesPage = () => {
     const { courseId } = useParams();
     const navigate = useNavigate();
-    const { data, isLoading, error } = useGetCourseAndLecturesQuery(courseId);
+    const { data, isLoading, error } = useGetCourseDetailsAndLecturesQuery(courseId);
     const [course, setCourse] = useState(null);
 
     useEffect(() => {
@@ -22,14 +23,13 @@ const CourseLecturesPage = () => {
         if (data && data.success) {
             setCourse(data.data);
         } else {
-            // If the course is not found or accessible, navigate back
             toast.error('You do not have access to this course.');
             navigate('/me');
         }
     }, [data, navigate]);
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <Loader />;
     }
 
     if (!course) {
@@ -38,7 +38,7 @@ const CourseLecturesPage = () => {
 
     return (
         <div className="container mx-auto p-4 mt-5">
-            <Button color="primary" onClick={() => navigate('/me')}>
+            <Button color="primary" onClick={() => navigate('/me/mycourses')}>
                 Go Back
             </Button>
             <div className="py-10 max-w-4xl mx-auto">

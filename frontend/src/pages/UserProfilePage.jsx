@@ -7,7 +7,7 @@ import Button from '../Components/Button';
 import ConfirmationModal from '../Components/ConfirmationModal';
 import Loader from '../Components/Loader';
 import { setCredentials } from '../Redux/slices/authSlice';
-import { useGetProfileDetailsAndCoursesQuery, useUpdateDetailsMutation, useDeleteUserAccountMutation } from '../Redux/slices/userApiSlice';
+import { useGetProfileDetailsQuery, useUpdateDetailsMutation, useDeleteUserAccountMutation } from '../Redux/slices/userApiSlice';
 import { useNavigate } from 'react-router-dom';
 
 const UserProfilePage = () => {
@@ -24,7 +24,7 @@ const UserProfilePage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { data: userProfile, error: profileError } = useGetProfileDetailsAndCoursesQuery();
+    const { data: userProfile, error: profileError } = useGetProfileDetailsQuery();
     const purchasedCourses = userProfile?.data?.purchasedCourses || [];
     const ownCourses = userProfile?.data?.ownCourses || [];
 
@@ -57,6 +57,10 @@ const UserProfilePage = () => {
 
     const handleDeleteCourse = (courseId) => {
         // Logic for deleting course
+    };
+
+    const handleNavigateToMyCourses = () => {
+        navigate('/me/mycourses');
     };
 
     if (!userProfile) {
@@ -134,7 +138,7 @@ const UserProfilePage = () => {
                 </div>
 
                 <div className="flex flex-col items-center">
-                    <h2 className="text-2xl font-semibold mb-4">My Purchased Courses</h2>
+                    <h2 className="text-2xl font-semibold mb-4 cursor-pointer" onClick={handleNavigateToMyCourses}>My Purchased Courses</h2>
                     {purchasedCourses.length === 0 ? (
                         <div>No purchased courses found.</div>
                     ) : (
@@ -147,7 +151,7 @@ const UserProfilePage = () => {
                         </div>
                     )}
 
-                    <h2 className="text-2xl font-semibold mb-4">My Own Courses</h2>
+                    <h2 className="text-2xl font-semibold mb-4 cursor-pointer" onClick={handleNavigateToMyCourses}>My Own Courses</h2>
                     {ownCourses.length === 0 ? (
                         <div>No own courses found.</div>
                     ) : (

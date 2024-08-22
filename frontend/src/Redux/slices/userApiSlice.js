@@ -23,9 +23,21 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
       }),
     }),
-    getProfileDetailsAndCourses: builder.query({
+    getProfileDetails: builder.query({
       query: () => ({
         url: `${USERS_URL}/me`,
+        method: "GET",
+      }),
+    }),
+    getMyCourses: builder.query({
+      query: () => ({
+        url: `${USERS_URL}/me/mycourses`,
+        method: "GET",
+      }),
+    }),
+    getCourseDetailsAndLectures: builder.query({
+      query: (courseId) => ({
+        url: `${USERS_URL}/me/mycourses/${courseId}`,
         method: "GET",
       }),
     }),
@@ -50,7 +62,9 @@ export const {
   useLoginMutation, 
   useRegisterMutation, 
   useLogoutMutation,
-  useGetProfileDetailsAndCoursesQuery,  
+  useGetProfileDetailsQuery,
+  useGetMyCoursesQuery,  
+  useGetCourseDetailsAndLecturesQuery,
   useUpdateDetailsMutation,
   useDeleteUserAccountMutation,
 } = userApiSlice;

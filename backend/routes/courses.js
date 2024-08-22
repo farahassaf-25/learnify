@@ -16,6 +16,6 @@ router
     .route('/:id')
     .get(getCourse) 
     .put(protect, authorize('student', 'admin'), updateCourse) 
-    .delete(protect, authorize('student', 'admin'), deleteCourse); 
+    .delete(protect, authorize('student', 'admin'), deleteCourse);  
     
 module.exports = router;

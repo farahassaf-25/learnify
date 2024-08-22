@@ -1,20 +1,18 @@
 const express = require('express');
-const { protect } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 const { 
   register, 
   login, 
   forgotPassword, 
   resetPassword, 
   updatePassword,
-  logout 
-} = require('../controllers/auth');
-const { 
+  logout,
   getProfile, 
   updateDetails, 
-  deleteAccount, 
-  getAllPurchasedCoursesAndOwnCourses, 
-  getPurchasedCourseById 
-} = require('../controllers/users');
+  deleteAccount,
+  getAllPurchasedCoursesAndOwnCourses,
+  getPurchasedCourseById
+} = require('../controllers/auth');
 
 const router = express.Router();
 
@@ -26,10 +24,13 @@ router.put('/updatePassword', protect, updatePassword);
 router.post('/logout', logout);
 
 router.route('/me')
-  .get(protect, getProfile)
+  .get(protect, authorize('student'), getProfile)
   .put(protect, updateDetails)
   .delete(protect, deleteAccount);
 
-router.get('/me/:courseId', protect, getPurchasedCourseById);
+router.route('/me/mycourses')
+  .get(protect, authorize('student', 'admin'), getAllPurchasedCoursesAndOwnCourses);
+
+  router.get('/me/mycourses/:id', protect, getPurchasedCourseById);
 
 module.exports = router;
