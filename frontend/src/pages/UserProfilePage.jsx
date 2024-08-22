@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { FaTrash, FaEdit } from 'react-icons/fa';
 import Form from '../Components/Form';
 import Button from '../Components/Button';
 import ConfirmationModal from '../Components/ConfirmationModal';
-import Loader from '../Components/Loader'
+import Loader from '../Components/Loader';
 import { setCredentials } from '../Redux/slices/authSlice';
-import { useProfileQuery, useGetUserCoursesQuery, useUpdateDetailsMutation, useDeleteUserAccountMutation } from '../Redux/slices/userApiSlice';
+import { useGetProfileDetailsAndCoursesQuery, useUpdateDetailsMutation, useDeleteUserAccountMutation } from '../Redux/slices/userApiSlice';
 import { useNavigate } from 'react-router-dom';
 
 const UserProfilePage = () => {
@@ -18,15 +19,14 @@ const UserProfilePage = () => {
     const [imagePreview, setImagePreview] = useState('');
     const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    
     const { userInfo } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { data: userProfile, error: profileError } = useProfileQuery();
-    const { data: userCourses, error: coursesError, isLoading: coursesLoading } = useGetUserCoursesQuery();
-
-    const purchasedCourses = userCourses?.data?.purchasedCourses || [];
-    const ownCourses = userCourses?.data?.ownCourses || [];
+    const { data: userProfile, error: profileError } = useGetProfileDetailsAndCoursesQuery();
+    const purchasedCourses = userProfile?.data?.purchasedCourses || [];
+    const ownCourses = userProfile?.data?.ownCourses || [];
 
     const [updateDetails] = useUpdateDetailsMutation();
     const [deleteUserAccount, { isLoading: isDeleting }] = useDeleteUserAccountMutation();
@@ -43,30 +43,24 @@ const UserProfilePage = () => {
         }
     }, [userProfile, profileError, dispatch]);
 
-
-    const handlePurchasedCourseClick = (course) => {
-        if (course && course._id) {
-            navigate(`/me/mycourses/${course._id}`);
+    const handleCourseClick = (course) => {
+        if (course?._id) {
+            navigate(`/courses/${course._id}`);
         } else {
             console.error("Course ID is undefined. Course data:", course);
         }
     };
-    
-    const handleOwnedCourseClick = (course) => {
-        if (course && course._id) {
-            navigate(`/me/mycourses/${course._id}`);
-        } else {
-            console.error("Course ID is undefined. Course data:", course);
-        }
-    };
-    
 
-    if (coursesLoading) {
+    const handleEditCourse = (courseId) => {
+        navigate(`/edit-course/${courseId}`);
+    };
+
+    const handleDeleteCourse = (courseId) => {
+        // Logic for deleting course
+    };
+
+    if (!userProfile) {
         return <Loader />;
-    }
-
-    if (coursesError) {
-        return <div>Error: {coursesError.message}</div>;
     }
 
     const submitHandler = async (e) => {
@@ -127,14 +121,14 @@ const UserProfilePage = () => {
     return (
         <div className="container mx-auto p-6 mt-5 max-w-4xl">
             <h1 className="text-3xl font-bold mb-10 text-center"><span className='text-secondary'>{userInfo.name}</span>'s Profile</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-40">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="flex flex-col items-center">
                     <img
-                        src={`${imagePreview}?v=${new Date().getTime()}`}
+                        src={imagePreview}
                         alt="Profile"
                         className="w-48 h-48 rounded-full border-2 border-primary mb-12"
                     />
-                    <Button onClick={() => navigate('/create-course')} color='secondary' className="w-full mb-8">Add Course to Learnify</Button>
+                    <Button onClick={() => navigate('/create-course')} color='primary' className="w-full mb-8">Add Course to Learnify</Button>
                     <Button onClick={() => setIsModalOpen(true)} className="w-full mb-4 bg-green-600 text-white">Update Profile</Button>
                     <Button onClick={() => setIsConfirmationOpen(true)} className="bg-red-600 text-white w-full mt-4">Delete Account</Button>
                 </div>
@@ -144,56 +138,35 @@ const UserProfilePage = () => {
                     {purchasedCourses.length === 0 ? (
                         <div>No purchased courses found.</div>
                     ) : (
-                        <div className="w-full overflow-x-auto bg-white rounded-box">
-                            <div className="flex space-x-5 p-4">
-                                {purchasedCourses.map((course) => (
-                                    <div
-                                    key={course._id}
-                                    className="flex-shrink-0 w-70 sm:w-62 md:w-80 lg:w-76 bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transition-transform transform hover:scale-105"
-                                    onClick={() => handlePurchasedCourseClick(course)}
-                                >
-                                    <img
-                                        src={course.image}
-                                        alt={course.title}
-                                        className="w-70 h-40 sm:h-48 md:h-56 lg:h-64 object-cover"
-                                    />
-                                    <div className="p-4 bg-primary w-70">
-                                        <h3 className="text-lg font-semibold truncate text-white">{course.title}</h3>
-                                    </div>
-                                </div>                                
-                                ))}
-                            </div>
+                        <div className="overflow-auto max-h-60 bg-secondary text-white rounded mb-4">
+                            {purchasedCourses.map(course => (
+                                <div key={course._id} onClick={() => handleCourseClick(course)} className="p-4 border-b cursor-pointer">
+                                    {course.title}
+                                </div>
+                            ))}
                         </div>
                     )}
 
-                    <h2 className="text-2xl font-semibold mb-4 mt-10">My Own Courses</h2>
+                    <h2 className="text-2xl font-semibold mb-4">My Own Courses</h2>
                     {ownCourses.length === 0 ? (
                         <div>No own courses found.</div>
                     ) : (
-                        <div className="w-full overflow-x-auto bg-white rounded-box">
-                            <div className="flex space-x-5 p-4">
-                                {ownCourses.map((course) => (
-                                    <div
-                                    key={course._id}
-                                    className="flex-shrink-0 w-70 sm:w-62 md:w-80 lg:w-76 bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transition-transform transform hover:scale-105"
-                                    onClick={() => handleOwnedCourseClick(course)}
-                                >
-                                    <img
-                                        src={course.image}
-                                        alt={course.title}
-                                        className="w-70 h-40 sm:h-48 md:h-56 lg:h-64 object-cover"
-                                    />
-                                    <div className="p-4 bg-primary w-70">
-                                        <h3 className="text-lg font-semibold truncate text-white">{course.title}</h3>
+                        <div className="overflow-auto max-h-60 bg-secondary text-white rounded">
+                            {ownCourses.map(course => (
+                                <div key={course._id} className="flex justify-between items-center p-4 border-b bg-primary text-white rounded">
+                                    <div onClick={() => handleCourseClick(course)} className="cursor-pointer">{course.title}</div>
+                                    <div className="flex space-x-2">
+                                        <FaEdit onClick={() => handleEditCourse(course._id)} className="text-blue-500 cursor-pointer" />
+                                        <FaTrash onClick={() => handleDeleteCourse(course._id)} className="text-red-500 cursor-pointer" />
                                     </div>
-                                </div>                                
-                                ))}
-                            </div>
+                                </div>
+                            ))}
                         </div>
                     )}
                 </div>
             </div>
 
+            {/* Modal for updating profile */}
             {isModalOpen && (
                 <>
                     <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
@@ -223,13 +196,16 @@ const UserProfilePage = () => {
                 </>
             )}
 
+            {/* Confirmation Modal for account deletion */}
             {isConfirmationOpen && (
                 <ConfirmationModal
-                    title="Delete Account"
-                    description="Are you sure you want to delete your account? This action cannot be undone."
-                    btnText={isDeleting ? "Deleting..." : "Confirm"}
+                    isOpen={isConfirmationOpen}
                     onClose={() => setIsConfirmationOpen(false)}
                     onConfirm={handleDelete}
+                    title="Delete Account"
+                    description="Are you sure you want to delete your account? This action cannot be undone."
+                    loading={isDeleting}
+                    btnText='Delete'
                 />
             )}
         </div>

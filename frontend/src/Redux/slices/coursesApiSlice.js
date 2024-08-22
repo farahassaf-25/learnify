@@ -19,11 +19,19 @@ export const coursesApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Courses"],
     }),
+    editCourse: builder.mutation({
+      query: ({ data, courseId }) => ({
+        url: `${COURSES_URL}/${courseId}/edit`,  
+        method: 'PUT',
+        body: data,
+      }),
+    }),
   }),
 });
 
 export const { 
   useGetCoursesQuery, 
   useGetCourseDetailsQuery, 
-  useCreateCourseMutation 
+  useCreateCourseMutation,
+  useEditCourseMutation
 } = coursesApiSlice;

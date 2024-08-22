@@ -8,7 +8,13 @@ const {
   updatePassword,
   logout 
 } = require('../controllers/auth');
-const { getProfile, updateDetails, deleteAccount, getAllPurchasedCoursesAndOwnCourses, getPurchasedCourseById } = require('../controllers/users');
+const { 
+  getProfile, 
+  updateDetails, 
+  deleteAccount, 
+  getAllPurchasedCoursesAndOwnCourses, 
+  getPurchasedCourseById 
+} = require('../controllers/users');
 
 const router = express.Router();
 
@@ -22,9 +28,8 @@ router.post('/logout', logout);
 router.route('/me')
   .get(protect, getProfile)
   .put(protect, updateDetails)
-  .delete(protect, deleteAccount);  
-  
-router.get('/me/mycourses', protect, getAllPurchasedCoursesAndOwnCourses);
-router.get('/me/mycourses/:id', protect, getPurchasedCourseById);
+  .delete(protect, deleteAccount);
+
+router.get('/me/:courseId', protect, getPurchasedCourseById);
 
 module.exports = router;

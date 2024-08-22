@@ -8,18 +8,36 @@ const uploadImage = require('../config/uploadImage.js');
 // @desc      Get single user
 // @route     GET /learnify/auth/me
 // @access    Private/Admin
+// @desc      Get single user with courses
+// @route     GET /learnify/auth/me
+// @access    Private/Admin
 exports.getProfile = asyncHandler(async (req, res, next) => {
+    // Fetch user without password
     const user = await User.findById(req.user.id).select('-password');
   
-    if(!user){
-      return next(new ErrorResponse(`User not found`, 404));
+    if (!user) {
+        return next(new ErrorResponse(`User not found`, 404));
     }
-  
+
+    // Fetch own courses
+    const ownCourses = await Course.find({ user: req.user.id }).populate('lectures');
+
+    // Fetch purchased courses
+    const purchasedCourses = await Course.find({ _id: { $in: user.purchasedCourses } }).populate('lectures');
+
+    // Prepare response data
+    const responseData = {
+        ...user.toObject(), // Convert user to plain object
+        ownCourses, // Add own courses
+        purchasedCourses, // Add purchased courses
+    };
+
     res.status(200).json({
-      success: true,
-      data: user
+        success: true,
+        data: responseData
     });
 });
+
 
 //@desc update user details
 //@route PUT /learnify/auth/me
@@ -78,25 +96,25 @@ exports.deleteAccount= asyncHandler(async (req, res, next) => {
 });
 
 // @desc      Get all purchased courses
-// @route     GET /learnify/me/mycourses
+// @route     GET /learnify/auth/me
 // @access    Private
-exports.getAllPurchasedCoursesAndOwnCourses = asyncHandler(async (req, res, next) => {
-    const ownCourses = await Course.find({ user: req.user.id }).populate('lectures');
-    const purchasedCourses = await Course.find({ _id: { $in: req.user.purchasedCourses } }).populate('lectures');
+// exports.getAllPurchasedCoursesAndOwnCourses = asyncHandler(async (req, res, next) => {
+//     const ownCourses = await Course.find({ user: req.user.id }).populate('lectures');
+//     const purchasedCourses = await Course.find({ _id: { $in: req.user.purchasedCourses } }).populate('lectures');
 
-    const allCourses = {
-        ownCourses,
-        purchasedCourses
-    };
+//     const allCourses = {
+//         ownCourses,
+//         purchasedCourses
+//     };
 
-    res.status(200).json({
-        success: true,
-        data: allCourses
-    });
-});
+//     res.status(200).json({
+//         success: true,
+//         data: allCourses
+//     });
+// });
 
 // @desc      Check if user has purchased a course
-// @route     GET /learnify/me/mycourses/:id
+// @route     GET /learnify/me/:courseIid
 // @access    Private
 exports.getPurchasedCourseById = asyncHandler(async (req, res, next) => {
     const courseId = req.params.id; 
