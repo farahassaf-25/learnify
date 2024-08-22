@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../Components/Button';
 import MiddleText from '../Components/MiddleText';
-import Form from '../Components/Form';
 import { useAddLectureMutation } from '../Redux/slices/lecturesApiSlice';
+import TextInput from '../Components/TextInput';
 
 const AddLecturePage = () => {
   const [lectures, setLectures] = useState([]);
@@ -35,7 +35,6 @@ const AddLecturePage = () => {
 
         await addLecture({ courseId, formData }).unwrap();
       }
-      // Navigate back to course page or show success message
       navigate(`/courses/${courseId}`);
     } catch (err) {
       console.error('Failed to add lectures:', err);
@@ -49,27 +48,36 @@ const AddLecturePage = () => {
       </Button>
       <MiddleText text='Add Lectures to Course' />
 
-      <Form
-        title="Add Lectures"
-        onSubmit={handleSubmit}
-        submitLabel={isLoading ? "Submitting..." : "Add Lectures"}
-        fields={lectures.map((lecture, index) => [
-          { 
-            id: `title-${index}`, 
-            type: 'text', 
-            placeholder: `Lecture ${index + 1} Title`, 
-            value: lecture.title, 
-            onChange: (e) => handleInputChange(index, 'title', e.target.value), 
-            label: `Lecture ${index + 1} Title` 
-          },
-          { 
-            id: `video-${index}`, 
-            type: 'file', 
-            label: `Lecture ${index + 1} Video`, 
-            onChange: (e) => handleInputChange(index, 'video', e.target.files[0])
-          },
-        ]).flat()}
-      />
+      <form onSubmit={handleSubmit}>
+        {lectures.map((lecture, index) => (
+          <div key={index} className="mb-6">
+            <label className="block text-sm font-medium mb-1">
+              Lecture {index + 1} 
+            </label>
+            <TextInput
+              placeholder={`Lecture ${index + 1} Title`}
+              type="text"
+              value={lecture.title}
+              onChange={(e) => handleInputChange(index, 'title', e.target.value)}
+            />
+            
+            <input
+              type="file"
+              onChange={(e) => handleInputChange(index, 'video', e.target.files[0])}
+              className="border border-secondary rounded-md p-2 w-full bg-white"
+            />
+          </div>
+        ))}
+
+        <Button
+          type="submit"
+          color='primary'
+          className={`${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={isLoading}
+        >
+          {isLoading ? "Submitting..." : "Add Lectures"}
+        </Button>
+      </form>
     </div>
   );
 };
