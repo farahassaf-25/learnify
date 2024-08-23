@@ -74,10 +74,10 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Update course
-// @route PUT /learnify/courses/:courseId
+// @route PUT /learnify/me/mycourses/:courseId/edit-course
 // @access Private
 exports.updateCourse = asyncHandler(async (req, res, next) => {
-    let course = await CoursesSchema.findById(req.params.id);
+    let course = await Course.findById(req.params.id);
 
     if (!course) {
         return next(new ErrorResponse('Course not found', 404));
@@ -121,38 +121,28 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Delete course
-// @route DELETE /learnify/courses/:courseId
-// @access Public
+// @route DELETE /learnify/me/mycourses/:courseId/edit-course
+// @access Private
 exports.deleteCourse = asyncHandler(async (req, res, next) => {
-    const course = await CoursesSchema.findById(req.params.id).populate('lectures');
+    const course = await CoursesSchema.findById(req.params.courseId);
 
     if (!course) {
         return next(new ErrorResponse('Course not found', 404));
     }
 
-    if (course.user && (course.user.toString() !== req.user.id && req.user.role !== 'admin')) {
+    //authorization check
+    if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
         return next(new ErrorResponse(`User ${req.user.id} is not authorized to delete this course`, 401));
     }
 
-    // Check if the course has lectures
-    if (course.lectures.length > 0) {
-        // Notify the user and ask for confirmation (this part is typically handled on the frontend)
-        return res.status(400).json({
-            success: false,
-            msg: 'This course has lectures associated with it. Do you want to delete the course and all its lectures? Please confirm.'
-        });
-    }
-
-    // If the user confirms deletion of lectures (handle this confirmation on the frontend), proceed
-    await CoursesSchema.findByIdAndDelete(req.params.id);
-
-    // If you want to delete the lectures as well, you can add logic here
-    // await LectureSchema.deleteMany({ course: req.params.id });
+    //delete all lectures associated with the course
+    await LectureSchema.deleteMany({ course: req.params.courseId });
+    
+    //delete the course
+    await CoursesSchema.findByIdAndDelete(req.params.courseId);
 
     res.status(200).json({
         success: true,
-        data: {},
-        msg: `Course ${req.params.id} deleted`
+        msg: `Course ${req.params.courseId} and all associated lectures deleted`
     });
 });
-

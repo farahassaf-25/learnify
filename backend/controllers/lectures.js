@@ -27,7 +27,7 @@ exports.getCourseLectures = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Add lecture
-// @route POST /learnify/courses/:courseId/lectures
+// @route POST /learnify/auth/me/create-course/:courseId/add-lectures
 // @access Private
 exports.addLecture = asyncHandler(async (req, res, next) => {
     uploadVideo.single('video')(req, res, async (err) => {
@@ -74,8 +74,8 @@ exports.addLecture = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Update lecture
-// @route PUT /learnify/courses/:courseId/lectures/:lectureId
-// @access Public
+// @route PUT /learnify/me/mycourses/:courseId/edit-lectures/:lectureId
+// @access Private
 exports.updateLecture = asyncHandler(async (req, res, next) => {
     let lecture = await LectureSchema.findById(req.params.lectureId);
 
@@ -91,24 +91,22 @@ exports.updateLecture = asyncHandler(async (req, res, next) => {
 
         //update lecture details
         lecture.title = req.body.title || lecture.title;
-        lecture.video = req.body.video || lecture.video;
 
         if (req.file) {
-            lecture.video = req.file.location;
+            lecture.video = req.file.location; //if a new video is uploaded, update the video field
+        } else if (req.body.video) {
+            lecture.video = req.body.video;  //update with the existing video URL
         }
 
         const updatedLecture = await lecture.save();
-    
+
         res.status(200).json({
             success: true,
-            data: lecture
+            data: updatedLecture
         });
     });
 });
 
-// @desc Delete lecture
-// @route DELETE /learnify/courses/:courseId/lectures/:lectureId
-// @access Public
 exports.deleteLecture = asyncHandler(async (req, res, next) => {
     const lecture = await LectureSchema.findById(req.params.lectureId);
 
@@ -116,7 +114,8 @@ exports.deleteLecture = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`Lecture not found with id of ${req.params.lectureId}`, 404));
     }
 
-    const course = await CoursesSchema.findById(req.params.courseId);
+    const course = await Course.findById(req.params.courseId); 
+
     if (!course) {
         return next(new ErrorResponse(`Course not found with id of ${req.params.courseId}`, 404));
     }
@@ -125,14 +124,10 @@ exports.deleteLecture = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`User ${req.user.id} is not authorized to delete lecture ${lecture._id}`, 401));
     }
 
-    //delete the video file from S3
-    await deleteFileFromS3(lecture.video.split('/').pop()); //pass the file name
-
     await LectureSchema.findByIdAndDelete(req.params.lectureId);
 
     res.status(200).json({
         success: true,
-        data: {},
         msg: `Lecture ${req.params.lectureId} deleted from course ${req.params.courseId}`
     });
 });

@@ -1,4 +1,4 @@
-import { COURSES_URL } from "../constants";
+import { COURSES_URL, USERS_URL } from "../constants";
 import { apiSlice } from "./apiSlice";
 
 export const coursesApiSlice = apiSlice.injectEndpoints({
@@ -13,7 +13,7 @@ export const coursesApiSlice = apiSlice.injectEndpoints({
     }),
     createCourse: builder.mutation({
       query: (formData) => ({
-        url: `${COURSES_URL}`,
+        url: `${USERS_URL}/me/create-course`,
         method: 'POST',
         body: formData,
       }),
@@ -21,11 +21,17 @@ export const coursesApiSlice = apiSlice.injectEndpoints({
     }),
     editCourse: builder.mutation({
       query: ({ data, courseId }) => ({
-        url: `${COURSES_URL}/${courseId}/edit`,  
+        url: `${USERS_URL}/me/mycourses/${courseId}/edit-course`,  
         method: 'PUT',
         body: data,
       }),
     }),
+    deleteCourse: builder.mutation({
+      query: (courseId) => ({
+        url: `${USERS_URL}/me/mycourses/${courseId}/edit-course`,  
+        method: 'DELETE',
+      }),
+    }),    
   }),
 });
 
@@ -33,5 +39,6 @@ export const {
   useGetCoursesQuery, 
   useGetCourseDetailsQuery, 
   useCreateCourseMutation,
-  useEditCourseMutation
+  useEditCourseMutation,
+  useDeleteCourseMutation
 } = coursesApiSlice;

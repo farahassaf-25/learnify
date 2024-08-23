@@ -19,6 +19,7 @@ import AddLecturePage from './pages/AddLecturesPage';
 import CourseLecturesPage from './pages/CourseLecturesPage';
 import EditCoursePage from './pages/EditCoursePage';
 import MyCoursesPage from './pages/MyCoursesPage';
+import EditLecturesPage from './pages/EditLecturesPage';
 
 const App = () => {
   return (
@@ -28,20 +29,20 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/courses" element={<AllCoursesPage />} />
         <Route path="/courses/:id" element={<CourseDetailsPage />} />
-        <Route path="/cart" element={<CartPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         
         <Route path="" element={<PrivateRoute />}>
-            <Route path="/me" element={<UserProfilePage />} />
-            <Route path="/payment/checkout" element={<PaymentPage />} />
-            <Route path="/confirmation" element={<ConfirmationPage />} />
-            <Route path="/me/mycourses" element={<MyCoursesPage />} />
-            <Route path="/me/mycourses/:courseId" element={<CourseLecturesPage />} />
-            <Route path="/create-course" element={<AddCoursePage />} />
-            <Route path="/courses/:courseId/add-lectures" element={<AddLecturePage />} />
-            <Route path="/courses/:courseId/edit" element={<EditCoursePage />} />
-            
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/me" element={<UserProfilePage />} />
+          <Route path="/payment/checkout" element={<PaymentPage />} />
+          <Route path="/confirmation" element={<ConfirmationPage />} />
+          <Route path="/me/mycourses" element={<MyCoursesPage />} />
+          <Route path="/me/mycourses/:courseId" element={<CourseLecturesPage />} />
+          <Route path="/me/create-course" element={<AddCoursePage />} />
+          <Route path="/me/create-course/:courseId/add-lectures" element={<AddLecturePage />} />
+          <Route path="/me/mycourses/:courseId/edit-course" element={<EditCoursePage />} />
+          <Route path="/me/mycourses/:courseId/edit-lectures" element={<EditLecturesPage />} />
         </Route>
       </Routes>
       <ToastContainer />
