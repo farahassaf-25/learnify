@@ -35,7 +35,7 @@ const AddLecturePage = () => {
 
         await addLecture({ courseId, formData }).unwrap();
       }
-      navigate(`/courses/${courseId}`);
+      navigate(`/me/mycourses/${courseId}`);
     } catch (err) {
       console.error('Failed to add lectures:', err);
     }
@@ -43,7 +43,7 @@ const AddLecturePage = () => {
 
   return (
     <div className="container mx-auto p-4 mt-5">
-      <Button color="primary" to={`/courses/${courseId}`}>
+      <Button color="primary" to={`/me/create-course/${courseId}`}>
         Go Back to Course
       </Button>
       <MiddleText text='Add Lectures to Course' />

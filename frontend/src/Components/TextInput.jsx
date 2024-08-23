@@ -5,7 +5,7 @@ const TextInput = ({ placeholder, type, value, onChange }) => {
     <label className="input input-bordered border-secondary flex items-center gap-2 mb-4">
       <input
         type={type}
-        className="grow p-2 focus:border-secondary"
+        className="grow p-2 focus:border-secondary border-secondary"
         placeholder={placeholder}
         value={value}
         onChange={onChange}

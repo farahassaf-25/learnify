@@ -5,10 +5,13 @@ import CourseCard from '../Components/CourseCard';
 import TextInput from '../Components/TextInput';
 import MiddleText from '../Components/MiddleText';
 import Loader from '../Components/Loader';
+import Button from '../Components/Button';
 
 const MyCoursesPage = () => {
   const { data: coursesData, error, isLoading } = useGetMyCoursesQuery();
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [coursesPerPage] = useState(9); 
   const navigate = useNavigate(); 
 
   if (isLoading) {
@@ -27,6 +30,12 @@ const MyCoursesPage = () => {
     course.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const indexOfLastCourse = currentPage * coursesPerPage;
+  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+  const currentCourses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   const handleCourseClick = (courseId) => {
     navigate(`/me/mycourses/${courseId}`); 
   };
@@ -41,11 +50,11 @@ const MyCoursesPage = () => {
         className="mb-4"
       />
 
-      {filteredCourses.length === 0 ? (
+      {currentCourses.length === 0 ? (
         <p>No courses found.</p>
       ) : (
         <div className="flex flex-wrap justify-center gap-8 py-10">
-          {filteredCourses.map(course => (
+          {currentCourses.map(course => (
             <CourseCard
               key={course._id}
               id={course._id}
@@ -59,6 +68,19 @@ const MyCoursesPage = () => {
           ))}
         </div>
       )}
+
+      {/* Pagination */}
+      <div className="flex justify-center mt-4">
+        {Array.from({ length: Math.ceil(filteredCourses.length / coursesPerPage) }, (_, index) => (
+          <Button className='mr-2'
+            key={index + 1}
+            onClick={() => paginate(index + 1)}
+            color={currentPage === index + 1 ? 'primary' : 'secondary'}
+          >
+            {index + 1}
+          </Button>
+        ))}
+      </div>
     </>
   );
 };

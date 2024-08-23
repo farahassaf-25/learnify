@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import TextInput from '../Components/TextInput';
 import CheckboxSelectInput from '../Components/CheckboxSelectInput'; 
 import SelectInput from '../Components/SelectInput'; 
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 
 const AllCoursesPage = () => {
   const { data: response, isLoading, error } = useGetCoursesQuery();
@@ -21,9 +21,18 @@ const AllCoursesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [coursesPerPage] = useState(9);
   
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
-  // Calculate filtered courses directly in render flow
+  const categoryOptions = [
+    { value: 'Web Development', label: 'Web Development' },
+    { value: 'Data Structures', label: 'Data Structures' },
+    { value: 'Algorithms', label: 'Algorithms' },
+    { value: 'Operating System', label: 'Operating System' },
+    { value: 'Computer Networks', label: 'Computer Networks' },
+    { value: 'Databases', label: 'Databases' },
+    { value: 'Other', label: 'Other' },
+  ];
+
   const filteredCourses = courses.filter(course => {
     let matches = true;
 
@@ -31,12 +40,13 @@ const AllCoursesPage = () => {
       matches = matches && course.title.toLowerCase().includes(searchTerm.toLowerCase());
     }
 
-    if (levelFilter) {
+    if (levelFilter && levelFilter !== '') {
       matches = matches && course.minimumLevel === levelFilter;
     }
 
+    // Update category filtering to match against fixed categories
     if (categoryFilter.length > 0) {
-      matches = matches && course.category.some(cat => categoryFilter.includes(cat));
+      matches = matches && categoryFilter.some(cat => course.category.includes(cat));
     }
 
     if (priceFilter) {
@@ -65,8 +75,6 @@ const AllCoursesPage = () => {
     }
   }, [error]);
 
-  const uniqueCategories = Array.from(new Set(courses.flatMap(course => course.category)));
-
   const clearFilters = () => {
     setSearchTerm('');
     setLevelFilter('');
@@ -76,14 +84,12 @@ const AllCoursesPage = () => {
   };
 
   const levelOptions = [
-    { value: '', label: 'All Levels' },
     { value: 'Beginner', label: 'Beginner' },
     { value: 'Intermediate', label: 'Intermediate' },
     { value: 'Advanced', label: 'Advanced' },
   ];
 
   const priceOptions = [
-    { value: '', label: 'All Prices' },
     { value: '0-50', label: '0 - 50 $' },
     { value: '51-100', label: '51 - 100 $' },
     { value: '101-200', label: '101 - 200 $' },
@@ -91,9 +97,8 @@ const AllCoursesPage = () => {
     { value: '501-1000', label: '501 - 1000 $' },
   ];
 
-  // Function to handle course card click
   const handleCourseClick = (courseId) => {
-    navigate(`/courses/${courseId}`); // Navigate to the course details page
+    navigate(`/courses/${courseId}`);
   };
 
   return (
@@ -111,16 +116,15 @@ const AllCoursesPage = () => {
         />
         <div className="flex flex-col md:flex-row md:space-x-4 w-full md:w-auto">
           <SelectInput
-            valueLabel='Level'
+            valueLabel='All Levels'
             value={levelFilter}
             onChange={(e) => setLevelFilter(e.target.value)}
             options={levelOptions}
           />
           <CheckboxSelectInput 
-            options={uniqueCategories.map(cat => ({ value: cat, label: cat }))} 
+            options={categoryOptions} 
             selectedOptions={categoryFilter}
             setSelectedOptions={setCategoryFilter}
-            className="mb-4 md:mb-0 md:w-auto"
           />
           <SelectInput
             valueLabel='Price'
@@ -135,37 +139,29 @@ const AllCoursesPage = () => {
       </div>
 
       <div className="flex flex-wrap justify-center gap-8 py-10">
-        {isLoading && <Loader />}
-        {error && <Message variant='error'>{error?.data?.message || error.error}</Message>}
-        {!isLoading && !error && Array.isArray(currentCourses) && currentCourses.length > 0 ? (
-          currentCourses.map((course) => (
-            <CourseCard
-              key={course._id}
-              id={course._id}
-              image={course.image}
-              title={course.title}
-              description={course.description}
-              price={course.price}
-              level={course.minimumLevel}
-              onCardClick={handleCourseClick} 
-            />
-          ))
-        ) : (
-          <div>No courses available</div>
-        )}
-      </div>
-
-      {/* Pagination */}
-      <div className="flex justify-center mt-4">
-        {Array.from({ length: Math.ceil(filteredCourses.length / coursesPerPage) }, (_, index) => (
-          <Button className='mr-2'
-            key={index + 1}
-            onClick={() => paginate(index + 1)}
-            color={currentPage === index + 1 ? 'primary' : 'secondary'}
-          >
-            {index + 1}
-          </Button>
-        ))}
+        {isLoading ? (
+            <div className="flex justify-center items-center h-96">
+              <Loader />
+            </div>
+          ) : error ? (
+            <Message variant='error'>{error?.data?.message || error.error}</Message>
+          ) : Array.isArray(currentCourses) && currentCourses.length > 0 ? (
+            currentCourses.map((course) => (
+              <CourseCard
+                key={course._id}
+                id={course._id}
+                image={course.image}
+                title={course.title}
+                description={course.description}
+                price={course.price}
+                level={course.minimumLevel}
+                onCardClick={handleCourseClick}
+              />
+            ))
+          ) : (
+            <div>No courses available</div>
+          )
+        }
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useGetCoursesQuery } from '../Redux/slices/coursesApiSlice';
 import Hero from '../Components/Hero';
 import MiddleText from '../Components/MiddleText';
@@ -12,12 +12,16 @@ import { toast } from 'react-toastify';
 const HomePage = () => {
   const { data: response, isLoading, error } = useGetCoursesQuery();
   const latestCoursesRef = useRef(null);
+  const [hasToastShown, setHasToastShown] = useState(false);
 
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading && !hasToastShown) {
       toast.info('Loading courses...');
+      setHasToastShown(true); 
+    } else if (!isLoading) {
+      setHasToastShown(false); 
     }
-  }, [isLoading]);
+  }, [isLoading, hasToastShown]);
 
   useEffect(() => {
     if (error) {

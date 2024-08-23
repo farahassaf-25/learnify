@@ -1,9 +1,5 @@
 import React from 'react';
 import Button from './Button';
-import MiddleText from './MiddleText';
-import Loader from './Loader';
-import TextInput from './TextInput';
-import SelectInput from './SelectInput'; 
 
 const Form = ({ title, fields, onSubmit, submitLabel, isLoading }) => {
   return (

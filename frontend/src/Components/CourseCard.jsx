@@ -34,7 +34,7 @@ const CourseCard = ({ id, image, title, description, price, level, onCardClick }
           <span className="text-sm text-gray-600">{level}</span>
         </div>
         <div className="card-actions justify-end">
-          <Button color="secondary" onClick={() => onCardClick(id)}>Show More</Button> {/* Pass click handling */}
+          <Button color="secondary" onClick={() => onCardClick(id)}>Show More</Button> 
         </div>
       </div>
     </div>

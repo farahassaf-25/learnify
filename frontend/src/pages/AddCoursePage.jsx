@@ -9,7 +9,7 @@ import SelectInput from '../Components/SelectInput'
 const AddCoursePage = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [categories, setCategories] = useState(''); // Text input for categories
+  const [categories, setCategories] = useState(''); 
   const [minimumLevel, setMinimumLevel] = useState('');
   const [image, setImage] = useState(null);
   const [price, setPrice] = useState('');
@@ -26,7 +26,6 @@ const AddCoursePage = () => {
     formData.append('title', title);
     formData.append('description', description);
     
-    // Split categories by comma and trim each category
     const categoriesArray = categories.split(',').map(category => category.trim());
     categoriesArray.forEach(category => formData.append('category', category));
 
@@ -38,7 +37,7 @@ const AddCoursePage = () => {
 
     try {
       const { data } = await createCourse(formData).unwrap();
-      navigate(`/courses/${data._id}/add-lectures`, { state: { numOfLectures: parseInt(numOfLectures) } });
+      navigate(`/me/create-course/${data._id}/add-lectures`, { state: { numOfLectures: parseInt(numOfLectures) } });
     } catch (err) {
       console.error('Failed to create course:', err);
     }
@@ -46,7 +45,7 @@ const AddCoursePage = () => {
 
   return (
     <div className="container mx-auto p-4 mt-5">
-      <Button color="primary" to="/courses">
+      <Button color="primary" to="/me">
         Go Back
       </Button>
       <MiddleText text='Add Your Own Course' />
@@ -73,7 +72,6 @@ const AddCoursePage = () => {
           className="border border-secondary rounded-md p-2 w-full mb-4 bg-white"
         />
 
-        {/* Updated to a text input for categories */}
         <TextInput
           placeholder="Categories (separate with commas)"
           type="text"

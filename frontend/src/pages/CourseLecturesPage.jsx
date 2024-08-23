@@ -5,6 +5,7 @@ import Accordion from '../Components/Accordion';
 import Button from '../Components/Button';
 import { toast } from 'react-toastify';
 import Loader from '../Components/Loader';
+import MiddleText from '../Components/MiddleText';
 
 const CourseLecturesPage = () => {
     const { courseId } = useParams();
@@ -14,17 +15,19 @@ const CourseLecturesPage = () => {
 
     useEffect(() => {
         if (error) {
-            toast.error('Failed to load course details.');
+            toast.error('Failed to load course details. Please try again later.');
             navigate('/me');
         }
     }, [error, navigate]);
 
     useEffect(() => {
-        if (data && data.success) {
-            setCourse(data.data);
-        } else {
-            toast.error('You do not have access to this course.');
-            navigate('/me');
+        if (data) {
+            if (data.success) {
+                setCourse(data.data);
+            } else {
+                toast.error('You do not have access to this course.');
+                navigate('/me');
+            }
         }
     }, [data, navigate]);
 
@@ -33,7 +36,7 @@ const CourseLecturesPage = () => {
     }
 
     if (!course) {
-        return <div>Error: Course not found.</div>;
+        return <MiddleText text='Course not found' />;
     }
 
     return (
@@ -54,6 +57,10 @@ const CourseLecturesPage = () => {
                         <p className="text-lg text-gray-700">{course.description}</p>
                     </div>
                     <div className="flex items-center">
+                        <h2 className="text-2xl font-semibold mb-2 text-secondary">Category:</h2>
+                        <p className="text-lg text-gray-700 ml-2">${course.category}</p>
+                    </div>
+                    <div className="flex items-center">
                         <h2 className="text-2xl font-semibold mb-2 text-secondary">Price:</h2>
                         <p className="text-lg text-gray-700 ml-2">${course.price}</p>
                     </div>
@@ -64,6 +71,10 @@ const CourseLecturesPage = () => {
                     <div className="flex items-center">
                         <h2 className="text-2xl font-semibold mb-2 text-secondary">Weeks:</h2>
                         <p className="text-lg text-gray-700 ml-2">{course.weeks}</p>
+                    </div>
+                    <div className="flex items-center">
+                        <h2 className="text-2xl font-semibold mb-2 text-secondary">Number Of Lectures:</h2>
+                        <p className="text-lg text-gray-700 ml-2">{course.numOfLectures}</p>
                     </div>
                 </div>
                 <h2 className="text-3xl font-semibold mt-10 mb-4 text-secondary">Lectures</h2>

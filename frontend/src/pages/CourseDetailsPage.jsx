@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../Redux/slices/cartSlice';
 import Button from '../Components/Button';
-import { useGetMyCoursesQuery} from '../Redux/slices/userApiSlice';
+import { useGetMyCoursesQuery } from '../Redux/slices/userApiSlice';
 import { useGetCourseDetailsQuery } from '../Redux/slices/coursesApiSlice';
 import Loader from '../Components/Loader';
 import Message from '../Components/Message';
@@ -20,14 +20,12 @@ const CourseDetailsPage = () => {
     const [isCreator, setIsCreator] = useState(false);
     const cartItems = useSelector(state => state.cart.cartItems);
 
-    //check if the current user is the creator of the course
     useEffect(() => {
         if (course && course.data && userInfo) {
-            setIsCreator(course.data.user.toString() === userInfo._id); //compare user ID
+            setIsCreator(course.data.user.toString() === userInfo._id);
         }
-    }, [course, userInfo]);      
+    }, [course, userInfo]);
 
-    //check if the user has purchased the course
     useEffect(() => {
         if (userCourses && userCourses.data && userCourses.data.purchasedCourses) {
             const purchasedCourseIds = userCourses.data.purchasedCourses.map(course => course._id);
@@ -66,9 +64,13 @@ const CourseDetailsPage = () => {
             <Button color="primary" to="/courses">
                 Go Back
             </Button>
-            {isLoading && <Loader />}
-            {error && <Message variant='error'>{error?.data?.message || error.error}</Message>}
-            {!isLoading && !error && course && course.data ? (
+            {isLoading ? (
+                <div className="flex justify-center items-center h-96">
+                    <Loader />
+                </div>
+            ) : error ? (
+                <Message variant='error'>{error?.data?.message || error.error}</Message>
+            ) : course && course.data ? (
                 <div className="py-10 max-w-4xl mx-auto">
                     <h1 className="text-4xl font-bold mb-4 text-primary">{course.data.title}</h1>
                     <img
@@ -120,7 +122,7 @@ const CourseDetailsPage = () => {
                                 {cartItems.some(item => item._id === id) ? 'Already in Cart' : 'Add to Cart'}
                             </Button>
                         )}
-                    </div>
+                        </div>
                 </div>
             ) : (
                 <div>No course data available</div>

@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 
 const CheckboxSelectInput = ({ options, selectedOptions, setSelectedOptions }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [checkedOptions, setCheckedOptions] = useState(selectedOptions);
   const dropdownRef = useRef(null);
+
+  const [checkedOptions, setCheckedOptions] = useState(selectedOptions);
 
   const handleOptionChange = (option) => {
     const updatedCheckedOptions = checkedOptions.includes(option)
@@ -23,6 +24,11 @@ const CheckboxSelectInput = ({ options, selectedOptions, setSelectedOptions }) =
     setSelectedOptions([]);
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    // Sync checkedOptions with selectedOptions whenever selectedOptions change
+    setCheckedOptions(selectedOptions);
+  }, [selectedOptions]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
