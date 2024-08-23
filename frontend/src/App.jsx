@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from './Components/Navbar';
+import Footer from './Components/Footer';
 import MainLayout from './layouts/MainLayout';
 import HomePage from './pages/HomePage';
 import AllCoursesPage from './pages/AllCoursesPage';
@@ -23,6 +24,7 @@ import EditLecturesPage from './pages/EditLecturesPage';
 
 const App = () => {
   return (
+    <>
     <MainLayout>
       <Navbar />
       <Routes>
@@ -47,6 +49,8 @@ const App = () => {
       </Routes>
       <ToastContainer />
     </MainLayout>
+    <Footer />
+    </>
   );
 };
 
