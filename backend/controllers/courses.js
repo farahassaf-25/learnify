@@ -1,6 +1,7 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const CoursesSchema = require('../models/Courses');
+const LectureSchema = require('../models/Lectures.js');
 const uploadImage = require('../config/uploadImage.js');
 
 // @desc Get all courses
@@ -77,7 +78,7 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
 // @route PUT /learnify/me/mycourses/:courseId/edit-course
 // @access Private
 exports.updateCourse = asyncHandler(async (req, res, next) => {
-    let course = await Course.findById(req.params.id);
+    let course = await CoursesSchema.findById(req.params.id);
 
     if (!course) {
         return next(new ErrorResponse('Course not found', 404));

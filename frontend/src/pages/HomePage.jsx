@@ -7,6 +7,8 @@ import Button from '../Components/Button';
 import Loader from '../Components/Loader';
 import { Link } from 'react-router-dom';
 import Message from '../Components/Message';
+import ContactUs from '../Components/ContactUs';
+import AboutUs from '../Components/AboutUs';
 import { toast } from 'react-toastify';
 
 const HomePage = () => {
@@ -67,9 +69,13 @@ const HomePage = () => {
           </div>
           <div className="flex justify-center mt-4">
             <Link to="/courses">
-              <Button color="primary">Show All Courses</Button>
+              <Button color="primary" className='mb-12'>Show All Courses</Button>
             </Link>
           </div>
+          <MiddleText text='About Us' />
+          <AboutUs />
+          <MiddleText text='Contact Us' />
+          <ContactUs />
         </>
       )}
     </div>

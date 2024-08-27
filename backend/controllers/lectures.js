@@ -114,7 +114,7 @@ exports.deleteLecture = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`Lecture not found with id of ${req.params.lectureId}`, 404));
     }
 
-    const course = await Course.findById(req.params.courseId); 
+    const course = await CoursesSchema.findById(req.params.courseId); 
 
     if (!course) {
         return next(new ErrorResponse(`Course not found with id of ${req.params.courseId}`, 404));

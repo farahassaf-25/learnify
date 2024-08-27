@@ -58,7 +58,7 @@ const CourseLecturesPage = () => {
                     </div>
                     <div className="flex items-center">
                         <h2 className="text-2xl font-semibold mb-2 text-secondary">Category:</h2>
-                        <p className="text-lg text-gray-700 ml-2">${course.category}</p>
+                        <p className="text-lg text-gray-700 ml-2">{course.category}</p>
                     </div>
                     <div className="flex items-center">
                         <h2 className="text-2xl font-semibold mb-2 text-secondary">Price:</h2>
