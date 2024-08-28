@@ -26,6 +26,8 @@ const {
   deleteLecture,
 } = require('../controllers/lectures');
 
+const { addFeedback } = require('../controllers/feedback');
+
 const router = express.Router();
 
 // Authentication routes
@@ -57,5 +59,7 @@ router.delete('/me/mycourses/:courseId/edit-course', protect, authorize('student
 // Lecture management routes
 router.put('/me/mycourses/:id/edit-lectures/:lectureId', protect, authorize('student', 'admin'), updateLecture);
 router.delete('/me/mycourses/:courseId/edit-lectures/:lectureId', protect, authorize('student', 'admin'), deleteLecture);
+
+router.post('/me/mycourses/:courseId', protect, addFeedback)
 
 module.exports = router;

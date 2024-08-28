@@ -291,8 +291,13 @@ exports.getPurchasedCourseById = asyncHandler(async (req, res, next) => {
         return res.status(403).json({ success: false, message: 'You do not have access to this course' });
     }
 
+    const responseData = {
+        ...course._doc, 
+        isPurchased 
+    };
+
     res.status(200).json({
         success: true,
-        data: course
+        data: responseData 
     });
 });

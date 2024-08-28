@@ -50,10 +50,12 @@ const CoursesSchema = new mongoose.Schema({
             ref: 'Lectures'
         },
     ],
-    views: {
-        type: Number,
-        default: 0,
-    },
+    feedback: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Feedback'
+        }
+    ],
     creatorName: {
         type: String,
         required: [true, 'Please add a creator name'],
