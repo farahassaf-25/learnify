@@ -16,29 +16,24 @@ exports.addFeedback = asyncHandler(async (req, res, next) => {
     }
 
     const feedback = await Feedback.create(req.body);
-
+    
     //add feedback to the course
     course.feedback.push(feedback._id);
     await course.save();
 
+    //recalculate average rating
+    const avgRating = await Feedback.aggregate([
+        { $match: { course: course._id } },
+        { $group: { _id: '$course', averageRating: { $avg: '$rating' } } }
+    ]);
+
+    if (avgRating.length > 0) {
+        course.averageRating = avgRating[0].averageRating.toFixed(1);
+        await course.save();
+    }
+
     res.status(201).json({
         success: true,
-        data: feedback
-    });
-});
-
-// @desc Get feedback for course
-// @route GET /learnify/courses/:courseId
-// @access Public
-exports.getCourseFeedback = asyncHandler(async (req, res, next) => {
-    const feedback = await Feedback.find({ course: req.params.courseId }).populate({
-        path: 'user',
-        select: 'name'
-    });
-
-    res.status(200).json({
-        success: true,
-        count: feedback.length,
         data: feedback
     });
 });

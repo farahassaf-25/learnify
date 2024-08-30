@@ -56,6 +56,11 @@ const CoursesSchema = new mongoose.Schema({
             ref: 'Feedback'
         }
     ],
+    averageRating: {
+        type: Number,
+        min: [1, 'Rating must be at least 1'],
+        max: [5, 'Rating must can not be more than 5']
+    },
     creatorName: {
         type: String,
         required: [true, 'Please add a creator name'],
@@ -79,6 +84,21 @@ const CoursesSchema = new mongoose.Schema({
 //create slug from title
 CoursesSchema.pre('save', function(next) {
     this.slug = slugify(this.title, { lower: true });
+    next();
+});
+
+//calculate average rating before saving
+CoursesSchema.pre('save', async function(next) {
+    if(this.feedback.length > 0) {
+        const avgRating = await this.model('Feedback').aggregate([
+            { $match: { course: this._id }},
+            { $group: { _id: '$course', averageRating: { $avg: '$rating'}}}
+        ]);
+
+        if(avgRating.length > 0) {
+            this.averageRating = avgRating[0].averageRating.toFixed(1);
+        }
+    }
     next();
 });
 

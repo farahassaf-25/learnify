@@ -63,6 +63,7 @@ const MyCoursesPage = () => {
               description={course.description}
               price={course.price}
               level={course.minimumLevel}
+              averageRating={course.averageRating}
               onCardClick={handleCourseClick} 
             />
           ))}

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Button from './Button';
+import { FaStar } from 'react-icons/fa';
 
-const CourseCard = ({ id, image, title, description, price, level, onCardClick }) => {
+const CourseCard = ({ id, image, title, description, price, level, averageRating, onCardClick }) => {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   const handleDescriptionToggle = () => {
@@ -32,6 +33,10 @@ const CourseCard = ({ id, image, title, description, price, level, onCardClick }
         <div className="flex justify-between items-center mt-4">
           <span className="text-lg font-semibold text-primary">{price} $</span>
           <span className="text-sm text-gray-600">{level}</span>
+        </div>
+        <div className="flex items-center mt-2">
+          <FaStar className="text-yellow-400 mr-1 text-2xl" />
+          <span>{averageRating ? averageRating.toFixed(1) : '(0.0)'}</span>
         </div>
         <div className="card-actions justify-end">
           <Button color="secondary" onClick={() => onCardClick(id)}>Show More</Button> 
