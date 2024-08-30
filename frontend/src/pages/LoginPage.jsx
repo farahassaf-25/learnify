@@ -37,15 +37,21 @@ const LoginPage = () => {
       toast.error('Please fill in all fields');
       return;
     }
-
+  
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials(res));
-      navigate(redirect || '/');
+  
+      //redirect based on user role
+      if (res.user.role === 'admin') {
+        navigate('/admin/dashboard'); //redirect to admin dashboard
+      } else {
+        navigate('/'); //redirect to home page for students
+      }
     } catch (err) {
       toast.error(err?.data?.message || 'Invalid email or password');
     }
-  };
+  };  
 
   return (
     <div className="flex flex-col justify-center items-center min-h-[80vh] p-4">
