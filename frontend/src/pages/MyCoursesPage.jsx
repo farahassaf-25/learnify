@@ -41,13 +41,13 @@ const MyCoursesPage = () => {
   };
 
   return (
-    <>
+    <div className='px-40'>
       <MiddleText text='My Courses' /> 
       <TextInput
         placeholder="Search courses..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="mb-4"
+        className="mb-4 mt-10"
       />
 
       {currentCourses.length === 0 ? (
@@ -82,7 +82,7 @@ const MyCoursesPage = () => {
           </Button>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

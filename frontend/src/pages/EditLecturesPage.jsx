@@ -92,7 +92,7 @@ const EditLecturesPage = () => {
   if (isError) return <MiddleText text="Failed to load course lectures." />;
 
   return (
-    <div className="container mx-auto p-4 mt-5">
+    <div className="container mx-auto p-4 mt-5 px-40">
       <MiddleText text="Edit Lectures" />
 
       {lectures.map((lecture, index) => (

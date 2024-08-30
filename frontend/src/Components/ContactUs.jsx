@@ -28,7 +28,7 @@ const ContactUs = () => {
   return (
     <div className="p-4 flex flex-col md:flex-row items-center justify-between py-16">
       <div className="md:w-1/2">
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4"> 
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4 px-40"> 
           <InputField
             id="name"
             label="Name"
@@ -55,7 +55,7 @@ const ContactUs = () => {
               placeholder="Your Message"
               value={formData.message}
               onChange={handleChange}
-              className="w-full p-2 border border-secondary rounded-2xl bg-white focus:outline-none focus:ring-2 focus:ring-secondary"
+              className="w-full p-2 border border-secondary rounded bg-white focus:outline-none focus:ring-2 focus:ring-secondary"
               rows="5"
             ></textarea>
           </div>

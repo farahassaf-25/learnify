@@ -147,7 +147,7 @@ const UserProfilePage = () => {
     return (
         <div className="container mx-auto p-6 mt-5 max-w-4xl">
             <h1 className="text-3xl font-bold mb-10 text-center"><span className='text-secondary'>{userInfo.name}</span>'s Profile</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
                 <div className="flex flex-col items-center">
                     <img
                         src={imagePreview}
@@ -187,7 +187,7 @@ const UserProfilePage = () => {
                             {ownCourses.map(course => (
                                 <div key={course._id} className="flex justify-between items-center p-4 border-b bg-secondary text-white rounded">
                                     <div onClick={() => handleCourseClick(course)} className="cursor-pointer">{truncateTitle(course.title)}</div> 
-                                    <FaEdit onClick={() => handleEditCourse(course._id)} className="text-primary cursor-pointer size-6" />
+                                    <FaEdit onClick={() => handleEditCourse(course._id)} className="text-primary cursor-pointer size-6 ml-20" />
                                 </div>
                             ))}
                         </div>

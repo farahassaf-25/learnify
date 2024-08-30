@@ -135,10 +135,9 @@ const CourseLecturesPage = () => {
             </div>
 
             {isPurchased && course?.creatorId !== currentUserId && (
-                <div className="mt-10">
+                <div className="mt-10 px-80 flex flex-col align-content-center justify-center">
                     <MiddleText text='Add Feedback' />
                     <div className="my-4">
-                        <h2 className="text-xl font-semibold mb-2 text-secondary">Rate this course:</h2>
                         <Rating
                             initialRating={rating}
                             onChange={(value) => setRating(value)}
@@ -147,7 +146,7 @@ const CourseLecturesPage = () => {
                         />
                     </div>
                     <textarea
-                        className="w-full p-4 border rounded-md"
+                        className="w-full p-5 border rounded border-secondary mb-4"
                         placeholder="Write your feedback here..."
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}

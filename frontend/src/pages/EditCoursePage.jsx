@@ -34,7 +34,7 @@ const EditCoursePage = () => {
       const courseData = course.data; 
       setTitle(courseData.title || '');
       setDescription(courseData.description || '');
-      setCategory(courseData.category[0] || ''); 
+      setCategory(courseData.category.join(', ') || '');
       setMinimumLevel(courseData.minimumLevel || '');
       setPrice(courseData.price !== undefined ? courseData.price : '');
       setWeeks(courseData.weeks !== undefined ? courseData.weeks : '');
@@ -55,7 +55,7 @@ const EditCoursePage = () => {
         data: {
           title,
           description,
-          category: [category], 
+          category: category.split(',').map(cat => cat.trim()), 
           minimumLevel,
           price,
           weeks,
@@ -97,7 +97,7 @@ const EditCoursePage = () => {
   }
   
   return (
-    <div className="container mx-auto p-4 mt-5">
+    <div className="container mx-auto p-4 mt-5 px-40">
       <Button color="primary" to={`/me/mycourses`}>
         Go Back
       </Button>
@@ -131,9 +131,9 @@ const EditCoursePage = () => {
           onChange={(e) => setMinimumLevel(e.target.value)}
           options={[
             { value: 'All Levels', label: 'All Levels' },
-            { value: 'beginner', label: 'Beginner' },
-            { value: 'intermediate', label: 'Intermediate' },
-            { value: 'advanced', label: 'Advanced' },
+            { value: 'Beginner', label: 'Beginner' },
+            { value: 'Intermediate', label: 'Intermediate' },
+            { value: 'Advanced', label: 'Advanced' },
           ]}
         />
 
@@ -163,6 +163,9 @@ const EditCoursePage = () => {
           </Button>
           <Button color="primary" type="submit">
             Save Changes
+          </Button>
+          <Button className='bg-green-600 text-white' type="submit" to={`/me/mycourses/${courseId}/edit-lectures`}>
+            Edit Lectures
           </Button>
         </div>
       </form>

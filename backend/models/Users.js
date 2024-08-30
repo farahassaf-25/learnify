@@ -29,7 +29,7 @@ const UsersSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'
+        default: process.env.DEFAULT_PROFILE_IMAGE
     },
     role: {
         type: String,

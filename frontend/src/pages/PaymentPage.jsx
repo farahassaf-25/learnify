@@ -44,7 +44,7 @@ const PaymentPage = () => {
     };    
 
     return (
-        <div className="payment-page container mx-auto py-8">
+        <div className="payment-page container mx-auto py-8 px-40">
             <MiddleText text="Payment" />
             <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
                 <div className="payment-methods mb-6">

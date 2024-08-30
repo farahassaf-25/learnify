@@ -102,12 +102,12 @@ const AllCoursesPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 mt-2">
+    <div className="container mx-auto p-4 mt-2 px-40">
       <Button color="primary" to="/">
         Go Back To Home
       </Button>
 
-      <div className="my-4 flex flex-col md:flex-row justify-between items-center mt-12">
+      <div className="my-4 flex flex-col md:flex-row justify-between items-center mt-12 px-30">
         <TextInput
           placeholder="Search ..."
           value={searchTerm}

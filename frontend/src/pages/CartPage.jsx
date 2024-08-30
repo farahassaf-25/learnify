@@ -23,7 +23,7 @@ const CartPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 px-40">
       <MiddleText text="Your Cart" />
       {cartItems.length === 0 ? (
         <div className="flex flex-col items-center">

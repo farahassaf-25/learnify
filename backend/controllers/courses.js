@@ -19,7 +19,10 @@ exports.getAllCourses = asyncHandler(async (req, res, next) => {
         query.category = { $regex: category, $options: 'i' };
     }
 
-    const courses = await CoursesSchema.find(query).select("-lectures");
+    const courses = await CoursesSchema.find(query)
+        .select("-lectures")
+        .sort({ createdAt: -1 });
+        
     res.status(200).json({
         success: true,
         count: courses.length,

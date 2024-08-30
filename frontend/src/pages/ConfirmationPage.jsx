@@ -7,7 +7,7 @@ const ConfirmationPage = () => {
     const { cartItems, totalPrice } = useSelector((state) => state.cart);
 
     return (
-        <div className="confirmation-page container mx-auto p-4">
+        <div className="confirmation-page container mx-auto p-4 px-40">
             <MiddleText text="Thank You for Your Order!" />
             <div className="order-summary bg-white p-8 rounded-xl shadow-lg">
                 <h2 className="text-2xl font-bold mb-4">Order Confirmation</h2>

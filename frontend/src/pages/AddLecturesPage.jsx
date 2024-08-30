@@ -42,11 +42,11 @@ const AddLecturePage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 mt-5">
+    <div className="container mx-auto p-4 mt-5 px-40">
       <Button color="primary" to={`/me/create-course/${courseId}`}>
         Go Back to Course
       </Button>
-      <MiddleText text='Add Lectures to Course' />
+      <MiddleText text='Add Lectures' />
 
       <form onSubmit={handleSubmit}>
         {lectures.map((lecture, index) => (

@@ -44,13 +44,13 @@ const AddCoursePage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 mt-5">
+    <div className="container mx-auto p-12 px-40 mt-5">
       <Button color="primary" to="/me">
         Go Back
       </Button>
       <MiddleText text='Add Your Own Course' />
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='mt-8'>
         <TextInput
           placeholder="Course Title"
           type="text"

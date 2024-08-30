@@ -13,7 +13,7 @@ const InputField = ({ id, label, type, placeholder, value, onChange }) => {
         value={value}
         onChange={onChange} 
         name={id} 
-        className="w-full p-2 border border-secondary rounded-2xl bg-white focus:outline-none focus:ring-2 focus:ring-secondary"
+        className="w-full p-2 border border-secondary rounded bg-white focus:outline-none focus:ring-2 focus:ring-secondary"
       />
     </div>
   );
