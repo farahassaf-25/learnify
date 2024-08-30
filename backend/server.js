@@ -13,6 +13,7 @@ const courses = require('./routes/courses');
 const lectures = require('./routes/lectures');
 const auth = require('./routes/auth');
 const orders = require('./routes/order');
+const admin = require('./routes/admin');
 
 // Connect to database
 connectDB();
@@ -46,6 +47,7 @@ app.use('/learnify/courses', courses);
 app.use('/learnify/lectures', lectures);
 app.use('/learnify/auth', auth);
 app.use('/learnify/payment', orders);
+app.use('/learnify/admin', admin);
 
 app.use(errorHandler);
 

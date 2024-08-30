@@ -31,17 +31,14 @@ exports.checkout = asyncHandler(async (req, res, next) => {
         itemsPrice,
         taxPrice,
         totalPrice,
-        isPaid: true, // mock payment
+        isPaid: true, // Mock payment
         paidAt: Date.now(), 
     });
 
-    orderItems.forEach(item => {
-        if (!req.user.purchasedCourses.includes(item.course.toString())) {
-            req.user.purchasedCourses.push(item.course);
-        }
-    });
-
-    await req.user.save();
+    const updatedPurchasedCourses = orderItems.map(item => item.course);
+    await User.findByIdAndUpdate(req.user.id, {
+        $addToSet: { purchasedCourses: { $each: updatedPurchasedCourses } } 
+    }, { new: true }); 
 
     res.status(201).json({
         success: true,
