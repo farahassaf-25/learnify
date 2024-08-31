@@ -7,8 +7,6 @@ import Button from '../Components/Button';
 import Loader from '../Components/Loader';
 import { Link } from 'react-router-dom';
 import Message from '../Components/Message';
-import ContactUs from '../Components/ContactUs';
-import AboutUs from '../Components/AboutUs';
 import { toast } from 'react-toastify';
 
 const HomePage = () => {
@@ -48,7 +46,7 @@ const HomePage = () => {
         <>
           <Hero scrollToCourses={scrollToCourses} />
           <div ref={latestCoursesRef}>
-            <MiddleText text="Learnify Courses" />
+            <MiddleText text="Latest Courses" />
             <div className="flex flex-wrap justify-center gap-8 py-10">
               {Array.isArray(latestCourses) && latestCourses.length > 0 ? (
                 latestCourses.map((course) => (
@@ -72,10 +70,6 @@ const HomePage = () => {
               <Button color="primary" className='mb-12'>Show All Courses</Button>
             </Link>
           </div>
-          <MiddleText text='About Us' />
-          <AboutUs />
-          <MiddleText text='Contact Us' />
-          <ContactUs />
         </>
       )}
     </div>

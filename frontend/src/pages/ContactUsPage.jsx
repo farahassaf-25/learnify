@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import InputField from '../Components/InputField';
-import Button from './Button';
+import Button from '../Components/Button';
+import MiddleText from '../Components/MiddleText';
 import contactImage from '../assets/logo.png'; 
 
-const ContactUs = () => {
+const ContactUsPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,7 +27,9 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="p-4 flex flex-col md:flex-row items-center justify-between py-16">
+    <div className='mt-8'>
+      <MiddleText text='Contact Us' />
+      <div className="flex flex-col md:flex-row items-center justify-between">
       <div className="md:w-1/2">
         <form onSubmit={handleSubmit} className="space-y-4 mt-4 px-40"> 
           <InputField
@@ -75,7 +78,8 @@ const ContactUs = () => {
         />
       </div>
     </div>
+    </div>
   );
 };
 
-export default ContactUs;
+export default ContactUsPage;

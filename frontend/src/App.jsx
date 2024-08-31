@@ -23,6 +23,8 @@ import MyCoursesPage from './pages/MyCoursesPage';
 import EditLecturesPage from './pages/EditLecturesPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import DeniedPage from './pages/DeniedPage'; 
+import AboutUsPage from './pages/AboutUsPage';
+import ContactUsPage from './pages/ContactUsPage';
 
 const App = () => {
   return (
@@ -35,6 +37,8 @@ const App = () => {
           <Route path="/courses/:id" element={<CourseDetailsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path='/about-us' element={<AboutUsPage />} />
+          <Route path='/contact-us' element={<ContactUsPage />} />
           
           {/* student pages */}
           <Route element={<RequireAuth allowedRoles={['student']} />}>

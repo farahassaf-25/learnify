@@ -56,8 +56,8 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
           >
             <li><NavLink to="/">Home</NavLink></li>
             <li><NavLink to="/courses">Courses</NavLink></li>
-            <li><NavLink to="/">About Us</NavLink></li>
-            <li><NavLink to="/">Contact Us</NavLink></li>
+            <li><NavLink to="/about-us">About Us</NavLink></li>
+            <li><NavLink to="/contact-us">Contact Us</NavLink></li>
             <li><NavLink to='/cart'>My Cart</NavLink></li>
             <div className="flex justify-between mt-4 space-x-2">
               { userInfo ? (
@@ -92,8 +92,8 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
         <ul className="menu menu-horizontal px-1 space-x-4">
           <li><NavLink to="/">Home</NavLink></li>
           <li><NavLink to="/courses">Courses</NavLink></li>
-          <li><NavLink to="/" onClick={scrollToAbout}>About Us</NavLink></li>
-          <li><NavLink to="/" onClick={scrollToContact}>Contact Us</NavLink></li>
+          <li><NavLink to="/about-us" onClick={scrollToAbout}>About Us</NavLink></li>
+          <li><NavLink to="/contact-us" onClick={scrollToContact}>Contact Us</NavLink></li>
         </ul>
       </div>
       <div className="navbar-end hidden lg:flex gap-2 lg:gap-4">
