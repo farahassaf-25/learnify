@@ -1,7 +1,21 @@
 import React, { useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
+import { useDeleteUserByAdminMutation } from '../Redux/slices/adminSlice';
 
-const UsersTable = ({ users }) => {
+const UsersTable = ({ users, onDelete }) => {
+  const [deleteUser] = useDeleteUserByAdminMutation();
+
+  const handleDeleteUser = async (userId) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      try {
+        await deleteUser(userId).unwrap();
+        onDelete(userId); 
+      } catch (error) {
+        console.error("Failed to delete the user:", error);
+      }
+    }
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="table mt-6 border-collapse border-2 border-gray-400">
@@ -17,7 +31,7 @@ const UsersTable = ({ users }) => {
         </thead>
         <tbody className='text-xl text-primary border-2'>
           {users.map((user) => (
-            <UserRow key={user._id} user={user} />
+            <UserRow key={user._id} user={user} onDelete={handleDeleteUser} />
           ))}
         </tbody>
       </table>
@@ -25,9 +39,9 @@ const UsersTable = ({ users }) => {
   );
 };
 
-const UserRow = ({ user }) => {
+const UserRow = ({ user, onDelete }) => {
   const [showMoreCourses, setShowMoreCourses] = useState(false);
-  const maxCoursesToShow = 2; 
+  const maxCoursesToShow = 2;
 
   const handleToggleCourses = () => {
     setShowMoreCourses(!showMoreCourses);
@@ -58,7 +72,10 @@ const UserRow = ({ user }) => {
         )}
       </td>
       <td className="border-2 border-gray-400">
-        <FaTrash className='text-red-600 size-6' />
+        <FaTrash 
+            className='text-red-600 size-6 cursor-pointer' 
+            onClick={() => onDelete(user._id)} 
+        />
       </td>
     </tr>
   );

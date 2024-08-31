@@ -38,3 +38,44 @@ exports.getDashboardData = asyncHandler(async (req, res) => {
     });
 });
 
+exports.deleteCourseByAdmin = asyncHandler(async (req, res, next) => {
+    const courseId = req.params.courseId; 
+
+    const course = await CoursesSchema.findById(courseId); 
+    if (!course) {
+        return next(new ErrorResponse(`Course not found with id of ${courseId}`, 404)); 
+    }
+
+    await LectureSchema.deleteMany({ course: courseId });
+
+    await FeedbackSchema.deleteMany({ course: courseId });
+
+    await CoursesSchema.findByIdAndDelete(courseId);
+
+    res.status(200).json({
+        success: true,
+        data: {},
+        message: 'Course and associated lectures and feedback deleted, orders retained.'
+    });
+});
+
+
+exports.deleteUserByAdmin = asyncHandler(async (req, res, next) => {
+    const userId = req.params.userId;
+
+    const user = await UsersSchema.findById(userId);
+    if (!user) {
+        return next(new ErrorResponse(`User not found with id of ${userId}`, 404));
+    }
+
+    await UsersSchema.findByIdAndDelete(userId);
+
+    res.status(200).json({
+        success: true,
+        data: {},
+        message: 'User deleted successfully.'
+    });
+});
+
+
+

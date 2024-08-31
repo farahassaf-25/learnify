@@ -1,15 +1,36 @@
 import React, { useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
+import { useDeleteCourseByAdminMutation } from '../Redux/slices/adminSlice';
 
-const CoursesTable = ({ courses }) => {
+const CoursesTable = ({ courses, onDelete }) => {
+  const [showMoreFeedback, setShowMoreFeedback] = useState(false);
+  const maxFeedbackToShow = 1;
+
+  const [deleteCourse] = useDeleteCourseByAdminMutation();
+
+  const handleToggleFeedback = () => {
+    setShowMoreFeedback(!showMoreFeedback);
+  };
+
+  const handleDeleteCourse = async (courseId) => {
+    if (window.confirm("Are you sure you want to delete this course?")) {
+      try {
+        await deleteCourse(courseId).unwrap();
+        onDelete(courseId); 
+      } catch (error) {
+        console.error("Failed to delete the course:", error);
+      }
+    }
+  };
+
   return (
-    <div className="overflow-x-auto mb-10">
+    <div className="overflow-x-auto">
       <table className="table mt-6 border-collapse border-2 border-gray-400">
         <thead>
           <tr className='text-textColor text-xl'>
             <th className="border-2 border-gray-400">Course ID</th>
             <th className="border-2 border-gray-400">Course Image</th>
-            <th className="border-2 border-gray-400">Course Name</th>
+            <th className="border-2 border-gray-400">Course Title</th>
             <th className="border-2 border-gray-400">Creator Id</th>
             <th className="border-2 border-gray-400">Number of Lectures</th>
             <th className="border-2 border-gray-400">Feedback</th>
@@ -20,51 +41,41 @@ const CoursesTable = ({ courses }) => {
         </thead>
         <tbody className='text-xl text-primary border-2'>
           {courses.map((course) => (
-            <CourseRow key={course._id} course={course} />
+            <tr key={course._id} className="border-t border-2 border-gray-400">
+              <td className="border-2 border-gray-400">{course._id}</td>
+              <td className="border-2 border-gray-400">
+                <img src={course.image} alt={course.title} className="h-12 w-12 rounded" />
+              </td>
+              <td className="border-2 border-gray-400">{course.title}</td>
+              <td className="border-2 border-gray-400">{course.creatorId}</td>
+              <td className="border-2 border-gray-400">{course.numOfLectures}</td>
+              <td className="border-2 border-gray-400 max-h-32 overflow-y-auto">
+                <ul>
+                  {course.feedback.slice(0, showMoreFeedback ? course.feedback.length : maxFeedbackToShow).map((feedback) => (
+                    <li key={feedback._id}>
+                      [{feedback.user ? feedback.user._id : 'User deleted'}, '{feedback.comment}']
+                    </li>
+                  ))}
+                </ul>
+                {course.feedback.length > maxFeedbackToShow && (
+                  <button onClick={handleToggleFeedback} className="text-blue-500 mt-2">
+                    {showMoreFeedback ? 'Show Less' : 'Show More'}
+                  </button>
+                )}
+              </td>
+              <td className="border-2 border-gray-400">{course.averageRating}</td>
+              <td className="border-2 border-gray-400">{course.price}</td>
+              <td className="border-2 border-gray-400">
+                <FaTrash 
+                  className='text-red-600 size-6 cursor-pointer' 
+                  onClick={() => handleDeleteCourse(course._id)} 
+                />
+              </td>
+            </tr>
           ))}
         </tbody>
       </table>
     </div>
-  );
-};
-
-const CourseRow = ({ course }) => {
-  const [showMoreFeedback, setShowMoreFeedback] = useState(false);
-  const maxFeedbackToShow = 1;
-
-  const handleToggleFeedback = () => {
-    setShowMoreFeedback(!showMoreFeedback);
-  };
-
-  return (
-    <tr className="border-t border-2 border-gray-400">
-      <td className="border-2 border-gray-400">{course._id}</td>
-      <td className="border-2 border-gray-400">
-        <img src={course.image} alt={course.title} className="h-12 w-12 rounded" />
-      </td>
-      <td className="border-2 border-gray-400">{course.title}</td>
-      <td className="border-2 border-gray-400">{course.creatorId}</td>
-      <td className="border-2 border-gray-400">{course.numOfLectures}</td>
-      <td className="border-2 border-gray-400 max-h-32 overflow-y-auto">
-        <ul>
-          {course.feedback.slice(0, showMoreFeedback ? course.feedback.length : maxFeedbackToShow).map((feedback) => (
-            <li key={feedback._id}>
-              [{feedback.user ? feedback.user._id : 'User deleted'}, '{feedback.comment}']
-            </li>
-          ))}
-        </ul>
-        {course.feedback.length > maxFeedbackToShow && (
-          <button onClick={handleToggleFeedback} className="text-blue-500 mt-2">
-            {showMoreFeedback ? 'Show Less' : 'Show More'}
-          </button>
-        )}
-      </td>
-      <td className="border-2 border-gray-400">{course.averageRating}</td>
-      <td className="border-2 border-gray-400">{course.price}</td>
-      <td className="border-2 border-gray-400">
-        <FaTrash className='text-red-600 size-6 cursor-pointer' />
-      </td>
-    </tr>
   );
 };
 
