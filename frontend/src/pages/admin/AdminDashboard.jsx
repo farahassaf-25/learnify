@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import CoursesTable from '../../Components/CoursesTable';
 import UsersTable from '../../Components/UsersTable';
+import OrdersTable from '../../Components/OrdersTable';
 import { useGetDashboardDataQuery } from '../../Redux/slices/adminSlice';
 import MiddleText from '../../Components/MiddleText';
 import Loader from '../../Components/Loader';
@@ -16,13 +17,15 @@ const AdminDashboard = () => {
   });
   const [courses, setCourses] = useState([]);
   const [users, setUsers] = useState([]);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     if (data) {
-      const { counts, courses: fetchedCourses, users: fetchedUsers } = data.data;
+      const { counts, courses: fetchedCourses, users: fetchedUsers, orders: fetchedOrders } = data.data;
       setCounts(counts);
       setCourses(fetchedCourses);
       setUsers(fetchedUsers);
+      setOrders(fetchedOrders);
     }
   }, [data]);
 
@@ -52,6 +55,14 @@ const AdminDashboard = () => {
     }));
   };
 
+  const handleDeleteOrder = (orderId) => {
+    setOrders((prevOrders) => prevOrders.filter(order => order._id !== orderId));
+    setCounts((prevCounts) => ({
+      ...prevCounts,
+      purchasedCourses: prevCounts.purchasedCourses - 1,
+    }));
+  };
+
   return (
     <div className='p-6 px-20'>
       <MiddleText text='Learnify Statistics' />
@@ -69,6 +80,8 @@ const AdminDashboard = () => {
       <CoursesTable courses={courses} onDelete={handleCourseDelete} />
       <MiddleText text='Users' />
       <UsersTable users={users} onDelete={handleUserDelete} />
+      <MiddleText text='Orders' />
+      <OrdersTable orders={orders} onDeleteOrder={handleDeleteOrder} />
     </div>
   );
 };

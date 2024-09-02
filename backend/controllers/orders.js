@@ -1,6 +1,6 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
-const Order = require('../models/Order');
+const Order = require('../models/Orders');
 const Course = require('../models/Courses');
 const User = require('../models/Users');
 

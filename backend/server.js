@@ -12,7 +12,7 @@ const errorHandler = require('./middleware/error');
 const courses = require('./routes/courses');
 const lectures = require('./routes/lectures');
 const auth = require('./routes/auth');
-const orders = require('./routes/order');
+const orders = require('./routes/orders');
 const admin = require('./routes/admin');
 
 // Connect to database

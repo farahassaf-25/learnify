@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 const OrderSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Users', 
         required: true,
     },
     orderItems: [
         {
             course: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'Course',
+                ref: 'Courses', 
                 required: true,
             },
             title: String,
@@ -45,4 +45,4 @@ const OrderSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-module.exports = mongoose.model('Order', OrderSchema);
+module.exports = mongoose.model('Orders', OrderSchema);  

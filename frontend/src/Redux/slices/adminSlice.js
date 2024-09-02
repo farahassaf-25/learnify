@@ -21,11 +21,18 @@ export const adminSlice = apiSlice.injectEndpoints({
         method: 'DELETE',
       }),
     }), 
+    deleteOrderByAdmin: builder.mutation({
+      query: (orderId) => ({
+        url: `${ADMIN_URL}/dashboard/order/${orderId}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
 export const { 
     useGetDashboardDataQuery,
     useDeleteCourseByAdminMutation,
-    useDeleteUserByAdminMutation
+    useDeleteUserByAdminMutation,
+    useDeleteOrderByAdminMutation
 } = adminSlice;

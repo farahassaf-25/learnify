@@ -3,13 +3,16 @@ import { FaTrash } from 'react-icons/fa';
 import { useDeleteCourseByAdminMutation } from '../Redux/slices/adminSlice';
 
 const CoursesTable = ({ courses, onDelete }) => {
-  const [showMoreFeedback, setShowMoreFeedback] = useState(false);
+  const [showMoreFeedback, setShowMoreFeedback] = useState({});
   const maxFeedbackToShow = 1;
 
   const [deleteCourse] = useDeleteCourseByAdminMutation();
 
-  const handleToggleFeedback = () => {
-    setShowMoreFeedback(!showMoreFeedback);
+  const handleToggleFeedback = (courseId) => {
+    setShowMoreFeedback(prev => ({
+      ...prev,
+      [courseId]: !prev[courseId]
+    }));
   };
 
   const handleDeleteCourse = async (courseId) => {
@@ -51,15 +54,17 @@ const CoursesTable = ({ courses, onDelete }) => {
               <td className="border-2 border-gray-400">{course.numOfLectures}</td>
               <td className="border-2 border-gray-400 max-h-32 overflow-y-auto">
                 <ul>
-                  {course.feedback.slice(0, showMoreFeedback ? course.feedback.length : maxFeedbackToShow).map((feedback) => (
-                    <li key={feedback._id}>
-                      [{feedback.user ? feedback.user._id : 'User deleted'}, '{feedback.comment}']
-                    </li>
-                  ))}
+                  {course.feedback && course.feedback.length > 0 && 
+                    course.feedback.slice(0, showMoreFeedback[course._id] ? course.feedback.length : maxFeedbackToShow).map((feedback) => (
+                      <li key={feedback._id}>
+                        [{feedback.user ? feedback.user._id : 'User deleted'}, '{feedback.comment}']
+                      </li>
+                    ))
+                  }
                 </ul>
-                {course.feedback.length > maxFeedbackToShow && (
-                  <button onClick={handleToggleFeedback} className="text-blue-500 mt-2">
-                    {showMoreFeedback ? 'Show Less' : 'Show More'}
+                {course.feedback && course.feedback.length > maxFeedbackToShow && (
+                  <button onClick={() => handleToggleFeedback(course._id)} className="text-blue-500 mt-2">
+                    {showMoreFeedback[course._id] ? 'Less' : 'More'}
                   </button>
                 )}
               </td>
