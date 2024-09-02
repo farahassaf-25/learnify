@@ -92,11 +92,11 @@ const EditLecturesPage = () => {
   if (isError) return <MiddleText text="Failed to load course lectures." />;
 
   return (
-    <div className="container mx-auto p-4 mt-5 px-40">
+    <div className="container mx-auto p-4 mt-5 px-2 md:px-4 lg:px-20">
       <MiddleText text="Edit Lectures" />
 
       {lectures.map((lecture, index) => (
-        <div key={index} className="mb-4 flex items-center justify-between">
+        <div key={index} className="mb-4 flex flex-col md:flex-row items-center justify-between">
           <div className="flex-grow">
             <TextInput
               placeholder="Lecture Title"
@@ -115,7 +115,7 @@ const EditLecturesPage = () => {
           {lecture._id && (
             <FaTrash
               onClick={() => handleOpenModal(lecture._id)} 
-              className="text-red-500 cursor-pointer ml-4"
+              className="text-red-500 cursor-pointer ml-4 mt-2 md:mt-0"
             />
           )}
         </div>

@@ -7,7 +7,7 @@ const ConfirmationPage = () => {
     const { cartItems, totalPrice } = useSelector((state) => state.cart);
 
     return (
-        <div className="confirmation-page container mx-auto p-4 px-40">
+        <div className="confirmation-page container mx-auto p-4 px-4 md:px-10 lg:px-40">
             <MiddleText text="Thank You for Your Order!" />
             <div className="order-summary bg-white p-8 rounded-xl shadow-lg">
                 <h2 className="text-2xl font-bold mb-4">Order Confirmation</h2>
@@ -31,7 +31,7 @@ const ConfirmationPage = () => {
                 <p className="text-lg mb-4">Thank you for shopping with us. If you have any questions, feel free to contact our support team.</p>
 
                 <div className="mt-6">
-                    <Button color='primary' onClick={() => window.location.href = '/me'}>
+                    <Button color='primary' onClick={() => window.location.href = '/me'} className="w-full">
                         Return to Your Courses, Happy Learning!
                     </Button>
                 </div>

@@ -15,17 +15,17 @@ const PaymentPage = () => {
 
     const handleCheckout = async () => {
         if (cartItems.length === 0) return;
-    
+
         const orderItems = cartItems.map(item => ({
             course: item._id,
             title: item.title,
             price: item.price,
         }));
-    
+
         const itemsPrice = cartItems.reduce((acc, item) => acc + item.price, 0);
         const taxPrice = (itemsPrice * 0.05).toFixed(2);
         const calculatedTotalPrice = (itemsPrice + Number(taxPrice)).toFixed(2);
-    
+
         try {
             await dispatch(createOrder({
                 orderItems,
@@ -34,7 +34,7 @@ const PaymentPage = () => {
                 taxPrice,
                 totalPrice: calculatedTotalPrice,
             })).unwrap(); 
-    
+
             dispatch(clearCart());
             toast.success('Payment successful! Redirecting to your courses...');
             navigate('/confirmation');
@@ -44,13 +44,13 @@ const PaymentPage = () => {
     };    
 
     return (
-        <div className="payment-page container mx-auto py-8 px-40">
+        <div className="payment-page container mx-auto py-8 px-4 md:px-10 lg:px-40">
             <MiddleText text="Payment" />
             <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
                 <div className="payment-methods mb-6">
                     <h2 className="text-2xl font-bold mb-4">Select Payment Method</h2>
-                    <div className="flex space-x-4">
-                        <label className="flex items-center">
+                    <div className="flex flex-col md:flex-row md:space-x-4">
+                        <label className="flex items-center mb-2 md:mb-0">
                             <input
                                 type="radio"
                                 value="PayPal"
@@ -60,7 +60,7 @@ const PaymentPage = () => {
                             />
                             <span>PayPal</span>
                         </label>
-                        <label className="flex items-center">
+                        <label className="flex items-center mb-2 md:mb-0">
                             <input
                                 type="radio"
                                 value="Credit Card"

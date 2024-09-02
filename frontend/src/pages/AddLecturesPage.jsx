@@ -42,13 +42,13 @@ const AddLecturePage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 mt-5 px-40">
-      <Button color="primary" to={`/me/create-course/${courseId}`}>
+    <div className="container mx-auto p-4 md:p-8 lg:p-12 mt-5">
+      <Button color="primary" to={`/me/create-course/${courseId}`} className="mb-4">
         Go Back to Course
       </Button>
       <MiddleText text='Add Lectures' />
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="space-y-4">
         {lectures.map((lecture, index) => (
           <div key={index} className="mb-6">
             <label className="block text-sm font-medium mb-1">
@@ -72,7 +72,7 @@ const AddLecturePage = () => {
         <Button
           type="submit"
           color='primary'
-          className={`${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`w-full ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
           disabled={isLoading}
         >
           {isLoading ? "Submitting..." : "Add Lectures"}

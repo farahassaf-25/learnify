@@ -33,10 +33,9 @@ const CourseLecturesPage = () => {
 
     useEffect(() => {
         if (data) {
-            // console.log('Course Data:', data.data);
             if (data.success) {
                 setCourse(data.data);
-                setIsPurchased(data.data.isPurchased || false); //default to false if not defined
+                setIsPurchased(data.data.isPurchased || false);
             } else {
                 toast.error('You do not have access to this course.');
                 navigate('/me');
@@ -47,14 +46,9 @@ const CourseLecturesPage = () => {
     useEffect(() => {
         if (userData && userData.success) {
             setCurrentUserId(userData.data._id);
-            // console.log('Current User ID:', userData.data._id); //check current user ID
         }
     }, [userData]);
     
-    // console.log('Is Purchased:', isPurchased);
-    // console.log('Course Creator ID:', course?.creatorId);
-    // console.log('Current User ID:', currentUserId);    
-
     const handleFeedbackSubmit = async () => {
         if (!isPurchased) {
             toast.error('You cannot submit feedback for this course because it is not purchased.');
@@ -135,7 +129,7 @@ const CourseLecturesPage = () => {
             </div>
 
             {isPurchased && course?.creatorId !== currentUserId && (
-                <div className="mt-10 px-80 flex flex-col align-content-center justify-center">
+                <div className="mt-10 px-4 md:px-20 lg:px-40 flex flex-col align-content-center justify-center">
                     <MiddleText text='Add Feedback' />
                     <div className="my-4">
                         <Rating

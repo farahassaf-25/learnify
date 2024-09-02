@@ -44,7 +44,6 @@ const AllCoursesPage = () => {
       matches = matches && course.minimumLevel === levelFilter;
     }
 
-    // Update category filtering to match against fixed categories
     if (categoryFilter.length > 0) {
       matches = matches && categoryFilter.some(cat => course.category.includes(cat));
     }
@@ -102,17 +101,17 @@ const AllCoursesPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 mt-2 px-40">
+    <div className="container mx-auto p-4 mt-2">
       <Button color="primary" to="/">
         Go Back To Home
       </Button>
 
-      <div className="my-4 flex flex-col md:flex-row justify-between items-center mt-12 px-30">
+      <div className="my-4 flex flex-col md:flex-row justify-between items-center mt-8">
         <TextInput
           placeholder="Search ..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="mb-4 md:mb-0 md:w-1/3"
+          className="mb-4 md:mb-0 md:w-1/3 w-full"
         />
         <div className="flex flex-col md:flex-row md:space-x-4 w-full md:w-auto">
           <SelectInput
@@ -120,17 +119,20 @@ const AllCoursesPage = () => {
             value={levelFilter}
             onChange={(e) => setLevelFilter(e.target.value)}
             options={levelOptions}
+            className="mb-4 md:mb-0 w-full md:w-auto"
           />
           <CheckboxSelectInput 
             options={categoryOptions} 
             selectedOptions={categoryFilter}
             setSelectedOptions={setCategoryFilter}
+            className="mb-4 md:mb-0 w-full md:w-auto"
           />
           <SelectInput
             valueLabel='Price'
             value={priceFilter}
             onChange={(e) => setPriceFilter(e.target.value)}
             options={priceOptions}
+            className="mb-4 md:mb-0 w-full md:w-auto"
           />
         </div>
         <Button color="secondary" onClick={clearFilters} className="w-full md:w-auto mt-4 md:mt-0">

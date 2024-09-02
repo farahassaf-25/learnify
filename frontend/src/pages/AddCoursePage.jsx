@@ -4,7 +4,7 @@ import MiddleText from '../Components/MiddleText';
 import { useCreateCourseMutation } from '../Redux/slices/coursesApiSlice';
 import { useNavigate } from 'react-router-dom';
 import TextInput from '../Components/TextInput';
-import SelectInput from '../Components/SelectInput'
+import SelectInput from '../Components/SelectInput';
 
 const AddCoursePage = () => {
   const [title, setTitle] = useState('');
@@ -44,13 +44,13 @@ const AddCoursePage = () => {
   };
 
   return (
-    <div className="container mx-auto p-12 px-40 mt-5">
-      <Button color="primary" to="/me">
+    <div className="container mx-auto p-4 md:p-8 lg:p-12 mt-5">
+      <Button color="primary" to="/me" className="mb-4">
         Go Back
       </Button>
       <MiddleText text='Add Your Own Course' />
 
-      <form onSubmit={handleSubmit} className='mt-8'>
+      <form onSubmit={handleSubmit} className='mt-8 space-y-4'>
         <TextInput
           placeholder="Course Title"
           type="text"
@@ -116,7 +116,7 @@ const AddCoursePage = () => {
         <Button
           type="submit"
           color='primary'
-          className={` ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`w-full ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
           disabled={isLoading}
         >
           {isLoading ? "Submitting..." : "Add Course"}

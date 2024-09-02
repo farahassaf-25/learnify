@@ -23,7 +23,7 @@ const CartPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 px-40">
+    <div className="container mx-auto p-4">
       <MiddleText text="Your Cart" />
       {cartItems.length === 0 ? (
         <div className="flex flex-col items-center">
@@ -35,12 +35,16 @@ const CartPage = () => {
         <div>
           <div className="flex flex-col space-y-4">
             {cartItems.map((item) => (
-              <div key={item._id} className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-2xl font-semibold">{item.title}</h2>
-                  <p>{item.price} $</p>
+              <div key={item._id} className="flex items-center justify-between flex-wrap border-b py-2">
+                <div className="flex-1">
+                  <h2 className="text-lg md:text-2xl font-semibold">{item.title}</h2>
+                  <p className="text-sm md:text-base">{item.price} $</p>
                 </div>
-                <Button color="secondary" onClick={() => handleRemoveFromCart(item._id)}>
+                <Button 
+                  color="secondary" 
+                  onClick={() => handleRemoveFromCart(item._id)} 
+                  className="ml-2 mt-2 md:mt-0"
+                >
                   <FaTrash />
                 </Button>
               </div>

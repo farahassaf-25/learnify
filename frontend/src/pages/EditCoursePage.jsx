@@ -97,18 +97,19 @@ const EditCoursePage = () => {
   }
   
   return (
-    <div className="container mx-auto p-4 mt-5 px-40">
+    <div className="container mx-auto p-4 mt-5">
       <Button color="primary" to={`/me/mycourses`}>
         Go Back
       </Button>
       <MiddleText text="Edit Course" />
 
-      <form onSubmit={handleUpdateCourse}>
+      <form onSubmit={handleUpdateCourse} className="flex flex-col md:w-1/2 mx-auto">
         <TextInput
           placeholder="Course Title"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          className="mb-4"
         />
 
         <TextInput
@@ -116,6 +117,7 @@ const EditCoursePage = () => {
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          className="mb-4"
         />
 
         <TextInput
@@ -123,6 +125,7 @@ const EditCoursePage = () => {
           type="text"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
+          className="mb-4"
         />
 
         <SelectInput
@@ -135,6 +138,7 @@ const EditCoursePage = () => {
             { value: 'Intermediate', label: 'Intermediate' },
             { value: 'Advanced', label: 'Advanced' },
           ]}
+          className="mb-4"
         />
 
         <TextInput
@@ -142,6 +146,7 @@ const EditCoursePage = () => {
           type="number"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
+          className="mb-4"
         />
 
         <TextInput
@@ -149,6 +154,7 @@ const EditCoursePage = () => {
           type="number"
           value={weeks}
           onChange={(e) => setWeeks(e.target.value)}
+          className="mb-4"
         />
 
         <TextInput
@@ -156,24 +162,25 @@ const EditCoursePage = () => {
           type="number"
           value={numOfLectures}
           onChange={(e) => setNumOfLectures(e.target.value)}
+          className="mb-4"
         />
-        <div className="mt-4 flex justify-end gap-2">
-          <Button color="secondary" to={`/me/mycourses`}>
+        <div className="mt-4 flex flex-col md:flex-row justify-between gap-2">
+          <Button color="secondary" to={`/me/mycourses`} className='text-center'>
             Cancel
           </Button>
           <Button color="primary" type="submit">
             Save Changes
           </Button>
-          <Button className='bg-green-600 text-white' type="submit" to={`/me/mycourses/${courseId}/edit-lectures`}>
+          <Button className='bg-green-600 text-white' type="button" onClick={() => navigate(`/me/mycourses/${courseId}/edit-lectures`)}>
             Edit Lectures
           </Button>
         </div>
       </form>
       <div className="mt-4 flex justify-end gap-2">
-          <Button onClick={handleDeleteCourse} className="flex items-center bg-red-600 text-white">
-            <FaTrash className="mr-1" /> Delete Course
-          </Button>
-        </div>
+        <Button onClick={handleDeleteCourse} className="flex items-center bg-red-600 text-white">
+          <FaTrash className="mr-1" /> Delete Course
+        </Button>
+      </div>
 
       {isConfirmationOpen && (
         <ConfirmationModal

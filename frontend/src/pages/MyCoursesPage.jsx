@@ -41,7 +41,7 @@ const MyCoursesPage = () => {
   };
 
   return (
-    <div className='px-40'>
+    <div className='container mx-auto px-4 md:px-8 lg:px-40'>
       <MiddleText text='My Courses' /> 
       <TextInput
         placeholder="Search courses..."
