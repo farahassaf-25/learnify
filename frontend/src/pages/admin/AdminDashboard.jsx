@@ -6,6 +6,7 @@ import OrdersTable from '../../Components/OrdersTable';
 import { useGetDashboardDataQuery } from '../../Redux/slices/adminSlice';
 import MiddleText from '../../Components/MiddleText';
 import Loader from '../../Components/Loader';
+import TextInput from '../../Components/TextInput';
 
 const AdminDashboard = () => {
   const { data, isLoading, error } = useGetDashboardDataQuery();
@@ -18,6 +19,11 @@ const AdminDashboard = () => {
   const [courses, setCourses] = useState([]);
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
+
+  // Search state
+  const [courseSearch, setCourseSearch] = useState('');
+  const [userSearch, setUserSearch] = useState('');
+  const [orderSearch, setOrderSearch] = useState('');
 
   useEffect(() => {
     if (data) {
@@ -63,6 +69,11 @@ const AdminDashboard = () => {
     }));
   };
 
+  //filtered courses, users, and orders
+  const filteredCourses = courses.filter(course => course.title.toLowerCase().includes(courseSearch.toLowerCase()));
+  const filteredUsers = users.filter(user => user.name.toLowerCase().includes(userSearch.toLowerCase()));
+  const filteredOrders = orders.filter(order => order._id.toLowerCase().includes(orderSearch.toLowerCase()));
+
   return (
     <div className='p-6 px-20'>
       <MiddleText text='Learnify Statistics' />
@@ -76,12 +87,40 @@ const AdminDashboard = () => {
           <Bar dataKey="count" fill="#EC5C2E" />
         </BarChart>
       </ResponsiveContainer>
+
       <MiddleText text='Courses' />
-      <CoursesTable courses={courses} onDelete={handleCourseDelete} />
+      <div className='mb-6'>
+        <TextInput
+          type="text" 
+          placeholder="Search Courses..." 
+          value={courseSearch} 
+          onChange={(e) => setCourseSearch(e.target.value)} 
+          className="border p-2 mr-4"
+        />
+      </div>
+      <CoursesTable courses={filteredCourses} onDelete={handleCourseDelete} />
       <MiddleText text='Users' />
-      <UsersTable users={users} onDelete={handleUserDelete} />
+      <div className='mb-6'>
+        <TextInput
+          type="text" 
+          placeholder="Search Users..." 
+          value={userSearch} 
+          onChange={(e) => setUserSearch(e.target.value)} 
+          className="border p-2 mr-4"
+        />
+      </div>
+      <UsersTable users={filteredUsers} onDelete={handleUserDelete} />
       <MiddleText text='Orders' />
-      <OrdersTable orders={orders} onDeleteOrder={handleDeleteOrder} />
+      <div className='mb-6'>
+        <TextInput
+          type="text" 
+          placeholder="Search Orders..." 
+          value={orderSearch} 
+          onChange={(e) => setOrderSearch(e.target.value)} 
+          className="border p-2"
+        />
+      </div>
+      <OrdersTable orders={filteredOrders} onDeleteOrder={handleDeleteOrder} />
     </div>
   );
 };
