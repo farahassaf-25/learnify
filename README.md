@@ -7,16 +7,13 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 
 ### Admin:
 - Login
-- Change Password
 - Logout
 - Manage Courses:
-  - Add Course
-  - Edit Course
   - Delete Course
-- Manage Quizzes:
-  - Add Quiz for a Course
-  - Update Quiz
-  - Delete Quiz
+- Manage Users:
+  - Delete User
+- Manage Orders:
+  - Delete Order
 
 ### Student:
 - Login
@@ -34,14 +31,14 @@ Learnify is an e-learning platform where users can browse diverse courses, enrol
 - Update Profile
 - Delete Account
 - Payment Method for Subscription:
-  - PayPal 
+  - PayPal or Credit Card (mock payment)
 
 
 ### Additional Features:
 - Allow Students to Give Feedback on Courses
 - Notifications for Updates on Course Activities
 - Subscriptions Email
-- Contact Us Form on the Landing Page (accessible by logged-in students and visitors)
+- Contact Us Form (accessible by logged-in users and visitors)
 
 ## Tech Stack
 
@@ -165,108 +162,77 @@ classDiagram
         +String password
         +String role
         +String image
+        +Array purchasedCourses
+        +Timestamp createdAt
+        +Timestamp updatedAt
     }
 
     class Course {
         +String title
         +String slug
         +String description
-        +String category
+        +Array category
         +String minimumLevel
         +String image
         +Number price
         +Number weeks
-        +Number views
         +Number numOfLectures
         +String creatorName
+        +ObjectId creatorId
+        +ObjectId user
+        +Array lectures
+        +Array feedback
+        +Number averageRating
         +Timestamp createdAt
         +Timestamp updatedAt
-        +slugify()
     }
 
     class Lecture {
         +String title
         +String video
+        +ObjectId course
+        +ObjectId user
         +Timestamp createdAt
         +Timestamp updatedAt
     }
 
-    class Quiz {
-        +String title
-        +String[] questions
+    class Feedback {
+        +ObjectId course
+        +ObjectId user
+        +String comment
+        +Number rating
+        +Date createdAt
+    }
+
+    class Order {
+        +ObjectId user
+        +Array orderItems
+        +String paymentMethod
+        +Number itemsPrice
+        +Number taxPrice
+        +Number totalPrice
+        +Boolean isPaid
+        +Date paidAt
         +Timestamp createdAt
         +Timestamp updatedAt
+    }
+
+    class OrderItem {
+        +ObjectId course
+        +String title
+        +String image
+        +Number price
     }
 
     User "1" --> "many" Course : creates
     Course "1" --> "many" Lecture : contains
-    Course "1" --> "many" Quiz : contains
-    Lecture "many" --> "1" Course : belongs to
-    Quiz "many" --> "1" Course : belongs to
-
-    class Admin {
-        +login()
-        +changePassword()
-        +logout()
-        +getAllUsers()
-        +getAllCourses()
-        +addCourse()
-        +editCourse()
-        +deleteCourse()
-        +addLecture()
-        +editLecture()
-        +deleteCourse()
-        +getAllLectures()
-        +getLecturesForCourse()
-        +addQuiz()
-        +updateQuiz()
-        +deleteQuiz()
-    }
-
-    class Student {
-        +login()
-        +register()
-        +changePassword()
-        +logout()
-        +addCourse()
-        +editCourse()
-        +deleteCourse()
-        +addLecture()
-        +editLecture()
-        +deleteLecture()
-        +updateProfile()
-        +deleteAccount()
-        +purchaseCourse()
-        +giveFeedback()
-    }
-
-    class Subscription {
-        +String method
-        +Paypal
-    }
-
-    class Feedback {
-        +String comment
-        +Number rating
-        +Timestamp createdAt
-        +Timestamp updatedAt
-    }
-
-    class Notification {
-        +String message
-        +Timestamp createdAt
-        +Timestamp updatedAt
-    }
-
-    class ContactForm {
-        +String name
-        +String email
-        +String message
-    }
-
-    User "1" --> "many" Subscription : has
     Course "1" --> "many" Feedback : receives
     User "1" --> "many" Feedback : gives
-    User "1" --> "many" Notification : receives
-    User "many" --> "1" ContactForm : sends
+    User "1" --> "many" Order : places
+    Order "1" --> "many" OrderItem : contains
+    Lecture "many" --> "1" Course : belongs to
+    Feedback "many" --> "1" Course : belongs to
+    Feedback "many" --> "1" User : belongs to
+    OrderItem "many" --> "1" Course : belongs to
+    OrderItem "many" --> "1" Order : belongs to
 ```
