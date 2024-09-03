@@ -26,7 +26,7 @@ const OrdersTable = ({ orders, onDeleteOrder }) => {
             <th className="border-2 border-gray-400">User ID</th>
             <th className="border-2 border-gray-400">Courses Ordered</th>
             <th className="border-2 border-gray-400">Total Price</th>
-            <th className="border-2 border-gray-400">Actions</th>
+            <th className="border-2 border-gray-400">Delete</th>
           </tr>
         </thead>
         <tbody className="text-xl text-primary">
