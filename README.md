@@ -165,6 +165,19 @@ classDiagram
         +Array purchasedCourses
         +Timestamp createdAt
         +Timestamp updatedAt
+        +register()
+        +login()
+        +logout()
+        +updateProfile()
+        +deleteAccount()
+        +addCourse()
+        +updateCourse()
+        +deleteCourse()
+        +addCourseToCart()
+        +removeCourseFromCart()
+        +purchaseCourses()
+        +sendContactForm()
+        +viewCourses()
     }
 
     class Course {
@@ -222,6 +235,18 @@ classDiagram
         +String title
         +String image
         +Number price
+    }
+
+    class Admin {
+        +login()
+        +logout()
+        +viewDashboard()
+        +viewCourses()
+        +viewUsers()
+        +viewOrders()
+        +deleteCourse()
+        +deleteUser()
+        +deleteOrder()
     }
 
     User "1" --> "many" Course : creates
