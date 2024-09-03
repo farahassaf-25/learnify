@@ -40,8 +40,8 @@ const App = () => {
           <Route path='/about-us' element={<AboutUsPage />} />
           <Route path='/contact-us' element={<ContactUsPage />} />
           
-          {/* student pages */}
-          <Route element={<RequireAuth allowedRoles={['student']} />}>
+          {/* user pages */}
+          <Route element={<RequireAuth allowedRoles={['user']} />}>
             <Route path="/cart" element={<CartPage />} />
             <Route path="/me" element={<UserProfilePage />} />
             <Route path="/payment/checkout" element={<PaymentPage />} />

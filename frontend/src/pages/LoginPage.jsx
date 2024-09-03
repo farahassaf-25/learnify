@@ -46,7 +46,7 @@ const LoginPage = () => {
       if (res.user.role === 'admin') {
         navigate('/admin/dashboard'); //redirect to admin dashboard
       } else {
-        navigate('/'); //redirect to home page for students
+        navigate('/'); //redirect to home page for users
       }
     } catch (err) {
       toast.error(err?.data?.message || 'Invalid email or password');

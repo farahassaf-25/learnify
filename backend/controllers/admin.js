@@ -18,7 +18,7 @@ exports.getDashboardData = asyncHandler(async (req, res, next) => {
         },
     });
 
-    const users = await UsersSchema.find({ role: 'student' })
+    const users = await UsersSchema.find({ role: 'user' })
       .populate('purchasedCourses');
   
       const orders = await OrdersSchema.find()

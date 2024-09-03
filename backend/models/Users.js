@@ -33,8 +33,8 @@ const UsersSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['student', 'admin'],
-        default: 'student',
+        enum: ['user', 'admin'],
+        default: 'user',
     },
     purchasedCourses: [
         { type: mongoose.Schema.ObjectId, ref: 'Courses' }
